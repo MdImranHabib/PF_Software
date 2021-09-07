@@ -1,0 +1,102 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        var fromDate;
+        var toDate;
+        $(document).ready(function () {
+            var viewUrl = rootPath + "/Accounting/TrialBalance2/GetFilterBox/";
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html('');
+                $('#mainDiv').css('display', 'none');
+                $('#mainDiv').fadeIn(1000).html(data);
+                $("#mainDiv").removeClass("col-md-8").addClass("col-md-10");
+                if ($.cookie("ckFromDate")) {
+                    $("#fromDate").val($.cookie("ckFromDate"));
+                }
+                if ($.cookie("ckToDate")) {
+                    $("#toDate").val($.cookie("ckToDate"));
+                }
+            });
+
+        })
+
+        function GetData(fDate, tDate) {
+
+            if (fDate.length < 2 || tDate.length < 2) {
+                ErrorNotify("Please select date range");
+            }
+            else {
+
+                $.cookie("ckFromDate", fDate, { path: '/' });
+                $.cookie("ckToDate", tDate, { path: '/' });
+
+                Reset();
+                fromDate = fDate;
+                toDate = tDate;
+                var viewUrl = rootPath + "/Accounting/TrialBalance2/GetTrialBalance/?fromDate=" + fromDate + "&toDate=" + toDate;
+                $.get(viewUrl, function (data) {
+                    $('#mainDiv').fadeIn(1000).append(data);
+                    //var viewUrl = rootPath + "/Accounting/BalanceSheet/GetLiabilities/?fromDate=" + fromDate + "&toDate=" + toDate;
+                    //$.get(viewUrl, function (data) {
+                    //    $("#mainDiv").fadeIn(2000).append(data);
+                    //})
+                })
+            }
+        }
+
+        function GetTrialBalanceReport(fromDate, toDate) {
+
+            if (fromDate.length < 2 || toDate.length < 2) {
+                ErrorNotify("Please select date range!");
+            }
+            else {
+                var viewURL = '../Accounting/TrialBalance2/TrialBalanceReport/?fromDate=' + fromDate + "&toDate=" + toDate;
+                //window.open(viewURL, 'window name', 'window settings')
+                FancyBox(viewURL);
+            }
+        }
+
+        function getGroupDetail(groupID) {
+            if (groupID > 0) {
+                var viewURL = '../../Accounting/BalanceSheet/GetGroupDetail/?groupID=' + groupID + '&fromDate=' + fromDate + '&toDate=' + toDate;
+                //window.open(viewURL, 'window name', 'window settings')
+                Reset();
+                $.get(viewURL, function (data) {
+                    $("#mainDiv").append(data);
+                })
+            }
+            else {
+                ErrorNotify("Invalid Group...");
+                ShowModalMessage("Invalid Group...");
+            }
+        }
+
+        function Reset() {
+            $("#mainDivResult").remove();
+            $("#mainDivResult").remove();
+            $("#fieldsetLiabilities").remove();
+            $("#fieldsetGroupDetail").remove();
+            $("#fieldsetLedgerDetail").remove();
+            $("#retainEarningOpening").remove();
+        }
+
+        function getLedgerDetail(ledgerID, ledgerName) {
+
+            var viewURL = '../../Accounting/LedgerBook/GetData/?LedgerID=' + ledgerID + '&FromDate=' + fromDate + '&ToDate=' + toDate + '&LedgerName=' + ledgerName;
+            //window.open(viewURL, 'window name', 'window settings')
+
+            Reset();
+            $.post(viewURL, function (data) {
+                $("#mainDiv").append(data);
+            })
+        }
+
+    </script>
+}

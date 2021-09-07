@@ -1,0 +1,155 @@
+﻿@model List<DLL.ViewModel.VM_acc_VoucherDetail>
+
+@{
+    Layout = null;
+}
+
+<fieldset>
+    <legend id="voucherType">Contra Voucher</legend>
+
+    @using (Ajax.BeginForm("ContraVoucher", "ContraVoucher", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccess"
+}, new { @id = "DialogForm1" }))
+    {
+    @Html.AntiForgeryToken()
+        <div id="update-message1"></div>
+        @Html.Hidden("voucherId", (int)ViewBag.voucherId, new { @id = "voucherId"});
+
+        <table class="table table-condensed">
+            <tr>
+                <td class="a">@Html.Label("Voucher No")</td>
+                <td>
+                    <div class="form-inline">
+                         @Html.TextBox("Payment Voucher No", (string)ViewBag.VoucherNo, new { @class = "form-control input-sm tooltip_test", @readonly= "readonly" , @id= "VoucherNo", @style="font-weight:bold; color:blue, ", title="Voucher number will be auto created on save."})
+                        <div class="pull-right">
+                            @Html.Label("Transaction Date")
+                            @Html.TextBox("TransactionDate", (DateTime)ViewBag.TransactionDate , new { @class = "form-control input-sm dateTimePickerNoFuture", @readonly= "readonly"})
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        @*<tr>
+                <td class="a">@Html.Label("Voucher Name")</td>
+                <td>
+                    <input class="form-control input-sm next" type="text" id="VoucherName" placeholder="Voucher/Transaction Name" value="@ViewBag.VoucherName" name="VoucherName">
+                </td>
+            </tr>*@
+        </table>
+
+
+    
+        <table class="table table-striped table-condensed" id="VoucherTable">
+            <tr style="text-align:center; font-weight:bold">
+                <td style="width: 35px; vertical-align:middle !important"></td>
+                <td>Head of Account</td>
+                <td style="width: 150px">Chq./Desc.</td>
+                <td style="width: 100px">Debit</td>
+                <td style="width: 100px">Credit</td>
+            </tr>
+            @{int i = 0;}
+            @foreach (var item in Model)
+            {
+                
+                <tr>
+                    <td><input type="button" value="Dr." name="inputType" class="btn-warning btn-xs next inputType" id='inputType-@i' /></td>
+                    <td>@Html.TextBox("LedgerName", item.LedgerName, new { @class = "form-control next accountHead", placeholder = "Head of Accounts", @id="LedgerName"+i }) @Html.Hidden("LedgerID", item.LedgerID, new  { @id="LedgerID"+i})</td>
+                    <td>@Html.TextBox("ChequeNumber", item.ChequeNumber, new { @class = "form-control next", placeholder = "", @id="ChequeNumber"+i })</td>
+                    <td>
+                        @if(item.Debit !=0 )
+                        {
+                            @Html.TextBox("Debit", item.Debit.ToString("#,###,##0.000"), new { @class = "form-control next NumOnly debit", @id="Debit"+i })
+                        }
+                        else
+                        {
+                            @Html.TextBox("Debit", null, new { @class = "form-control next NumOnly debit", @id="Debit"+i })    
+                        }
+                    </td>
+
+                    <td>
+                        @if(item.Credit != 0)
+                        {
+                            @Html.TextBox("Credit", item.Credit.ToString("#,###,##0.000"), new { @class = "form-control next NumOnly credit", @id="Credit"+i })
+                        }
+                        else
+                        {
+                            @Html.TextBox("Credit", null, new { @class = "form-control next NumOnly credit", @id="Credit"+i })
+                        }
+                    </td>
+                </tr>
+                i++;
+            }
+            <tr>
+                <td><input type="button" value="Dr." name="input_type" class="btn-xs btn-warning next inputType" id='inputType-@i' /></td>
+                <td>@Html.TextBox("LedgerName", null, new { @class = "form-control next accountHead", @id="LedgerName"+i, placeholder = "Use up/down arrow and select from list at right..."  }) @Html.Hidden("LedgerID",null, new { @id = "LedgerID" + i })</td>
+                <td>@Html.TextBox("ChequeNumber", null, new { @class = "form-control next", placeholder = "", @id="ChequeNumber"+i })</td>
+                <td>
+
+                    @Html.TextBox("Debit", null, new { @class = "form-control next NumOnly debit", @id="Debit"+i })
+
+                </td>
+
+                <td>
+                    @Html.TextBox("Credit", null, new { @class = "form-control input-sm next NumOnly credit", @id="Credit"+i  })
+                </td>
+            </tr>
+        </table>
+        <label style="color:lightsteelblue; font-style:italic">Press ENTER to move on NEXT</label>
+        <label  id="result_credit" class="pull-right" style="min-width:100px; text-align:center; color:grey"> 0.0</label>
+        <label id="result_debit" class="pull-right" style="min-width:100px; text-align:center; padding-top:-10px; color:grey"> 0.0</label>
+        
+        <input type="text" class="form-control next" placeholder="Narration of the payment voucher..." style="width:100%" name="Narration" id="Narration" value="@ViewBag.Narration"/>
+        <br />
+        
+        @*<button class="btn btn-default pull-left" type="button"  onclick="addRow('VoucherTable');">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>*@
+        
+        <button class="btn btn-info tooltip_test" type="button"  onclick="SwitchOptionDiv()" data-toggle="tooltip" data-placement="bottom" title="Switch: Account Head & Payment Voucher List" id="switchOptionDiv">
+            <span class="glyphicon glyphicon-align-justify"></span>
+        </button>
+        
+           <button class="btn btn-danger not-new hidden" type="button"  onclick="deleteGroup($('#voucherId').val());" style="padding-left:10px">
+            <span class="glyphicon glyphicon-trash"></span>
+        </button>
+            <button class="btn btn-primary not-new hidden" type="button"  onclick="NewVoucher();" style="padding-left:10px">
+            <span class="glyphicon glyphicon-plus"></span>
+        </button>
+        <button class="btn btn-warning not-new hidden" type="button" onclick="getreport($('#voucherId').val(), 'Contra Voucher')" id="report">
+            <span class="glyphicon glyphicon-print"></span>
+        </button>
+        
+        
+        <button class="btn btn-success pull-right 3 next" type="button" onclick="save();" id="save_btn">
+            <span class="glyphicon glyphicon-saved"></span>Save
+        </button>
+    }
+
+      @if (Model != null)
+      {
+        <br />
+        <hr />
+        <label class="mini">@ViewBag.User</label>
+    }
+
+    <div class="alert alert-info smaller">
+        We will use contra vouchers to post contra entry transactions that affect both the <strong>bank and cash accounts</strong>. For example, when you withdraw cash from the bank, you can use a contra voucher to post the debit and credit entries to the cash and bank accounts.
+    </div>
+</fieldset>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".tooltip_test").tooltip();
+        $('#LedgerName0').focus();
+        calculate();
+        ProcessGrid();
+        $('.debit').unbind('change');
+        $('.credit').unbind('change');
+        $('.inputType').unbind();
+    })
+</script>

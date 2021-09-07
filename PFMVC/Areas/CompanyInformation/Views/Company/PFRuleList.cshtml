@@ -1,0 +1,85 @@
+﻿
+
+@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+
+<div class="row">
+    <div class="col-md-10">
+    <fieldset>
+        <legend>Membership Closing Rules</legend>
+@(Html.Telerik().Grid<DLL.ViewModel.VM_MembershipClosingRules>()
+    .Name("PFRulesGrid").HtmlAttributes(new { @class = "A" })
+        .DataKeys(keys => { keys.Add(s => s.ROWID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("New Rules").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectPFMembershipClosingRules", "MembershipClosed", new  { Area = "PFSettings" });
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.ROWID).Visible(false);
+                    columns.Bound(c => c.PFDurationInMonth).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.OwnPartPercent).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EmployerPartPercent).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.OwnProfitPercent).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EmpProfitPercent).HtmlAttributes(new { style = "text-align:center" });
+                    //columns.Bound(c => c.IsOwnPartPayable).HtmlAttributes(new { style = "text-align:center" }).ClientTemplate("<input type='checkbox' name='IsOwnPartPayable' <#= IsOwnPartPayable ? checked='checked' :'' #> disabled='disabled' />"); ;
+                    //columns.Bound(c => c.IsEmployerPartPayable).HtmlAttributes(new { style = "text-align:center" }).ClientTemplate("<input type='checkbox' name='IsEmployerPartPayable' disabled='disabled' <#= IsEmployerPartPayable ? checked='checked' :'' #> />"); ;
+                    //columns.Bound(c => c.IsProfitPartPayable).HtmlAttributes(new { style = "text-align:center" }).ClientTemplate("<input type='checkbox' name='IsProfitPartPayable' <#= IsProfitPartPayable ? checked='checked' :''  #> disabled='disabled' />");
+                   @* columns.Bound(c => c.ProfitPercentige).HtmlAttributes(new { style = "text-align:center" });*@
+                    //columns.Bound(p => p.status).Title("Status").HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EffectiveFrom).HtmlAttributes(new { style = "text-align:center" }).Format("{0:dd/MM/yyyy}");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                    columns.Command(commands =>
+                    {
+                        commands.Custom("DeleteCommand").Text("Delete").Ajax(true)
+                       .ButtonType(GridButtonType.Image)
+                       .ImageHtmlAttributes(new { @class = "t-delete" });
+                    }
+                  ).Width(40).Title("");
+                }
+            )
+            .Sortable()
+            //.Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                {
+                    events.OnCommand("PFMCRulesGridOnCommand");
+                })
+                .Selectable()
+)
+        </fieldset>
+    </div>
+
+        <div class="col-md-2 pull-right"> 
+        <fieldset>
+            <legend>Note</legend>
+            <div class="alert alert-warning">
+            Membership closing rules are required when we close membership of a PF member.
+            Closing rule represent what will be self part and employer part based on member's working duration.
+            <br /><u>Same rule with same working duration can not be created.</u> 
+            <br />
+            <strong>Please note, </strong>
+            <br />
+            A rule can not be activated again once de-activated!
+        </div>
+        </fieldset>
+    </div>
+
+</div>
+
+@section scripts{
+    
+}

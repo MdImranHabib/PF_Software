@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Sattlement";
+}
+<div class="row">
+
+    <div class="col-md-7">
+        <fieldset>
+            <legend>Sattlement From Excel</legend>
+            @if (TempData["shortMessage"] == "Sucess")
+            {
+                <div class="alert alert-warning"><strong>@TempData["shortMessage"]</strong> </div>
+            }
+            else if (TempData["shortMessage"] == "")
+            {
+
+            }
+            else 
+            { 
+                <div class="alert alert-success"><strong>@TempData["shortMessage"]</strong> </div>
+            }
+            @using (Html.BeginForm("ImportExcel", "FirstTimeImplemetation", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div id="update-message1" class="error">@ViewBag.Message</div>
+                <table>
+                    <tr style="font-weight: bold">
+                        <td style="font-weight: bold">Excel file</td>
+                        <td>
+                            <input type="file" id="FileUpload1" name="FileUpload1" /></td>
+                        <td>
+                            <input type="submit" id="Submit" name="Submit" value="Submit" class="btn btn-success" /></td>
+                    </tr>
+                </table>
+            }
+        </fieldset>
+    </div>
+</div>

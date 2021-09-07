@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Accrude Interest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    
+</style>
+<h3>Instrument Accrude Interest Process</h3>
+<div class="row">
+    <br />
+    <div class="col-md-1">
+        <strong> Select Date </strong>
+    </div>
+    <div class="col-md-2">
+        <input type="text" id="date" name="date" class="dateTimePicker form-control" @*style="width: 120px;"*@ />
+    </div>
+    <div class="col-md-2" style="float: left;">
+        <input type="button" class="btn btn-info btn-xs" value="Show" onclick="ProcessAccrudeInterest()" id="btnSave" />
+    </div>
+</div>
+
+@section scripts{
+    <script>     
+
+
+
+        function ProcessAccrudeInterest() {
+            debugger;
+            var date = $("#date").val();
+                if (date === "") {
+                    ShowDropDownMessage("Please select the Date");
+                    return false;
+                }
+            
+           
+                var viewURL = '../../Instrument/Instrument/AccrudeInterestProcess/?date=' + date;
+            //window.location = viewURL;
+            //window.open(viewURL, 'window name', 'window settings');
+            FancyBox(viewURL);
+            return false;
+        }
+
+
+
+        //function ProcessAccrudeInterest() {
+        //    var date = $("#date").val();
+        //    if (date === "") {
+        //        ShowDropDownMessage("Please select the Date");
+        //        return false;
+        //    }
+
+        //    $("#ModalSpace").html("Before Accured interest calculation please ensure all Instrument are uptodate with reinvest on closing date otherwise it's would not get actual result "),
+        //      $("#ModalSpace").dialog({
+        //          width: 'auto',
+        //          resizable: false,
+        //          modal: true,
+        //          show: "slide",
+        //          hide: "slide",
+
+        //          title: "Confirm Accured Interest Calculation?",
+        //          buttons: [{
+        //              text: "Yes", click: function () {
+        //                  var viewUrl = "/Instrument/Instrument/AccrudeInterestProcess/?date=" + date;
+        //                  alert(viewUrl);
+        //                  //window.location = viewURL;
+        //                  //window.open(viewURL, 'window name', 'window settings');
+        //                  FancyBox(viewUrl);
+
+
+        //                  //var viewUrl = "/Instrument/Instrument/AccrudeInterestProcess/?date=" + date;
+        //                  $.post(viewUrl, function(data) {
+        //                      if (data.Success === true) {
+        //                          ShowModalMessage(data.Message);
+        //                      } else {
+        //                          ErrorNotify(data.ErrorMessage);
+        //                          ShowModalMessage(data.ErrorMessage);
+        //                          $(this).dialog("close");
+        //                      }
+        //                  });
+        //              }
+        //          }, {
+        //              text: "Close",
+        //              click: function () {
+        //                  $(this).dialog("close");
+        //                  //ErrorNotify("You cancelled the operation!");
+        //              }
+        //          }]
+        //      });
+        //    //$.ajax({
+        //    //    url: "/Instrument/Instrument/AccrudeInterestProcess",
+        //    //    type: 'post',
+        //    //    dataType: 'json',
+        //    //    data: { date: date },
+        //    //    success: function (result) {
+        //    //        if (result.Success == true) {
+        //    //            ShowDropDownMessage(result.Message);
+        //    //        }
+        //    //        else {
+        //    //            ShowDropDownMessage(result.ErrorMessage);
+        //    //        }
+        //    //    }
+        //    //});
+        //}
+    </script>
+}

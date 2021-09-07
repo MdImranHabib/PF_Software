@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            GetGroupForm();
+        })
+
+
+        function GetGroupForm() {
+            var viewUrl = rootPath + "/Accounting/CashFlow/CashFlowGroupForm/?GroupID=0";
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html("");
+                $("#mainDiv").html(data);
+                var viewUrl = rootPath + "/Accounting/CashFlow/GetGroupJQFile/";
+                $.get(viewUrl, function (data) {
+                    $("#JQ").html(data);
+                })
+            })
+
+            var viewUrl = rootPath + "/Accounting/CashFlow/GetGroupName/?filter=0&name=All";
+
+            $.get(viewUrl, function (data) {
+                $("#optionDiv").html('');
+                $("#optionDiv").html(data);
+            })
+
+
+        }
+
+        $(function () {
+            $("table tr").hover(function () {
+                $(this).find(".editbtn").removeClass("hidden");
+            }, function () {
+                $(this).find(".editbtn").addClass("hidden");
+            });
+        });
+
+        function editGroup(id) {
+            var viewUrl = rootPath + "/Accounting/CashFlow/CashFlowGroupForm/?GroupID=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html("");
+                $("#mainDiv").html(data);
+            });
+        }
+
+
+        $(function () {
+            $("table tr").hover(function () {
+                $(this).find(".editbtn").removeClass("hidden");
+            }, function () {
+                $(this).find(".editbtn").addClass("hidden");
+            });
+        });
+
+
+        $("#underGroup").unbind('keydown');
+        var index = -1;
+       
+    </script>
+}

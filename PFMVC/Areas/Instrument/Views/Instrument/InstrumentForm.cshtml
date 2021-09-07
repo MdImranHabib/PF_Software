@@ -1,0 +1,294 @@
+﻿@model DLL.ViewModel.VM_Instrument
+
+
+@{ 
+    Layout = null;
+
+   var meturityDate = "";
+   
+    }
+
+
+<fieldset><legend>Create Instrument</legend>
+@using (Ajax.BeginForm("Create", "Instrument", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccess"
+}, new { @id = "DialogForm1" }))
+            {   
+                <div id="update-message" class="alert-dismissible">@ViewBag.Message</div>
+                @Html.HiddenFor(m => m.InstrumentID, new { @id ="instrumentID"})
+                <table class="table table-striped">
+                    @*<tr>
+                        <td>Instrument Type</td>
+                        <td>@Html.TextBoxFor(m => m.InstrumentType, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentType)</td>
+                        <td>Instrument Number</td>
+                        <td>@Html.TextBoxFor(m => m.InstrumentNumber, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentNumber)</td>
+                    </tr>
+                    <tr>
+                        <td>Institution</td>
+                        <td>@Html.TextBoxFor(m => m.Institution, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.Institution)</td>
+                        <td>Branch</td>
+                        <td>@Html.TextBoxFor(m => m.Branch, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.Branch)</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Deposit</td>
+                        <td>
+                            @if(Model.DepositDate != null)
+                            {
+                                @Html.TextBoxFor(m => m.DepositDate, "{0:dd'/'MMM'/'yyyy}", new { @class ="form-control Next dateTimePicker", @readonly=true  })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.DepositDate, new { @class ="form-control Next dateTimePicker", @readonly=true })
+                            }
+                            @Html.ValidationMessageFor(v => v.DepositDate)
+                        </td>
+                        <td>Maturity Period<span style="font-size:smaller;color:blue"><br />(In Month)</span></td>
+                        <td>@Html.TextBoxFor(m => m.MaturityPeriod, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.MaturityPeriod)</td>
+                    </tr>
+                    <tr>
+                        <td>Start Date</td>
+                        <td>
+                            @if (Model.StartDate != null)
+                            {
+                                @Html.TextBoxFor(m => m.StartDate, "{0:dd'/'MMM'/'yyyy}", new { @class ="form-control Next dateTimePicker", @readonly=true  })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.StartDate, new { @class ="form-control Next dateTimePicker", @readonly=true })
+                            }
+                            @Html.ValidationMessageFor(v => v.StartDate)
+                        </td>
+                        <td>Maturity Date</td>
+                        <td> @Html.TextBox("lblMaturityDate", null, new { @class ="form-control Next", @readonly=true })</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td>@Html.TextBoxFor(m => m.Amount, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.Amount)</td>   
+                        <td>Interest Rate <span style="color:blue">(%)</span></td>
+                        <td>
+                            @Html.TextBoxFor(m => m.InterestRate, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.InterestRate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ledger</td>
+                        <td colspan="3">@Html.DropDownListFor(m => m.LedgerID, (SelectList)ViewData["LedgerOptions"], string.Empty, new { @class = "form-control Next", @id="ddlLedger" })
+                            <span style="color:blue">If not selected <span style="font-weight:bold">Investment</span> account will be debited!</span>
+                            
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>Renew</td>
+                        <td> @Html.CheckBoxFor(m => m.Renew)</td>
+                        <td>Instrument</td>
+                        <td><input type="text" class="form-control" id="RenewInstrument" name="RenewInstrument" placeholder="Type Instrument Number" /></td>
+                        @Html.HiddenFor(m => m.RenewInstrumentID, new {@class ="form-control Next" })
+                    </tr>*@
+
+
+                    <tr>
+                        <td>Instrument Type</td>
+                        <td>@Html.TextBoxFor(m => m.InstrumentType, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentType)</td>
+                        <td>Instrument Number</td>
+                        <td>@Html.TextBoxFor(m => m.InstrumentNumber, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentNumber)</td>
+                    </tr>
+                    <tr>
+                        <td>Institution</td>
+                        <td>@Html.TextBoxFor(m => m.Institution, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.Institution)</td>
+                        <td>Branch</td>
+                        <td>@Html.TextBoxFor(m => m.Branch, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.Branch)</td>
+                    </tr>
+                    @*<tr>
+                        <td>Date of Deposit</td>
+                        <td>
+                            @Html.TextBoxFor(m => m.DepositDate, "{0:dd'/'MMM'/'yyyy}", new { @class = "form-control Next dateTimePicker", @readonly = true })
+                            @Html.ValidationMessageFor(v => v.DepositDate)
+                        </td>
+                        <td>Date of Maturity</td>
+                        <td>
+                            @Html.TextBoxFor(m => m.MaturityDate, "{0:dd'/'MMM'/'yyyy}", new { @class = "form-control Next dateTimePicker", @readonly = true })
+                            @Html.ValidationMessageFor(v => v.MaturityDate)
+                        </td>
+                    </tr>*@
+                    <tr>
+                        <td>Date of Deposit</td>
+                        <td>
+                            @if (Model.DepositDate != null)
+                            {
+                                @Html.TextBoxFor(m => m.DepositDate, "{0:dd'/'MMM'/'yyyy}", new { @class = "form-control Next dateTimePicker", @readonly = true })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.DepositDate, new { @class = "form-control Next dateTimePicker", @readonly = true })
+                            }
+                            @Html.ValidationMessageFor(v => v.DepositDate)
+                        </td>
+                        <td>Maturity Period<span style="font-size:smaller;color:blue"><br />(In Month)</span></td>
+                        <td>@Html.TextBoxFor(m => m.MaturityPeriod, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.MaturityPeriod)</td>
+                    </tr>
+
+                    @*<tr>
+                        <td>Maturity Date</td>
+                        <td> @Html.TextBox("lblMaturityDate", null, new { @class = "form-control Next", @readonly = true })</td>
+                    </tr>*@
+                    <tr>
+                        @*<td>
+                            Maturity Period<span style="font-size: smaller; color: blue">
+                                <br />
+                                (In Month)
+                            </span>
+                        </td>
+                        <td>@Html.TextBoxFor(m => m.MaturityPeriod, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.MaturityPeriod)</td>*@
+                        <td>Maturity Date</td>
+                        <td> @Html.TextBox("lblMaturityDate", null, new { @class = "form-control Next", @readonly = true })</td>
+                        <td>Amount</td>
+                        <td>@Html.TextBoxFor(m => m.Amount, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.Amount)</td>
+
+                    </tr>
+                    <tr>
+                        <td>Interest Rate <span style="color: blue">(%)</span></td>
+                        <td>
+                            @Html.TextBoxFor(m => m.InterestRate, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InterestRate)
+                        </td>
+                        <td>TDS</td>
+                        <td>@Html.TextBoxFor(m => m.TDSonFDR, new { @class = "form-control Next", value = "0" })</td>
+                    </tr>
+                    <tr>
+                        <td>Tax</td>
+                        <td>@Html.TextBoxFor(m => m.FDRTax, new { @class = "form-control Next", value = "0" })</td>
+                        <td>Bank Charge</td>
+                        <td>@Html.TextBoxFor(m => m.BankCharge, new { @class = "form-control Next", value = "0" }) </td>
+                    </tr>
+                    <tr>
+                        <td>Ledger</td>
+                        <td colspan="3">
+                            @Html.DropDownListFor(m => m.LedgerID, (SelectList)ViewData["LedgerOptions"], string.Empty, new { @class = "form-control Next", @id = "ddlLedger", placeholder = "Select the ledger head" })
+                        <span style="color: blue">Please selecte the <span style="font-weight:bold ">Debit ledger head</span> for <span style="font-weight: bold">Investment</span> account</span>
+                    </td>
+                </tr>
+                @*<tr>
+    <td>
+        For Coupon date add please click here
+        @Html.CheckBoxFor(m => m.CheckBoxValue, new { onclick = "PeriodicDateAdd()" })*
+                    </td>
+                    <td colspan="3">
+                        @* @Html.RadioButtonFor(m => m.Comment, "Periodic", new { onclick = "PeriodicDateAdd()" })*
+
+                           @Html.HiddenFor(m => m.Comment)*
+                        @Html.TextBoxFor(m => m.NoofPeriod, new { @class = "form-control Next" })*
+                    </td>
+                </tr>*@
+                    <tr>
+                        <td>Renew</td>
+                        <td> @Html.CheckBoxFor(m => m.Renew)</td>
+                        <td>Instrument</td>
+                        <td><input type="text" class="form-control" id="RenewInstrument" name="RenewInstrument" placeholder="Type Instrument Number" /></td>
+                        @Html.HiddenFor(m => m.RenewInstrumentID, new { @class = "form-control Next" })
+                    </tr>
+                </table>
+                <button type="button" class="btn btn-default btn-xs" onclick="addNew()">Add New</button>
+                <button type="button" class="btn btn-info btn-xs" onclick="passVoucher($('#instrumentID').val())">Pass Voucher</button>
+                 <button type="button" class="btn btn-xs btn-danger" onclick="InstrumentDelete($('#instrumentID').val())" >
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                
+                <button type="button" class="pull-right btn btn-success btn-xs Next" onclick="save();" id="save_btn">Save</button>
+                
+            }
+        </fieldset>
+     @if (Model.InstrumentID != 0)
+     {
+        <br />
+        <div class="alert alert-warning editUser">This information was updated by @Model.EditUserName at @Model.EditDate</div>
+    }
+    else{
+    
+         }
+<script type="text/javascript">
+
+    // Added by Shohid 23 Aug 2016
+    if ($("#Renew").prop("checked") == true) {
+        $("#RenewInstrument").show();
+        //var value = '@ViewBag.instrumentName'
+        $("#RenewInstrument").val('@ViewBag.instrumentName');
+    }
+    else {
+        $("#RenewInstrument").hide();
+    }
+
+    $("#DepositDate").change(function () {
+
+        var _maturityPeriod = $("#MaturityPeriod").val();
+            var _depositDate = new Date($("#DepositDate").val());
+           var meturityDate = _depositDate;
+           meturityDate.setMonth(parseInt(_depositDate.getMonth()) + parseInt(_maturityPeriod));
+           $("#lblMaturityDate").val(meturityDate);
+        });
+
+    // Added by Shohid 23 Aug 2016
+    $("#MaturityPeriod").change(function () {        
+        var _maturityPeriod = $("#MaturityPeriod").val();
+        // added by Izab 07 April 2020
+        var _year = _maturityPeriod / 12;
+        $('#RateTable').empty();
+        if (_year > 1) {
+            //$("#rate").show();
+            var td = "";
+            for (var i = 1; i < _year; i++) {
+                td += '<div style="padding:5px;"><input type="text" name="rate_' + i + '" class="form-control _interestRate" id="rate_' + i + '"/></div>';
+            }
+            $('#RateTable').append(td);
+            $("#rate").show();
+        }
+        else {
+            $("#rate").hide();
+            $('#RateTable').empty();
+        }
+        //End by Izab
+        var _depositDate = new Date($("#DepositDate").val());
+        var meturityDate = _depositDate;
+        meturityDate.setMonth(parseInt(_depositDate.getMonth()) + parseInt(_maturityPeriod));
+        $("#lblMaturityDate").val(meturityDate);
+    });
+
+    // added by Izab 15 April 2020
+    $("#InterestRate").change(function () {
+        var _interestRate = $("#InterestRate").val();
+        var addInterestRate = _interestRate;
+        $("._interestRate").val(addInterestRate);
+    });
+    //End by Izab
+
+
+    // Added by Shohid 23 Aug 2016
+    $("#Renew").change(function()
+    {
+        if ($("#Renew").prop("checked") == true) {
+            $("#RenewInstrument").show();
+        }
+        else {
+            $("#RenewInstrument").hide();
+        }
+    })
+
+    // Added by Shohid 24 Aug 2016
+    $(function () {
+        $("#RenewInstrument").autocomplete({
+            source: rootPath + "/Instrument/Instrument/AutocompleteSuggestions",
+            minLength: 1,
+            select: function (event, ui) {
+                event.preventDefault();
+                $("#RenewInstrumentID").val(ui.item.value);
+                $("#RenewInstrument").val(ui.item.label);
+                return false;
+            },
+            focus: function (event, ui) {
+                event.preventDefault();
+                $("#RenewInstrument").val(ui.item.label);
+            },
+        });
+    });    
+</script>

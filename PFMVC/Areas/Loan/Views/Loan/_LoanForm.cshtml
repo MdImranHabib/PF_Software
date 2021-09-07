@@ -1,0 +1,118 @@
+﻿@model DLL.ViewModel.VM_PFLoan
+
+@{
+    Layout = null;
+}
+
+  
+    @using (Ajax.BeginForm("LoanForm", "Loan",null, new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessLoanForm"
+	}, new { @id = "DialogForm1" }))
+    {
+        
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+        
+    <div id="update-message1" class="error"></div>
+        @Html.HiddenFor(m => m.EmpID)
+    <input type="hidden" value="@ViewBag.RuleID" name="RuleID"/>
+        <input type="hidden" value="@ViewBag.PayableAmount" name="PayableAmount" />
+<table class="table table-striped table-condensed">
+    
+    <tr>
+        <td>@Html.LabelFor(m => m.PFLoanID)</td><td>@Html.TextBoxFor(m => m.PFLoanID, new { @readonly="readonly", @style="color:blue; background-color:cyan", @class="form-control Next"}) @Html.ValidationMessageFor(m => m.PFLoanID)</td>
+    </tr>
+      <tr>
+        <td>@Html.LabelFor(m => m.LoanAmount)</td><td>@Html.TextBoxFor(m => m.LoanAmount, new { @class="target form-control Next"}) @Html.ValidationMessageFor(m => m.LoanAmount)</td>
+    </tr>
+      <tr>
+        <td>@Html.LabelFor(m => m.TermMonth)</td><td>@Html.TextBoxFor(m => m.TermMonth, new { @class = "target form-control Next" })  @Html.ValidationMessageFor(m => m.TermMonth)</td>
+    </tr>
+     
+      <tr>
+        <td>@Html.LabelFor(m => m.Interest)</td><td>@Html.TextBoxFor(m => m.Interest, new { @readonly="readonly", @class="target form-control Next"}) @Html.ValidationMessageFor(m => m.Interest)</td>
+    </tr>
+     <tr>
+        <td>@Html.LabelFor(m => m.Installment)</td><td>@Html.TextBoxFor(m => m.Installment, new { @style="color:blue;", @class="form-control Next" }) @Html.ValidationMessageFor(m => m.Installment)</td>
+    </tr>
+      <tr>
+        <td>@Html.LabelFor(m => m.StartDate)</td>
+          <td>
+              @if(Model.StartDate != null)
+              {
+                @Html.TextBoxFor(m => m.StartDate, "{0:dd'/'MMM'/'yyyy}", new { @class="dateTimePicker form-control Next", @readonly="readonly" })
+              }
+              else
+              {
+                  @Html.TextBoxFor(m => m.StartDate, new { @class = "dateTimePicker form-control Next", @readonly = "readonly" })
+              }
+              @Html.ValidationMessageFor(m => m.StartDate)
+          </td>
+    </tr>
+</table>
+    }
+
+
+
+<script type="text/javascript">
+    $(function () {
+        $('.dateTimePicker').datepicker({ dateFormat: "dd/M/yy", changeYear: true });
+
+
+        var p_hlemi;
+        var tmpgp;
+        var tmpk;
+
+        var _intRate = 0;
+        var _loanTenor = 0;
+        var _loanAmount = 0;
+
+        $('.target').change(function () {
+            _initRate = $("#Interest").val();
+            _loanTenor = $("#TermMonth").val();
+            _loanAmount = $("#LoanAmount").val();
+          
+            var URL = rootPath + "/Loan/Loan/GetMonthlyPayment/?_loanTenor=" + _loanTenor+"&_loanAmount="+_loanAmount+"&_intRate="+_initRate;
+            $.get(URL, function (data) {
+                if (data.Success == true) {
+                    $("#Installment").val(data.Result);
+                }
+                else {
+                    $("#Installment").val(0);
+                }
+            });
+
+            //var tmpk = 1 / (1 + (_intRate / 100) * 1 / 12);
+            //alert(tmpk);
+            //var tmpgp = (Math.pow(tmpk, _loanTenor) - 1) / (tmpk - 1) * tmpk;
+            //alert(tmpgp);
+            //var p_hlemi = _loanAmount / tmpgp / 1;
+            //alert(p_hlemi);
+            //var p_hlemi_round = Math.round(p_hlemi, 4);
+            //$("#Installment").val(p_hlemi_round);
+
+        });
+      
+       
+    });
+
+    $('#TermMonth').change(function () {
+
+        var termMonth = $('#txtid').val();
+        _loanTenor = $("#TermMonth").val();
+
+        var URL =rootPath + "/Loan/Loan/GetInterest/?_loanTenor=" + _loanTenor;
+        $.get(URL, function (data) {
+            if (data.Success == true) {
+
+                $("#Interest").val(data.Result);
+            }
+        });
+    })
+
+
+</script>

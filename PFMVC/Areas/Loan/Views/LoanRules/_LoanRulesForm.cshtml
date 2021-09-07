@@ -1,0 +1,40 @@
+﻿@model DLL.ViewModel.VM_LoanRules
+
+@{
+    Layout = null;
+}
+
+
+
+
+@using (Ajax.BeginForm("LoanRulesForm", "LoanRules", new { Area = "Loan" }, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccessLoanRulesForm"
+}, new { @id = "DialogForm1" }))
+{
+    
+<div id="update-message1" class="error"></div>
+    @Html.HiddenFor(model => model.ROWID)
+    <table>
+        <tr><td>@Html.LabelFor(m => m.WorkingDurationInMonth)</td><td>@Html.TextBoxFor(m => m.WorkingDurationInMonth, new { @class="form-control", @style="text-align:center"}) @Html.ValidationMessageFor(m => m.WorkingDurationInMonth)</td></tr>
+        <tr><td>Own Part Payable (%)</td><td>@Html.TextBoxFor(m => m.OwnPartPayable, new { @class="form-control"})</td></tr>
+        <tr><td>Employer Part Payable (%)</td><td>@Html.TextBoxFor(m => m.EmpPartPayable, new { @class="form-control"})</td></tr>
+         <tr><td>Own Profit Part Payable (%)</td><td>@Html.TextBoxFor(m => m.OwnProfitPartPayable, new { @class="form-control"})</td></tr>
+        <tr><td>Emp. Profit Part Payable (%)</td><td>@Html.TextBoxFor(m => m.EmpProfitPartPayable, new { @class="form-control"})</td></tr>
+        <tr><td>Interest Rate (%)</td><td>@Html.TextBoxFor(m => m.IntarestRate, new { @class="form-control"})</td></tr>
+        <tr><td>Installment</td><td>@Html.TextBoxFor(m => m.Installment, new { @class="form-control"})</td></tr>
+        @if (Model.EffectiveFrom != null)
+        {
+            <tr><td>@Html.LabelFor(m => m.EffectiveFrom)</td><td>@Html.TextBoxFor(m => m.EffectiveFrom, "{0:dd'/'MMM'/'yyyy}", new { @class = "dateTimePicker form-control", @readonly = "readonly" }) @Html.ValidationMessageFor(m => m.EffectiveFrom)</td></tr>
+        }
+        else
+        {
+             
+            <tr><td>@Html.LabelFor(m => m.EffectiveFrom)</td><td>@Html.TextBoxFor(model => model.EffectiveFrom, new { @class = "dateTimePicker form-control", @readonly = "readonly" })  @Html.ValidationMessageFor(m => m.EffectiveFrom)</td></tr>
+        }
+    </table>
+    <label style="font-size:smaller; color:red;">Deactivated rule cannot be Re-activate again.</label><br />
+    
+}

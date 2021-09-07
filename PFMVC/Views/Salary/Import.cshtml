@@ -1,0 +1,60 @@
+﻿@{
+    ViewBag.Title = "Import";
+}
+<div class="row">
+    
+
+      
+
+            <div class="col-md-6">
+                  <fieldset><legend>Import Salary-1 (System)</legend>
+    <strong class="error">@ViewBag.Message</strong>
+                     @using (Html.BeginForm("ImportExcel", "Salary", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                     {
+                     <table>
+                         <tr style="font-weight:bold"><td>Salary month</td><td><input type="text" id="date" name="date" class="dateTimePickerNoFuture form-control", readonly = "readonly" style="width:120px;" value="@ViewBag.Month" /></td>
+                     <td style="font-weight:bold">Excel file</td><td><input  type="file"  id="FileUpload1" name="FileUpload1" /></td>
+                     <td><input  type="submit" id="Submit" name="Submit" value="Submit" class="btn btn-success"/></td></tr>
+                     </table>
+                     }
+
+                <br />
+                <br />
+
+                <div class="alert alert-info">
+                    You need to upload contribution file for the month. This file should be in excel format containing the required field.
+            <em>After uploading the file you will see a validation page which contain necessary information</em>
+                    <br />
+                    <u>We don't keep the EXCEL file after information has been extracted.</u>
+                    <br />
+                    <strong>Please note, </strong>
+                    <br />
+                    This process will not finally execute iff your excel file contain any single error!
+                </div>
+        </fieldset>
+    </div>
+
+            
+        
+
+
+       <div class="col-md-3 pull-right">
+           <fieldset><legend>Instruction</legend>
+          <p class="alert alert-warning">
+            <label style="color:green; font-weight:bold">Excel file should contain the following header with correct spelling...</label><br /><br />
+        </p>
+         <table class="table table-condensed">
+             <thead style="font-weight:bold"><tr><td>Header</td><td>Cell Type</td><td></td></tr></thead>
+                  <tr><td>Employee ID</td><td>Text</td><td>*</td></tr>
+                <tr><td>Basic Salary</td><td>Number</td><td>*</td></tr>
+            
+            </table>
+            @Html.ActionLink("Download sample excel", "SampleSalaryImportSheet", "Download", null, new { @class = "link", @style = "font-size:smaller;" })
+               </fieldset>
+        
+    </div>
+
+
+       </div>         
+
+

@@ -1,0 +1,192 @@
+﻿@{
+    ViewBag.Title = "Members' Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*Edited by fahim 27/10/2015*@
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            <legend>Member Register</legend>
+            @*Edited by Fahim date:27/10/2015*@
+            <table>
+                <tr>
+                    <td>From Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtFromDate" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>To Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtToDate" />
+                    </td>
+                </tr>
+            </table>
+            <table>
+
+                <tr>
+                    <td>
+                        <input id="searchTerm" name="searchTerm" type="text" placeholder="Select Employee ID" class="form-control" /><input type="hidden" id="SelectedEmpID" name="SelectedEmpID" />
+                    </td>
+                    <td>
+                        <input id="searchTermName" name="searchTermName" type="text" placeholder="Select Employee Name" class="form-control" /><input type="hidden" id="SelectedEmpName" name="SelectedEmpName" />
+                    </td>
+                    <td>
+                        <input id="find" type="button" class="btn btn-info" value="Find" onclick="GetEmployee()" />
+                    </td>
+                    <td>
+                        <input id="getAllMembersRegister" type="button" class="btn btn-success" value="Get All Members Register" onclick="GetAllMembersRegister()" />
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div id="dvMessage"></div>
+            <br />
+
+            <div class="col-md-12">
+                <div id="dvMembersRegister"></div>
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+
+
+@section scripts{
+
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#ui-datepicker-div").hide();
+        });
+
+        function GetEmpId() {
+            var empIdentification = $("#searchTerm").val();
+            $.ajax({
+                type: 'POST',
+                url: rootPath + "/MembersRegister/GetEmpId",
+                data: { IdentificationNumber: empIdentification },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#SelectedEmpID").val(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+                }
+            });
+        }
+
+        function RemoveFilter () {
+            $("#SelectedEmpID").val("");
+            $("#searchTerm").val("");
+            $("#searchTermName").val("");
+        }
+
+        $(function () {
+            $("#searchTerm").autocomplete({
+                source: rootPath + "/MembersRegister/AutocompleteSuggestions",
+                minLength: 1,
+                select: function (event, ui) {
+                    $('input[name="searchTerm"]').val(ui.item.label);
+                    $('input[name="searchTermName"]').val(ui.item.value);
+                    GetEmpId();
+                    return false;
+                }
+            });
+        });
+
+        $(function () {
+            $("#searchTermName").autocomplete({
+                source: rootPath + "/MembersRegister/AutocompleteSuggestionsName",
+                minLength: 1,
+                select: function (event, ui) {
+                    $('input[name="searchTermName"]').val(ui.item.label);
+                    $('input[name="searchTerm"]').val(ui.item.value);
+                    GetEmpId();
+                    return false;
+                }
+            });
+        });
+
+        _curEmployeeID = '';
+
+        function GetEmployee() {
+            _txtEmpId = $("#searchTerm").val();
+            if (_txtEmpId == "" || _txtEmpId == null) {
+                ShowModalMessage("Please Enter Employee Id.");
+                $('#loading-indicator').hide();
+                return;
+            }
+            _curEmployeeID = $("#SelectedEmpID").val();
+            if (_curEmployeeID == null || _curEmployeeID == "") {
+                ShowModalMessage("Please Enter Employee Id.");
+                $('#loading-indicator').hide();
+                return;
+            }
+            var startDate = $('#txtFromDate').val();
+            var endDate = $('#txtToDate').val();
+            if (Date.parse(startDate) > Date.parse(endDate)) {
+                ShowModalMessage("To Date must be Greater than From Date");
+                $('#loading-indicator').hide();
+                return;
+            }
+            if (startDate == "" || endDate == "") {
+                ShowModalMessage("Pl's Fill To Date & From Date");
+                $('#loading-indicator').hide();
+                return;
+            }
+            var viewUrl = rootPath + '/MembersRegister/SingleMembersRegister/?EmployeeID=' + _curEmployeeID + '&toDate=' + endDate + '&fromDate=' + startDate;
+            RemoveFilter();
+            if (_curEmployeeID) {
+                $.get(viewUrl, function (data) {
+                    $("#dvMembersRegister").html('');
+                    $("#dvMembersRegister").html(data);
+                });
+            }
+            else {
+                ShowModalMessage("Pl's Fill All the fields.");
+                $('#loading-indicator').hide();
+                return;
+            }
+        }
+
+        $('#searchTerm').keyup(function (e) {
+
+            if (e.keyCode == 13) {
+                GetEmployee();
+                $('#GetEmployee').focus();
+            }
+        });
+
+        //Edited by Fahim 27/10/2015 
+
+        function GetAllMembersRegister() {
+            RemoveFilter();
+            // Added if date empty show message //Fahim 27/10/2015            
+            var startDate = $('#txtFromDate').val();
+            var endDate = $('#txtToDate').val();
+            if (Date.parse(startDate) > Date.parse(endDate)) {
+                ShowModalMessage("To Date must be Greater than From Date");
+                $('#loading-indicator').hide();
+                return;
+            }
+            if (startDate == "" || endDate == "") {
+                ShowModalMessage("Pl's Fill To Date & From Date");
+                $('#loading-indicator').hide();
+                return;
+            }
+
+            //var URL = rootPath + "/MembersRegister/GetAllMembersRegister/";
+            var URL = rootPath + '/MembersRegister/GetAllMembersRegister/?toDate=' + endDate + '&fromDate=' + startDate;
+            $.get(URL, function (data) {
+                $("#dvMembersRegister").html('');
+                $("#dvMembersRegister").html(data);
+            });
+        }
+
+    </script>
+}

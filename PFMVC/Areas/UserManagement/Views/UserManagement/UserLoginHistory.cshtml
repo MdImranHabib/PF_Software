@@ -1,0 +1,35 @@
+﻿@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "User Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset><legend>User Login History</legend></fieldset>
+@(Html.Telerik().Grid<DLL.ViewModel.VM_UserLoginHistory>()
+    .Name("UserLoginHistory").HtmlAttributes(new { @class="A"})
+            .DataKeys(keys => { keys.Add(s => s.rowid); })
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectUsersLoginHistory", "UserManagement");
+            }
+        )
+        .Columns(columns =>
+                {
+                    
+                    columns.Bound(s => s.UserFullName);
+                    columns.Bound(s => s.UserName);
+                    columns.Bound(s => s.LoginTime);
+                    columns.Bound(s => s.Host);
+                    columns.Bound(s => s.Terminal);
+                    columns.Bound(s => s.LoginTime);
+                    columns.Bound(s => s.SignOut).Title("Signout Time");
+                }
+            )
+            .Filterable()
+              .Pageable(s => s.PageSize(10))
+              .Sortable()
+)

@@ -1,0 +1,25 @@
+﻿@{
+    Layout = null;
+}
+
+@if(!string.IsNullOrEmpty(ViewBag.TotalCount+""))
+{
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="~/NotificationFactory/NotificationDetailPF/" id="Notification">
+            @*    <a href="~/NotificationFactory/NotificationDetailAccounting/" id="Notification">*@
+                <span class="glyphicon glyphicon-bell"></span>
+                    &nbsp Notification &nbsp 
+                <span class="badge pull-right">@ViewBag.TotalCount</span></a>
+        </li>
+    </ul>
+    }
+else{
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a href="#" id="Notification">
+            No Notification 
+            </a>
+        </li>
+    </ul>
+}

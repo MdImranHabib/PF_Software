@@ -1,0 +1,94 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_PFLoanPayment>
+@{
+    ViewBag.Title = "LoanPaymentNoError";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+
+<div class="alert alert-success"><strong id="msg">@ViewBag.Message</strong> </div>
+
+  @using (Ajax.BeginForm("ImportExcelSave", "Import",new { process_number = @ViewBag.ProcessNumber} , new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessEmployeeImport"
+	}, new { @id = "DialogForm1" }))
+    {
+    
+    <div id="update-message1" class="error"></div>
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" />
+      <div id="info">
+    <table class="table table-striped table-condensed" style="text-align:center">
+        <tr style="font-weight:bold; ">
+            <td>Employee ID</td>
+            <td>Loan ID</td>
+            <td>Principal Amount</td>
+            
+            <td>Interest Amount</td>
+
+           @* <td>Installment Amount</td>*@
+            <td>Installment Year</td>
+            <td>Installment Month</td>
+            @*<td>Installment Number</td>*@
+            <td>Payment Date</td>
+            <td>Error Message (If Any)</td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].IdentificationNumber) @Html.HiddenFor(m => m[i].IdentificationNumber)</td>
+                <td>@Html.DisplayFor(m => m[i].LoanID) @Html.HiddenFor(m => m[i].LoanID)</td>
+                <td>@Html.DisplayFor(m => m[i].PrincipalAmount) @Html.HiddenFor(m => m[i].PrincipalAmount)</td>
+                
+                <td>@Html.DisplayFor(m => m[i].Interest) @Html.HiddenFor(m => m[i].Interest)</td>
+
+                <td>@Html.DisplayFor(m => m[i].ConYear) @Html.HiddenFor(m => m[i].ConYear)</td>
+                <td>@Html.DisplayFor(m => m[i].ConMonth) @Html.HiddenFor(m => m[i].ConMonth)</td>
+               @* <td>@Html.DisplayFor(m => m[i].InstallmentAmount) @Html.HiddenFor(m => m[i].InstallmentAmount)</td>*@
+               @* <td>@Html.DisplayFor(m => m[i].InstallmentNumber) @Html.HiddenFor(m => m[i].InstallmentNumber)</td>*@
+                <td>@Html.DisplayFor(m => m[i].PaymentDate) @Html.HiddenFor(m => m[i].PaymentDate)</td>
+                <td>@Html.DisplayFor(m => m[i].PreImportMessage) @Html.HiddenFor(m => m[i].PreImportMessage)</td>
+                
+            </tr>
+        }
+    </table>
+          </div>
+<hr />
+        @Html.ActionLink("Re-Upload", "Index", "Import", new { area="Loan", @class="btn btn-success"})
+ 
+     <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-warning pull-right">Process Data</button>
+  }
+
+        </div>
+    </div>
+
+@section scripts{
+    
+    <script type="text/javascript">
+
+        function updateSuccessEmployeeImport(data) {
+            if (data.Success == true) {
+                ShowDropDownMessage(data.Message);
+                $("#update-message1").hide();
+                $("#msg").text("Information imported successfully...");
+                $("#info").html('');
+                document.getElementById('submitbtn').style.visibility = 'hidden';
+            }
+            else {
+                $("#update-message1").html(data.ErrorMessage);
+                $("#update-message1").show();
+            }
+        }
+
+        function ShowDropDownMessage(_message) {
+
+            $('#commonMessage').html(_message);
+            $('#commonMessage').delay(400).slideDown(400).delay(3000).slideUp(400);
+        }
+
+    </script>
+    }

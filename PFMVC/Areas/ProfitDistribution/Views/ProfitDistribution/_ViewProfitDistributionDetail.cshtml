@@ -1,0 +1,56 @@
+﻿@model List<DLL.ViewModel.VM_Contribution>
+
+<div class="alert alert-success">
+    From Date: @ViewBag.FromDate.ToString("dd/MMM/yyyy") To Date: @ViewBag.ToDate.ToString("dd/MMM/yyyy"), 
+    Distributable Amount: @ViewBag.DistributableAmount Distributed Amount: @ViewBag.DistributedAmount 
+    Operated By: @ViewBag.EditUserName
+</div>
+
+<br />
+<table class="table table-condensed table-striped smaller">
+    <tr>
+        <td>
+            ID
+        </td>
+        <td>
+            Employee Name
+        </td>
+        <td>
+            Self Contributation
+        </td>
+        <td>
+           Self Profit
+        </td>
+        <td>
+            Emp. Contributation
+        </td>
+        <td>
+           Emp Profit
+        </td>
+    </tr>
+    @foreach (var item in Model)
+    {
+    <tr>
+        <td>
+            @item.IdentificationNumber
+        </td>
+        <td>
+            @item.EmpName
+        </td>
+        <td>
+            @item.SelfContribution.ToString("#,##,##,##0.00")
+        </td>
+        <td>
+            @item.SelfProfit.ToString("#,##,##,##0.00")
+        </td>
+        <td>
+            @item.EmpContribution.ToString("#,##,##,##0.00")
+        </td>
+        <td>
+            @item.EmpProfit.ToString("#,##,##,##0.00")
+        </td>
+    </tr>
+    }
+
+</table>
+

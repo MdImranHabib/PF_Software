@@ -1,0 +1,95 @@
+﻿@model DLL.ViewModel.VM_Employee
+@{
+    Layout = null;
+}
+
+<fieldset>
+    <legend>Employee Detail</legend>
+    <table class="table table-condensed table-striped" style="font-size: smaller">
+        <tr>
+            <td>Employee Name</td>
+            <td>@Html.DisplayFor(m => m.EmpName)</td>
+        </tr>
+        <tr>
+            <td>Designation Name</td>
+            <td>@Html.DisplayFor(m => m.opDesignationName)</td>
+        </tr>
+        <tr>
+            <td>Department Name</td>
+            <td>@Html.DisplayFor(m => m.opDepartmentName)</td>
+        </tr>
+        <tr>
+            <td>Contact Number</td>
+            <td>@Html.DisplayFor(m => m.ContactNumber)</td>
+        </tr>
+        <tr>
+            <td>E-mail</td>
+            <td>@Html.DisplayFor(m => m.Email)</td>
+        </tr>
+
+        <tr>
+            <td>Joining Date</td>
+            <td>
+                @if (Model.JoiningDate != null)
+                {
+                    @Model.JoiningDate.Value.Date.ToString("dd-MMM-yyyy")
+                }
+            </td>
+        </tr>
+        <tr>
+            <td>PF Activation Date</td>
+            <td>@Model.PFActivationDate.Value.Date.ToString("dd-MMM-yyyy")</td>
+        </tr>
+
+        <tr>
+            <td>Present Address</td>
+            <td>@Html.DisplayFor(m => m.PresentAddress)</td>
+        </tr>
+        <tr>
+            <td>Opening Own Cont</td>
+            <td>@Html.DisplayFor(m => m.opOwnContribution)</td>
+        </tr>
+        <tr>
+            <td>Opening Emp Cont</td>
+            <td>@Html.DisplayFor(m => m.opEmpContribution)</td>
+        </tr>
+        <tr>
+            <td>Opening Loan balance</td>
+            <td>@Html.DisplayFor(m => m.opLoan)</td>
+        </tr>
+        <tr>
+            <td>Opening Profit</td>
+            <td>@Html.DisplayFor(m => m.opProfit)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.PFStatusID)</td>
+            <td>@if (Model.PFStatus == "Active")
+                {
+                @Html.DisplayFor(m => m.PFStatus) <label> ✔ </label>
+                    
+                }
+                else
+                {
+                <label style="color: red; font-weight: bolder;">@Model.PFStatus</label>
+                }</td>
+        </tr>
+        @*<tr>
+            <td colspan="2">
+                <a href="@Url.Action("GetNomineeInformation", "Employee", new { empID = @ViewBag.EmpID })" target="_blank">Nominee Information</a>
+               
+            </td>
+        </tr>*@
+
+    </table>
+
+    @if (!string.IsNullOrEmpty(ViewBag.EditUserName))
+    {
+        <div class="alert alert-warning">
+            @ViewBag.EditUserName
+        </div>
+    }
+
+</fieldset>
+
+
+

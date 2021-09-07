@@ -1,0 +1,28 @@
+﻿--last modified
+
+USE [PFTM]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_GetLedgerTransactionDetail]    Script Date: 9/19/2014 10:34:02 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER proc [dbo].[sp_GetLedgerTransactionDetail]
+@ledgerID uniqueidentifier,
+@fromDate datetime,
+@toDate datetime
+AS
+Begin
+select 	isnull(a.VoucherDetailID,'00000000-0000-0000-0000-000000000000') as VoucherDetailID , a.ChequeNumber, isnull(a.Debit, 0) as Debit, isnull(a.Credit,0) as Credit, b.LedgerName, b.LedgerID--, b.ParentLedgerID as ParentLedgerID
+ ,isnull(b.InitialBalance, 0) as InitialBalance, c.Narration, isnull(c.VoucherID, 0) as VoucherID, c.VNumber,	c.TransactionDate
+ from acc_VoucherDetail a, acc_Ledger b, acc_VoucherEntry  c
+  where
+  b.LedgerID = @ledgerID and
+  a.LedgerID = b.LedgerID and
+  c.TransactionDate >= @fromDate and c.TransactionDate<=@toDate and
+  c.VoucherID = a.VoucherID
+--	a.VoucherID = c.VoucherID and
+		--( b.LedgerID = @ledgerID or b.ParentLedgerID = @ledgerID)
+		
+End

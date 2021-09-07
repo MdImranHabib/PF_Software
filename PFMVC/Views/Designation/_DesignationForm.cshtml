@@ -1,0 +1,26 @@
+﻿@model DLL.ViewModel.VM_Designation
+
+           
+    @using (Ajax.BeginForm("DesignationForm", "Designation", new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccess1"
+	}, new { @id = "DialogForm1" }))
+    {
+    @Html.ValidationSummary(true)
+    <div id="update-message1" class="error"></div>
+        @Html.HiddenFor(model => model.DesignationID)
+        
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.DesignationName, "Designation: ")
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.DesignationName, new { style="max-width: 200px; max-height: 70px; min-width: 199px; ", @class="form-control Next"})
+                @Html.ValidationMessageFor(model => model.DesignationName)
+            </td>
+        </tr>
+    </table>
+}

@@ -1,0 +1,33 @@
+﻿@model DLL.ViewModel.VM_PFStatus
+
+@{
+    Layout = null;
+}
+
+
+<fieldset>
+    <legend>PF Status & Contribution</legend>
+    
+    <dl class="dl-horizontal">
+        <dt>@Html.LabelFor(m => m.PFStatus)</dt><dd>@Html.DisplayFor(m => m.PFStatus)</dd>
+        <dt>@Html.LabelFor(m => m.SelfContribution)</dt><dd>@Html.DisplayFor(m => m.SelfContribution)</dd>
+        <dt>@Html.LabelFor(m => m.OrgContribution)</dt><dd>@Html.DisplayFor(m => m.OrgContribution)</dd>
+         @if(Model.RetirementDate != null)
+        {
+            
+            <dt>@Html.LabelFor(m => m.RetirementDate)</dt> <dd>@Model.RetirementDate.Value.Date.ToString("dd-MMM-yyyy")</dd>
+        }
+        else
+        {
+            <dt>@Html.LabelFor(m => m.RetirementDate)</dt><dd>&zwnj;</dd>
+        }
+    
+    </dl>
+    <br />
+    <div class="form-inline">
+        <hr />
+        @*<input type="button" class="btn btn-info" value="Check Amortization" onclick="CheckAmortization()" />*@
+        <input type="button" class="btn btn-primary" value="Update" onclick="EditPFStatus()" />
+
+    </div>
+</fieldset>

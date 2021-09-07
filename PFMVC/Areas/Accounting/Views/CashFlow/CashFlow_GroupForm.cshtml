@@ -1,0 +1,79 @@
+﻿@model DLL.ViewModel.VM_acc_Cash_Flow_Group
+
+@{
+    Layout = null;
+}
+
+<fieldset>
+    <legend id="addGroupLegend">Add Cash Flow Group@*<button class="btn btn-default btn-xs pull-right" onclick="getGroupTree()" id="report">Group Tree</button> <button class="btn btn-default btn-xs pull-right" onclick="getTreeView()" id="tvw"><span class="glyphicon glyphicon-tree-conifer"></span></button>*@</legend>
+
+@using (Ajax.BeginForm("CashFlowGroupForm", "CashFlow", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccess"
+}, new { @id = "DialogForm1" }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="update-message1"></div>
+       
+        <table class="table table-striped">
+           @* <tr>
+                <td class="a">@Html.Label("Nature")</td>
+                <td>@Html.DropDownListFor(m => m.NatureID, (SelectList)ViewData["Nature"], string.Empty, new { @class = "form-control next", @id = "drop" })</td>
+            </tr>*@
+
+              <tr>
+                <td class="a">@Html.Label("New Cash Flow Group Name")</td>
+                <td>@Html.TextBoxFor(m => m.CashFlow_Group, new { @class = "form-control next", @id="CashFlow_Group", placeholder="New Cash Flow Group Name..." }) @Html.ValidationMessageFor(m => m.CashFlow_Group)</td>
+                  <td class="hidden">@Html.TextBoxFor(m => m.CashFlowGroup_Id)</td>
+            </tr>
+
+            @*<tr>
+                <td class="a">@Html.Label("Group Code")</td>
+                <td>@Html.TextBoxFor(m => m.GroupCode, new { @class = "form-control next", @id="GroupCode", placeholder="Unique Group Code" }) @Html.ValidationMessageFor(m => m.GroupCode)</td>
+            </tr>
+
+            <tr>
+                <td class="a">@Html.Label("Under which Group")</td>
+                <td>@Html.TextBoxFor(m => m.ParentGroupName, new { @class = "form-control next", @id = "underGroup", placeholder="Use up/down arrow and select from right side list..." }) </td>
+            </tr>*@
+
+          
+            
+        </table>
+    <label style="color:lightsteelblue; font-style:italic">Press ENTER to move on NEXT</label>
+        <hr />@*
+        if (Model != null)
+        {
+            <button class="btn btn-danger" type="button"  onclick="deleteGroup(@Model.GroupID);">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+            <button class="btn btn-primary" type="button" onclick="NewGroup();" style="padding-left: 10px">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        }
+        *@
+        <button class="btn btn-success pull-right 3 next" type="button" onclick="save();" id="save_btn">
+            <span class="glyphicon glyphicon-saved"></span> Save
+        </button>
+    }
+     @if (Model != null)
+     {
+        <br />
+        <hr />
+        <label class="mini">@ViewBag.User</label>
+    }
+</fieldset>
+
+<style>
+    .a {
+        vertical-align:middle !important;
+        max-width:80px;
+    }
+
+</style>
+
+<script>
+    $('#CashFlow_Group').focus();
+</script>

@@ -1,0 +1,134 @@
+﻿@model List<DLL.ViewModel.VM_acc_VoucherDetail>
+@{
+    Layout = null;
+}
+
+
+<fieldset><legend style="color:green; font-size:small">Asset</legend>
+    <table class="table table-striped table-condensed" style=" font-size:smaller" id="AssetBook">
+       <tr style="font-weight:bold;">
+            
+            <td>Group</td>
+            <td>Ledger Name</td>
+            <td style="text-align:right">Initial Balance</td>
+            <td style="text-align:right">Debit</td>
+            <td style="text-align:right">Credit</td>
+            <td style="text-align:right">Balance</td>
+        </tr>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                
+                <td>@Model[i].GroupName</td>
+                
+                <td><a href="#" onclick="getLedgerDetail('@Model[i].LedgerID')">@Model[i].LedgerName</a></td>
+                <td id="init-@i" style="text-align:right">@if (@Model[i].InitialBalance != 0)
+                                  { @Model[i].InitialBalance }</td>
+                <td id="debit-@i" style="text-align:right">@if (@Model[i].Debit != 0)
+                                  { @Model[i].Debit }</td>
+                <td id="credit-@i" style="text-align:right">@if (@Model[i].Credit != 0)
+                                   { @Model[i].Credit}</td>
+                <td id="balance-@i" style="text-align:right"></td>
+            </tr>
+        }
+        <tr style=" font-weight:bold">
+            <td colspan="2"></td>
+            <td id="c_init" style="text-align:right"></td>
+            <td id="c_debit" style="text-align:right"></td>
+            <td id="c_credit" style="text-align:right"></td>
+            <td id="c_balance" style="text-align:right"></td>
+        </tr>
+    </table>
+    <input type="hidden" id="Asset_c_init" />
+</fieldset>
+
+<script>
+    $(document).ready(function () {
+        //c_ means cumulative
+        //res means result
+
+        var res_debit = 0;
+        var res_credit = 0;
+        var res_init = 0;
+
+        var c_init = 0;
+        var c_debit = 0;
+        var c_credit = 0;
+
+        var table = document.getElementById('AssetBook');
+
+        var rowLength = table.rows.length;
+
+        for (var i = 0; i < rowLength; i += 1) {
+
+            // credit
+            if (parseFloat($('#AssetBook #credit-' + i).text())) {
+                res_credit = parseFloat($('#AssetBook #credit-' + i).text());
+                c_credit = c_credit + res_credit;
+            }
+            else {
+                res_credit = 0;
+            }
+
+            //debit
+            if (parseFloat($('#AssetBook #debit-' + i).text())) {
+                res_debit = parseFloat($('#AssetBook #debit-' + i).text());
+                c_debit = c_debit + res_debit;
+            }
+            else {
+                res_debit = 0;
+            }
+
+            //init
+            if (parseFloat($('#AssetBook #init-' + i).text())) {
+                res_init = parseFloat($('#AssetBook #init-' + i).text());
+                c_init = c_init + res_init;
+            }
+            else {
+                res_init = 0;
+            }
+
+            var result = parseFloat(res_init) - parseFloat(res_credit) + parseFloat(res_debit);
+            if (!result) {
+                result = 0;
+            }
+            var res_bal = result;
+            if (parseFloat(res_bal) < 0) {
+                $('#AssetBook #balance-' + i).text(AccFormatMoney((res_bal) * (-1)) + " Cr.");
+            }
+            else {
+                $('#AssetBook #balance-' + i).text(AccFormatMoney(res_bal) + " Dr.");
+            }
+        }
+
+        $("#Asset_c_init").val(c_init);
+
+        $('#AssetBook #c_init').text(AccFormatMoney(c_init) + "");
+        $('#AssetBook #c_debit').text(AccFormatMoney(c_debit) + "");
+        $('#AssetBook #c_credit').text(AccFormatMoney(c_credit) + "");
+        var summary = parseFloat(c_init) - parseFloat(c_credit) + parseFloat(c_debit);
+        if (summary < 0) {
+            $('#AssetBook #c_balance').text(AccFormatMoney((summary) * (-1)) + " Cr.");
+        }
+        else {
+            $('#AssetBook #c_balance').text(AccFormatMoney(summary) + " Dr.");
+        }
+
+    });
+
+    function getreport(fromDate, toDate) {
+    
+        var viewURL = '../../Accounting/BalanceSheet/Report/?fromDate='+fromDate+"&toDate="+toDate;
+        //window.open(viewURL, 'window name', 'window settings')
+        FancyBox(viewURL);
+    }
+
+    function getLedgerDetail(ledgerID) {
+
+        var viewURL = '../../Accounting/LedgerBook/Report/?LedgerID=' + ledgerID + '&fromDate=@DateTime.MinValue&toDate=@DateTime.Now.ToString()';
+        //window.open(viewURL, 'window name', 'window settings')
+        FancyBox(viewURL);
+    }
+
+
+</script>

@@ -1,0 +1,269 @@
+﻿
+
+<script>
+    function updateSuccess(data) {
+
+        if (data.Success == true) {
+            ShowDropDownMessage(data.Message);
+            $("#update-message1").html("").removeClass("alert alert-danger");
+            SuccessNotify(data.Message);
+            
+
+            //$("#GroupID").val('');
+            //$("#LedgerID").val('00000000-0000-0000-0000-000000000000'); // empty guid
+            //$("#LedgerName").val('');
+            //$("#underGroup").val('');
+            //$("#InitialBalance").val('');
+            //$("#drop").prop("selectedIndex", 0);
+            //$("#LedgerName").focus();
+            var viewUrl = rootPath + "/Accounting/Ledger/LedgerForm/?LedgerID=00000000-0000-0000-0000-000000000000";
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html("");
+                $("#mainDiv").html(data);
+            });
+            GetLedgerNameList();
+        }
+        else {
+            $("#update-message1").html(data.ErrorMessage).addClass("alert alert-danger");
+            $("#update-message1").show();
+            $("#LedgerName").focus();
+        }
+    }
+
+    function GetLedgerNameList() {
+        var viewUrl =rootPath + "/Accounting/Ledger/GetLedgerNameList/";
+        $.get(viewUrl, function (data) {
+            $("#optionDiv").html(data);
+        })
+    }
+
+    /////////////////////////////////////////////
+    $(document).ready(function () {
+        $(document).unbind("keyup");
+        $('.next').unbind("keyup");
+        $("#LedgerName").focus();
+
+        $('.next').live("keyup", function (e) {
+            var n = $(".next").length;
+
+            if (e.which == 13) { //Enter key
+                e.preventDefault(); //to skip default behavior of the enter key
+                var nextIndex = $('.next').index(this) + 1;
+                if (nextIndex < n)
+                    $('.next')[nextIndex].focus();
+                else {
+                    //save();
+                    $('.next')[nextIndex - 1].blur();
+                }
+            }
+        });
+
+
+        onkeydown = function (e) {
+            if (e.ctrlKey && e.keyCode == 'S'.charCodeAt(0)) {
+                e.preventDefault();
+            }
+        }
+
+    })
+    ///////////////////////////////////////////////////////
+
+    function save() {
+        $("#DialogForm1").submit();
+    }
+
+    $("#underGroup").autocomplete({
+        source: function (request, response) {
+            $.ajax({
+                url: rootPath + "/Accounting/Group/GetGroupNameJson/",
+                datatype: "json",
+                data: {
+                    filter: $("#drop").val(),
+                    term: request.term
+                },
+                success: function (data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 1,
+        select: function (event, ui) {
+            event.preventDefault();
+            $('input[name="underGroup"]').val(ui.item.label);
+            $('input[name="GroupID"]').val(ui.item.value);
+            return false;
+        },
+
+        focus: function (event, ui) {
+            event.preventDefault();
+            $("#underGroup").val(ui.item.label);
+        },
+
+    });
+
+    function deleteGroup(id) {
+        var viewUrl = rootPath + "/Accounting/Ledger/DeleteLedgerPossible/?LedgerID=" + id;
+
+        $.get(viewUrl, function (data) {
+
+            if (data.Success == true) {
+                $("#ModalSpace").html(data.Message),
+                $("#ModalSpace").dialog({
+                    width: 'auto',
+                    resizable: false,
+                    modal: true,
+                    show: "blind",
+                    hide: "blind",
+
+                    title: "Delete",
+                    buttons: [{
+                        text: "Yes", click: function () {
+                            viewUrl = rootPath + "/Accounting/Ledger/DeleteLedgerConfirm/?LedgerID=" + id;
+                            $.post(viewUrl, function (data) {
+
+                                if (data.Success == true) {
+                                    $("#ModalSpace").dialog('close');
+                                    $("#ModalSpace").html('');
+                                    ShowDropDownMessage(data.Message);
+                                    SuccessNotify(data.Message);
+                                    var viewUrl = rootPath + "/Accounting/Ledger/LedgerForm/?LedgerID=00000000-0000-0000-0000-000000000000";
+                                    $.get(viewUrl, function (data) {
+                                        $("#mainDiv").html("");
+                                        $("#mainDiv").html(data);
+                                    })
+                                    GetLedgerNameList();
+                                }
+                                else {
+                                    $("#ModalSpace").html("Something Problem while deleting!!!");
+                                }
+
+                            })
+                        }
+                    }, {
+                        text: "Cancel",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }]
+                });
+            }
+            else {
+                ShowModalMessage(data.ErrorMessage);
+            }
+        });
+        return false;
+    }
+
+
+    //==========================================//
+
+    $('#underGroup').live('blur', function () {
+        $('#GNL td.can_be_selected').removeClass('selectedRow');
+        $('#optionDiv2').addClass("hidden");
+        $('#optionDiv').removeClass("hidden");
+    }).live('focus', function () {
+        
+        FilterAccountHeadTable();
+        $('.editBtn').addClass("hidden");
+        $('#optionDiv').addClass("hidden");
+        $('#optionDiv2').removeClass("hidden");
+    });
+
+    //searching ledgername and should change the index to -1 again!
+    $('#underGroup').live('keyup', function (e) {
+        if ((e.keyCode >= 97 && e.keyCode <= 122) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 8) {
+            FilterAccountHeadTable();
+            $('#underGroup').css({ "color": "red" });
+            $('#GroupID').val("");
+        }
+    });
+
+    function FilterAccountHeadTable() {
+        //InfoNotify("Key Press");
+        index = -1;
+        inp = $('#underGroup').val();
+
+        //InfoNotify(inp);
+        //This should ignore first row with th inside
+        $("#GNL tr:not(:has(>th))").each(function () {
+            if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+                // Show the row (in case it was previously hidden)
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    $("#underGroup").unbind('keydown');
+    var index = -1;
+    //38 up, 40down
+    $("#underGroup").live("keydown", (function (e) {
+        if (e.keyCode === 40) {
+            //InfoNotify("IN>" + index + " and length>" + $('#GNL tr:visible td.can_be_selected').length);
+            index = (index >= $('#GNL tr:visible td.can_be_selected').length) ? 0 : index;
+            //InfoNotify(index);
+            $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+            $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+
+            var s = $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').position();
+            $("div").scrollTop(s.top);
+
+            return false;
+        }
+        else if (e.keyCode === 38) {
+            //InfoNotify(index);
+            index = (index + 1 <= 0) ? $('#GNL tr:visible td.can_be_selected').length - 1 : index;
+            $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+            $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+
+            var s = $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').position();
+            $("div").scrollTop(s.top);
+
+            return false;
+        }
+        else if (e.keyCode == 13) {
+
+            if (index > -1) {
+                //InfoNotify("after enter index>" + index);
+                var groupName = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 0 + ')');
+                var parentGroupID = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 1 + ')');
+                //InfoNotify("led id>" + groupName.text());
+                $('#underGroup').val(groupName.text());
+                $('#GroupID').val(parentGroupID.text());
+                $('#underGroup').css({ "color": "black" });
+                index = -1;
+
+                $('#GNL td.can_be_selected').removeClass('selectedRow');
+            }
+        }
+    }));
+
+    function NewLedger() {
+        
+        var viewUrl = rootPath + "/Accounting/Ledger/LedgerForm/?LedgerID=00000000-0000-0000-0000-000000000000";
+
+        $.get(viewUrl, function (data) {
+            $("#mainDiv").html("");
+            $("#mainDiv").html(data);
+        });
+    }
+
+    function getChartOfAccount() {
+        var viewURL = '../../Accounting/Ledger/ReportChartOfAccount/';
+        FancyBox(viewURL);
+    }
+
+    function getTreeView() {
+        //alert("Will be implemented later!");
+        //var viewUrl = rootPath + "/Accounting/Ledger/LedgerTreeView";
+
+        //$.get(viewUrl, function (data) {
+        //    ShowModalMessage(data);
+        //});
+
+        return false;
+    }
+
+</script>

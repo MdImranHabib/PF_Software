@@ -1,0 +1,149 @@
+﻿
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    #instrumentList{
+    height:500px;
+    overflow-y: scroll;
+}
+</style>
+
+<div class="row">
+    <div class="col-md-4" id="instrumentList">
+
+    </div>
+
+    <div class="col-md-6" id="instrumentForm">
+        
+    </div>
+</div>
+
+@section scripts{
+     <script>
+        $(document).ready(function () {
+            GetInstrumentList();
+            GetInstrumentForm(0);
+            
+        })
+
+
+        function GetInstrumentForm(id) {
+            var viewUrl = "/Instrument/Instrument/Create/?instrumentID="+id;
+
+            $.get(viewUrl, function (data) {
+                $("#instrumentForm").html("");
+                $("#instrumentForm").html(data);
+                //var viewUrl = "/Accounting/Group/GetJQFile/";
+                //$.get(viewUrl, function (data) {
+                //    $("#JQ").html(data);
+                //})
+            })
+        }
+
+        function GetInstrumentList() {
+            var viewUrl = "/Instrument/Instrument/InstrumentList/";
+
+            $.get(viewUrl, function (data) {
+                $("#instrumentList").html("");
+                $("#instrumentList").html(data);
+            })
+        }
+
+
+        function InstrumentDetail(instrumentID) {
+            GetInstrumentForm(instrumentID);
+        }
+
+        function updateSuccess(data) {
+            if (data.Success == true) {
+                $("#instrumentID").val(data.InstrumentID);
+                
+                $("#update-message").html(data.Message).removeClass("alert alert-danger").addClass("alert alert-success");
+                //ShowDropDownMessage(data.Message);
+                GetInstrumentList();
+            }
+            else {
+                $("#update-message").html(data.ErrorMessage).removeClass("alert alert-success").addClass("alert alert-danger");
+            }
+        }
+
+        function addNew() {
+            
+            $(".Next").val("");
+            $("#instrumentID").val(0);
+            $(".editUser").html("").removeClass("alert alert-warning");
+            $("#update-message").html("").removeClass("alert alert-warning alert-success");
+        }
+
+        function passVoucher(id) {
+            
+            var viewURL = "/Instrument/Instrument/PassVoucher/?instrumentID=" + id;
+            $.post(viewURL, function (data) {
+                if (data.Success == true) {
+                    $("#update-message").removeClass("alert alert-danger").addClass("alert alert-success").html("").html(data.Message);
+                    ShowDropDownMessage(data.Message);
+                }
+                else {
+                    $("#update-message").removeClass("alert alert-success").addClass("alert alert-danger").html("").html(data.ErrorMessage);
+                    ErrorNotify(data.ErrorMessage);
+                }
+            });
+        }
+
+        function save() {
+            
+            $("#DialogForm1").submit();
+        }
+
+        function InstrumentDelete(id) {
+
+            if (id < 1) {
+                ShowModalMessage("Please select instrument to delete it...");
+                return;
+            }
+            //========
+            $("#ModalSpace").html("Confirm? This instrument will be deleted and also accounting voucher related to this instrument will be deleted!!!"),
+               $("#ModalSpace").dialog({
+                   width: 'auto',
+                   resizable: false,
+                   modal: true,
+                   show: "slide",
+                   hide: "slide",
+
+                   title: "Confirm Accounting Transaction?",
+                   buttons: [{
+                       text: "Yes", click: function () {
+                           var viewURL = "/Instrument/Instrument/DeleteInstrumentConfirm/?instrumentID=" + id;
+                           $.post(viewURL, function (data) {
+                               if (data.Success == true) {
+                                   $("#update-message").removeClass("alert alert-danger").addClass("alert alert-success").html("").html(data.Message);
+                                   ShowDropDownMessage(data.Message);
+                                   GetInstrumentList();
+                                   $("#ModalSpace").dialog("close");
+                               }
+                               else {
+                                   $("#update-message").removeClass("alert alert-success").addClass("alert alert-danger").html("").html(data.ErrorMessage);
+                                   ErrorNotify(data.ErrorMessage);
+                                   
+                               }
+                           });
+                       }
+                   }, {
+                       text: "Close",
+                       click: function () {
+                           $(this).dialog("close");
+                           //ErrorNotify("You cancelled the operation!");
+                       }
+                   }]
+               });
+            //========
+         
+        }
+
+     </script>
+    }
+         

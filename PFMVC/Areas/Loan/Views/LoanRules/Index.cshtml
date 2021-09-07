@@ -1,0 +1,216 @@
+﻿@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-11">
+        <fieldset>
+            <legend>Loan Rules</legend>
+            @(Html.Telerik().Grid<DLL.ViewModel.VM_LoanRules>()
+    .Name("LoanRulesGrid").HtmlAttributes(new { @class = "A" })
+        .DataKeys(keys => { keys.Add(s => s.ROWID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("New Rules").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectLoanRules", "LoanRules", new { Area = "Loan" });
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.ROWID).Visible(false);
+                    columns.Bound(c => c.WorkingDurationInMonth).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.OwnPartPayable).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EmpPartPayable).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.OwnProfitPartPayable).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EmpProfitPartPayable).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.IntarestRate).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.Installment).HtmlAttributes(new { style = "text-align:center" });
+                    //columns.Bound(p => p.status).Title("Status").HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EffectiveFrom).HtmlAttributes(new { style = "text-align:center" }).Format("{0:dd/MM/yyyy}");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                    columns.Command(commands =>
+                    {
+                        commands.Custom("DeleteCommand").Text("Delete").Ajax(true)
+                       .ButtonType(GridButtonType.Image)
+                       .ImageHtmlAttributes(new { @class = "t-delete" });
+                    }
+                  ).Width(40).Title("");
+                }
+            )
+            .Sortable()
+                    //.Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                {
+                    events.OnCommand("LoanRulesGridOnCommand");
+                })
+                .Selectable()
+)
+        </fieldset>
+    </div>
+</div>
+<div class="col-md-12">
+    <br />
+    <br />
+    <fieldset>
+        <legend>Note</legend>
+        <div class="alert alert-warning">
+            Loan rules are required when we disburse Loan to any employee.
+            
+            <br />
+            <u>Same rule with same working duration can not be created.</u>
+            <br />
+            <strong>Please note, </strong>
+            <br />
+            A rule can not be activated again once de-activated!
+        </div>
+    </fieldset>
+</div>
+
+
+@section scripts{
+
+    <script>
+        var rowid = 0;
+
+        function LoanRulesGridOnCommand(e) {
+
+            $(".ui-dialog-buttonpane").show();
+            var row = e.row;
+            var grid = $(this).data("tGrid");
+            var dataItem = grid.dataItem(row);
+
+            if (e.name == "InsertCommand") {
+                $("#DialogSpace1").dialog("option", "title", "Create Rule");
+                var dialogDiv = $('#DialogSpace1');
+                var viewUrl = rootPath + "/Loan/LoanRules/LoanRulesForm/?rowid=" + 0;
+
+                $.get(viewUrl, function (data) {
+                    dialogDiv.html(data);
+                    var $form = $("#DialogForm1");
+
+                    $form.unbind();
+                    $form.data("validator", null);
+
+                    $.validator.unobtrusive.parse(document);
+
+                    $form.validate($form.data("unobtrusiveValidation").options);
+
+                    dialogDiv.dialog('open');
+                });
+                return false;
+            }
+            else if (e.name == "EditCommand") {
+                d = grid.dataItem(row);
+                _rowid = d.ROWID;
+                _status = d.status;
+
+                if (_status == "Deactivated") {
+                    ShowModalMessage("Deactivated rule cannot be edited...");
+                    return false;
+                }
+                $("#DialogSpace1").dialog("option", "title", "Edit Rule");
+                var dialogDiv2 = $("#DialogSpace1");
+
+                var viewUrl = rootPath + "/Loan/LoanRules/LoanRulesForm/?rowid=" + _rowid;
+
+                $.get(viewUrl, function (data) {
+                    if (data.Success == false) {
+
+                        ShowModalMessage(data.ErrorMessage);
+                        return false;
+                    }
+                    dialogDiv2.html(data);
+                    $(".ui-dialog-buttonpane").show();
+                    var $form = $("#DialogForm1");
+
+                    $form.unbind();
+                    $form.data("validator", null);
+
+                    $.validator.unobtrusive.parse(document);
+
+                    $form.validate($form.data("unobtrusiveValidation").options);
+
+                    dialogDiv2.dialog('open');
+                });
+                return false;
+            }
+            else if (e.name == "DeleteCommand") {
+                _rowid = dataItem.ROWID;
+                var viewUrl = rootPath + "/Loan/LoanRules/LoanRuleDeletePossible/?rowid=" + _rowid;
+
+                $.get(viewUrl, function (data) {
+
+                    if (data.Success == true) {
+                        $("#ModalSpace").html(data.Message),
+                        $("#ModalSpace").dialog({
+                            width: 'auto',
+                            resizable: false,
+                            modal: true,
+                            show: "blind",
+                            hide: "blind",
+
+                            title: "Delete " + dataItem.DepartmentName,
+                            buttons: [{
+                                text: "Yes", click: function () {
+                                    viewUrl = rootPath + "/Loan/LoanRules/LoanRuleDeleteConfirm/?rowid=" + _rowid;
+                                    $.post(viewUrl, function (data) {
+
+                                        if (data.Success == true) {
+                                            //$(".ui-dialog-buttonpane").hide();
+                                            //$("#ModalSpace").html("Deleted successfully!!");
+
+                                            $("#ModalSpace").dialog('close');
+                                            $("#ModalSpace").html('');
+                                            ShowDropDownMessage(data.Message);
+                                            grid.ajaxRequest();
+                                        }
+                                        else {
+
+                                            $("#ModalSpace").html("Something Problem while deleting!!!");
+                                        }
+
+                                    })
+                                }
+                            }, {
+                                text: "Cancel", click: function () {
+                                    $(this).dialog("close");
+                                }
+                            }]
+                        });
+                    }
+                    else {
+                        ShowModalMessage(data.ErrorMessage);
+                    }
+                });
+                return false;
+            }
+        }
+
+
+        function updateSuccessLoanRulesForm(data) {
+            if (data.Success == true) {
+                var rbnd = $('#LoanRulesGrid').data('tGrid');
+                rbnd.rebind();
+                $('#DialogSpace1').dialog('close');
+                ShowDropDownMessage(data.Message);
+                $("#update-message1").hide();
+            }
+            else {
+                $("#update-message1").html(data.ErrorMessage);
+                $("#update-message1").show();
+            }
+        }
+    </script>
+}

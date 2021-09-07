@@ -1,0 +1,104 @@
+﻿@model DLL.ViewModel.VM_Instrument
+
+
+@{ Layout = null; }
+
+<fieldset><legend>Create Instrument</legend>
+    
+@using (Ajax.BeginForm("Create", "Instrument", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccess"
+}, new { @id = "DialogForm1", enctype = "multipart/form-data" }))
+            {   
+                <div id="update-message" class="alert-dismissible">@ViewBag.Message</div>
+                @Html.HiddenFor(m => m.InstrumentID, new { @id ="instrumentID"})
+                <table class="table table-striped">
+                    <tr>
+                        <td>Instrument Type</td>
+                        <td>@Html.TextBoxFor(m => m.InstrumentType, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentType)</td>
+                        <td>Instrument Number</td>
+                        <td>@Html.TextBoxFor(m => m.InstrumentNumber, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentNumber)</td>
+                    </tr>
+                    <tr>
+                        <td>Institution</td>
+                        <td>@Html.TextBoxFor(m => m.Institution, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.Institution)</td>
+                        <td>Branch</td>
+                        <td>@Html.TextBoxFor(m => m.Branch, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.Branch)</td>
+                    </tr>
+                    <tr>
+                        <td>Date of Deposit</td>
+                        <td>
+                            @if(Model.DepositDate != null)
+                            {
+                                @Html.TextBoxFor(m => m.DepositDate, "{0:dd'/'MMM'/'yyyy}", new { @class ="form-control Next dateTimePicker", @readonly=true  })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.DepositDate, new { @class ="form-control Next dateTimePicker", @readonly=true })
+                            }
+                            @Html.ValidationMessageFor(v => v.DepositDate)
+                        </td>
+                        <td>Maturity Period<span style="font-size:smaller;color:blue"><br />(In Month)</span></td>
+                        <td>@Html.TextBoxFor(m => m.MaturityPeriod, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.MaturityPeriod)</td>
+                    </tr>
+                    <tr>
+                        <td>Amount</td>
+                        <td>@Html.TextBoxFor(m => m.Amount, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.Amount)</td>   
+                        <td>Interest Rate <span style="color:blue">(%)</span></td>
+                        <td>
+                            @Html.TextBoxFor(m => m.InterestRate, new { @class ="form-control Next" }) @Html.ValidationMessageFor(v => v.InterestRate)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ledger</td>
+                        <td colspan="3">@Html.DropDownListFor(m => m.LedgerID, (SelectList)ViewData["LedgerOptions"], string.Empty, new { @class = "form-control Next", @id="ddlLedger" })
+                            <span style="color:blue">If not selected <span style="font-weight:bold">Investment</span> account will be debited!</span>
+                            
+                        </td>
+                    </tr>
+                    
+               @* <tr>
+                    <td>
+                       
+                        @Html.TextBoxFor(m => m.photo, new { type = "file", name = "photo", @id = "instument" })
+                        @Html.ValidationMessageFor(model => model.file_name, "", new { @class = "text-danger" })
+                    </td>
+                </tr>*@
+
+               @* <tr>
+                    <td>
+                        @Html.TextBoxFor(m => m.file_data, new { type = "file", name = "file_data" })
+                    </td>
+                </tr>*@
+               @* <tr>
+                    <td>
+                        @Html.Label("Suppored Formats: ") jpeg,docx,pdf<br />
+                    </td>
+                </tr>*@
+               @* <tr>
+                    <td>
+                        <input type="submit" value="Create" class="btn btn-color" />
+                        </td>
+                    </tr>*@
+                </table>
+                <button type="button" class="btn btn-default btn-xs" onclick="addNew()">Add New</button>
+                <button type="button" class="btn btn-info btn-xs" onclick="passVoucher($('#instrumentID').val())">Pass Voucher</button>
+                 <button type="button" class="btn btn-xs btn-danger" onclick="InstrumentDelete($('#instrumentID').val())" >
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                
+                <button type="button" class="pull-right btn btn-success btn-xs Next" onclick="save();" id="save_btn">Save</button>
+                
+            }
+        </fieldset>
+     @if (Model.InstrumentID != 0)
+     {
+                <br />
+                <div class="alert alert-warning editUser">This information was updated by @Model.EditUserName at @Model.EditDate</div>
+            }
+else{
+    
+     }
+

@@ -1,0 +1,112 @@
+﻿
+
+@{
+    Layout = null;
+}
+
+
+<style>
+    #scroller {
+        width: 170px;
+        height: 400px;
+    }
+
+    #inner {
+        width: 100%;
+        overflow-y: scroll;
+        height: 100%;
+        position:relative;
+    }
+</style>
+
+<fieldset>
+    <legend style="color:darkorange">@ViewBag.LegendName</legend>
+    <div id="scroller">
+        <div id="inner">
+                <table class="table table-striped table-condensed smaller" id="GNL" style="position:relative;top:0px;">
+        @foreach (var item in ViewBag.Group)
+        {
+            <tr class="myrow">
+                <td class="can_be_selected">@item.GroupName <span style="color:green">- @item.GroupCode</span>  </td>
+                <td class="hidden">@item.GroupID</td>
+                <td style="max-width:50px; border-left:hidden;" class="editBtn">
+                    @*<button class="btn btn-xs btn-default hidden editbtn pull-right" onclick="editGroup(@item.GroupID);">Edit</button>*@
+                    <a href="#" class="editbtn pull-right hidden" onclick="editGroup(@item.GroupID)">Edit</a>
+                </td>
+                
+            </tr>
+        }
+    </table>
+
+        </div>
+    </div>
+</fieldset>
+
+
+
+<script>
+
+    $(function () {
+        $("table tr").hover(function () {
+            $(this).find(".editbtn").removeClass("hidden");
+        }, function () {
+            $(this).find(".editbtn").addClass("hidden");
+        });
+    });
+
+    function editGroup(id) {
+        var viewUrl = rootPath + "/Accounting/Group/GroupForm/?GroupID=" + id;
+
+        $.get(viewUrl, function (data) {
+            $("#mainDiv").html("");
+            $("#mainDiv").html(data);
+        })
+    }
+
+    $("#underGroup").unbind('keydown');
+    var index = -1;
+    //38 up, 40down
+    $("#underGroup").live("keydown", (function (e) {
+        if (e.keyCode === 40) {
+            //InfoNotify("IN>" + index + " and length>" + $('#GNL tr:visible td.can_be_selected').length);
+            index = (index + 1 >= $('#GNL tr:visible td.can_be_selected').length) ? 0 : index + 1;
+            //InfoNotify(index);
+            $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+            $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+
+            //debugger;
+            var s = $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').position();
+            $("div").scrollTop(s.top);
+
+            return false;
+        }
+        else if (e.keyCode === 38) {
+            //InfoNotify(index);
+            index = (index <= 0) ? $('#GNL tr:visible td.can_be_selected').length - 1 : index - 1;
+            $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+            $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+
+            var s = $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').position();
+            $("div").scrollTop(s.top);
+
+            return false;
+        }
+        else if (e.keyCode == 13) {
+
+            if (index > -1) {
+                //InfoNotify("after enter index>" + index);
+                var groupName = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 0 + ')');
+                var parentGroupID = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 1 + ')');
+                //InfoNotify("led id>" + groupName.text());
+                $('#underGroup').val(groupName.text());
+                $('#ParentGroupID').val(parentGroupID.text());
+                $('#underGroup').css({ "background-color": "white" });
+                index = -1;
+
+                $('#GNL td.can_be_selected').removeClass('selectedRow');
+            }
+        }
+    }));
+</script>
+
+

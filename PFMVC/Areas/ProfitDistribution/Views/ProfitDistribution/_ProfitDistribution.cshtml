@@ -1,0 +1,92 @@
+﻿@model List<DLL.ViewModel.VM_Contribution>
+@*@model List<DLL.ViewModel.VM_Employee>*@
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage + ""))
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(ViewBag.PL))
+{
+    <div class="alert alert-success strong">
+        @ViewBag.PL
+    </div>
+    <div class="pull-right">
+        <span>Amount to be distributed: </span>&nbsp<input type="text" value="@ViewBag.DistributedAmount" class=" strongBlue " style="width: 120px; font-size: x-small" id="amount" onkeydown ="ValueCheck()" />
+        <input type="button" value="Process" class="btn btn-success btn-xs " style="font-weight: bold;" onclick='GetData($("#fromDate").val(), $("#toDate").val(), $("#amount").val())' id="search" />
+      <input type="text" id="hdfAmount" style="display:none" value=@ViewBag.Amount/>
+
+         </div>
+    <div style="clear:both"></div>
+    <br/>
+    <div class="alert alert-warning" id="AmountCheck" style="display:none">
+        Input amount will be more than 0 and some value or not gratter then "Net Profit Amount"
+    </div>
+   <div style="clear:both">
+       <br />
+   </div>
+    
+    if (Model == null)
+    {
+       @*<div class="alert alert-warning">
+            No member contribution found within selected date range.
+        </div>*@
+    }
+    else
+    {
+        if (Model.Count > 0)
+        {
+
+            using (Ajax.BeginForm("ProfitDistributionConfirm", "ProfitDistribution", new { _fromDate = ViewBag.FromDate, _toDate = ViewBag.ToDate, _distributableAmount = ViewBag.DistributableAmount, _distributedAmount = ViewBag.DistributedAmount }, new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                OnSuccess = "updateSuccessProfitDistribution"
+            }, new { @id = "DialogForm1" }))
+            {
+                    @Html.AntiForgeryToken()
+                    <div class="update-message"></div>
+    
+                @*@Html.Hidden("voucherId", (int)ViewBag.voucherId, new { @id = "voucherId" });*@
+    
+                <table class="table table-condensed table-striped smaller">
+                    <tr class="strong">
+                        <td>Member ID</td>
+                        <td>Member Name</td>
+                        <td>Self Contribution</td>
+                        <td>Self Profit</td>
+                        <td>Emp Contribution</td>
+                        <td>Emp Profit</td>
+                    </tr>
+                   @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td>@Model[i].IdentificationNumber <input type="hidden" name="[@i].IdentificationNumber" value="@Model[i].IdentificationNumber" /> <input type="hidden" value="@Model[i].EmpID" name="[@i].EmpID" /></td>
+                            <td>@Model[i].EmpName </td>
+                            <td>@Model[i].SelfContribution.ToString("#,##,##,##0.0000") <input type="hidden" name="[@i].SelfContribution" value="@Model[i].SelfContribution" /> </td>
+                            <td>@Model[i].SelfProfit.ToString("#,##,##,##0.0000") <input type="hidden" value="@Model[i].SelfProfit" name="[@i].SelfProfit" /></td>
+                            <td>@Model[i].EmpContribution.ToString("#,##,##,##0.0000") <input type="hidden" name="[@i].EmpContribution" value="@Model[i].EmpContribution" /> </td> 
+                            <td>@Model[i].EmpProfit.ToString("#,##,##,##0.0000") <input type="hidden" value="@Model[i].EmpProfit" name="[@i].EmpProfit" /></td>
+                        </tr>    
+                    }
+                </table>
+                <hr />
+    
+    <div class="update-message">
+    </div>
+    
+    <input type="submit" value="Submit" id="btnSubmit" class="btn btn-info btn-block" />
+    
+            }
+        }
+        else
+        {
+    
+        <div class="alert alert-warning">
+            No member contribution found within selected date range.
+        </div>
+        }
+    }
+}

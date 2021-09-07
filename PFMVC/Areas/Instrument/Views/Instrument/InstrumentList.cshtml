@@ -1,0 +1,40 @@
+﻿
+
+@model List<@DLL.tbl_Instrument>
+
+@{ Layout = null; }
+ 
+<fieldset>
+    <legend>Instrument List</legend>
+    <table class="table table-striped table-condensed" style="font-size:smaller">
+    <tr style="font-weight:bold; ">
+        <td>Instrument Type</td><td>Instrument Number</td><td></td>
+    </tr>
+        @foreach (var item in Model)
+        {
+            if (!item.PassVoucher)
+            {
+                 <tr style="color:red">
+                    <td>@item.InstrumentType</td>
+                    <td>@item.InstrumentNumber</td>
+                    <td>
+                        <button class="btn btn-xs btn-primary" onclick="InstrumentDetail(@item.InstrumentID)">View/edit</button>
+                    </td>
+              
+                </tr>           
+            }
+            else
+            {
+                <tr>
+                    <td>@item.InstrumentType</td>
+                    <td>@item.InstrumentNumber</td>
+                    <td>
+                        <button class="btn btn-xs btn-primary" onclick="InstrumentDetail(@item.InstrumentID)">View/edit</button>
+                    
+                    </td>
+              
+                </tr>
+            }
+        }
+</table>
+</fieldset>

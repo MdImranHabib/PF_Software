@@ -1,0 +1,109 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>PF - @ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+      <link href="~/BootstrapTheme/css/bootswatch.min.css" rel="stylesheet" />
+
+      @*Later add*@
+
+      <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+      <link href="~/BootstrapTheme/justified-nav.css" rel="stylesheet" />
+      <link href="~/Content/sticky-footer-navbar.css" rel="stylesheet" />
+      <link href="~/FancyBox/jquery.fancybox.css" rel="stylesheet" />
+      <link href="~/TreeViewAsset/default/style.css" rel="stylesheet" />
+
+
+      @*Later add*@
+
+      @{ Html.RenderPartial("_theme"); }
+      @(Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css").Add("telerik.vista.css")))
+
+      <link href="~/Content/custom_site.css" rel="stylesheet" />
+	  <script>
+          //var rootPath = "/PFMVC";
+          var rootPath = "";
+	  </script>
+  </head>
+  <body>
+      <div id="commonMessage"></div>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+            
+        @Html.ActionLink("Provident Fund", "Index", "Home", new { Area = "" }, new { @class = "navbar-brand"})<br />
+        @*@Html.ActionLink("Accounting Software", "Index", "Home", new { Area = "" }, new { @class = "navbar-brand"})<br />*@
+            
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        @{ Html.RenderPartial("_Navbar"); }
+      </div>
+    </div>
+          
+    <div class="container" style="min-height: 95%;">
+        <br />
+        <br />
+        @{ Html.RenderPartial("_menu"); }
+        @*@{ Html.RenderPartial("_menuAccounting"); }*@
+        <br />
+        @RenderBody()
+        <div id="DialogSpace1"></div>
+        <div id="ModalSpace" title="">
+            <p id="ModalMessage"></p>
+        </div>
+        <div id="ModalInformation" title=""></div>
+    </div>
+      
+   
+      
+      <div style="text-align:center">
+          <a href="http://www.subrasystems.com">
+          Copyright© @DateTime.Now.Year Subra Systems Ltd.
+              </a>
+        @*<a href="www.subrasystems.com">
+            <iframe id="5dfc9bc945ab23151b9538fe4fc0895d0c999dcf8d" src="/Banner/Bottom/5dfc9bc945ab23151b9538fe4fc0895d0c999dcf8d/5dfc9bc945ab23151b9538fe4fc0895d0c999dcf8d.html" width="100%" height="90" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+        </a>*@
+      </div>
+      
+      @*
+      <div style="text-align:center">
+        <a href="www.subrasystems.com">
+            <iframe id="1c0c3680dab0749e7de0b0e46ebd0e09d839c47ce40c" src="/Banner/MZ/1c0c3680dab0749e7de0b0e46ebd0e09d839c47ce40c/1c0c3680dab0749e7de0b0e46ebd0e09d839c47ce40c.html" width="100%" height="90" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+        </a>
+      </div>
+      *@
+
+      <img src="~/Images/159.gif" id="loading-indicator" style="display:none" />
+        
+      <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+      @(Html.Telerik().ScriptRegistrar().jQuery(false))
+      <script src="~/Scripts/2013.2.611/telerik.upload.min.js"></script>
+      <script src="~/BootstrapTheme/js/bootstrap.min.js"></script>
+      <script src="~/BootstrapTheme/js/bootswatch.js"></script>
+      @*Later add*@
+      
+      <script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+      <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+      <script src="~/Scripts/jquery.validate.js"></script>
+      <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+      <script src="~/BootstrapTheme/js/bootstrap-tooltip.js"></script>
+      <script src="~/Scripts/notify.min.js"></script>
+      <script src="~/Scripts/accounting.min.js"></script>
+      <script src="~/FancyBox/jquery.fancybox.js"></script>
+      <script src="~/Scripts/custom/Init.js"></script>
+      <script src="~/TreeViewAsset/jquery.jstree.js"></script>
+      <script src="~/Scripts/jquery.cookie.js"></script>
+      <script src="~/Scripts/date.js"></script>
+      @*Later Add*@
+      @Scripts.Render("~/bundles/modernizr")
+      @RenderSection("scripts", required: false)
+      
+</body>
+</html>

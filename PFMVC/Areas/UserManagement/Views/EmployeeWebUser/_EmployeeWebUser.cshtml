@@ -1,0 +1,72 @@
+﻿@model List<DLL.ViewModel.VM_EmployeeWebUser>
+
+
+
+<div id="operationMessage" class="hidden"></div>
+    <table class="table-striped hover">
+        <tr class="bold">
+            <td>Employee ID</td><td>Employee Name</td><td>Web Access</td><td></td>
+        </tr>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.IdentificationNumber</td>
+                <td>@item.FullName</td>
+                <td style="text-align:center" >
+                    @if(item.IsActive)
+                    {
+                        <label class="green" id="stts-@item.EmpID">Enabled</label>
+                    }
+                    else
+                    {
+                        <label class="red" id="stts-@item.EmpID">Disabled</label>
+                    }
+                </td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <button class="btn btn-danger btn-xs btn-block" onclick="EmpWebAccess(@item.EmpID);" id="btn-@item.EmpID">Disable</button>
+                    }
+                    else
+                    { 
+                        <button class="btn btn-success btn-xs btn-block" onclick="EmpWebAccess(@item.EmpID);" id="btn-@item.EmpID">Enable</button>
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+
+<script>
+    function EmpWebAccess(empid) {
+        
+        $.ajax({
+            type: "POST",
+            url: rootPath + "/UserManagement/EmployeeWebUser/EmpWebAccess/",
+            data: { empid: empid }
+        })
+          .done(function (data) {
+              if (data.Success == true) {
+                  
+                  if (data.MembershipStatus == "Enable") {
+                      
+                      $('#btn-' + empid).text("Disable").removeClass("btn btn-success").addClass("btn btn-danger");
+                      $('#btn-' + empid).notify(data.OperationMessage, { position: "right", className: "success" });
+                      $('#stts-' + empid).text("Enabled").removeClass("red").addClass("green");
+                  }
+                  else {
+                      
+                      $('#btn-' + empid).removeClass("btn btn-danger").addClass("btn btn-success").text("Enable");
+                      $('#btn-' + empid).notify(data.OperationMessage, { position: "right", className: "error" });
+                      $('#stts-' + empid).text("Disabled").removeClass("green").addClass("red");
+                  }
+                  
+              }
+              else {
+                  ShowModalMessage(data.ErrorMessage);
+              }
+          });
+    }
+</script>
+
+

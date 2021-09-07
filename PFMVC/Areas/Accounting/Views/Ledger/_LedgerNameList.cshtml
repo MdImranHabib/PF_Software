@@ -1,0 +1,56 @@
+﻿@{
+    ViewBag.Title = "_LedgerNameList";
+}
+
+<style>
+    #scroller {
+        width: 170px;
+        height: 400px;
+    }
+
+    #inner {
+        width: 100%;
+        overflow-y: scroll;
+        height: 100%;
+        position:relative;
+    }
+</style>
+
+<fieldset>
+    <legend style="color:blue">@ViewBag.LegendName</legend>
+    <div id ="scroller">
+        <div id ="inner">
+            <table class="table table-striped table-condensed smaller" id="LLT" style="position:relative;top:0px;">
+        @foreach (var item in ViewBag.Ledger)
+        {
+            <tr class="myrow">
+                @*<td>@item.LedgerName <button class="btn btn-xs btn-default hidden editbtn pull-right" onclick="editLedger('@item.LedgerID');">Edit</button></td>*@
+                <td>@item.LedgerName <span style="color:green">- @item.LedgerCode</span> <a href="#" class=" hidden editbtn pull-right" onclick="editLedger('@item.LedgerID');">Edit</a></td>
+            </tr>
+        }
+    </table>
+        </div>
+    </div>
+</fieldset>
+
+
+
+<script>
+    $(function () {
+        $("table tr").hover(function () {
+            $(this).find(".editbtn").removeClass("hidden");
+        }, function () {
+            $(this).find(".editbtn").addClass("hidden");
+        });
+    });
+
+    function editLedger(id) {
+        var viewUrl = rootPath + "/Accounting/Ledger/LedgerForm/?LedgerID="+id;
+
+        $.get(viewUrl, function (data) {
+            $("#mainDiv").html("");
+            $("#mainDiv").html(data);
+        })
+    }
+
+</script>

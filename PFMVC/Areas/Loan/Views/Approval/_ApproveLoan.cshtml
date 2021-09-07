@@ -1,0 +1,95 @@
+﻿
+
+@model DLL.tbl_PFLoan
+
+    @using (Ajax.BeginForm("ApproveLoan", "Approval", null, new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        HttpMethod = "POST",
+        OnSuccess = "updateSuccessApproval"
+    }, new { @id = "DialogForm1" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.EmpID)
+        @Html.HiddenFor(m => m.PFLoanID)
+        @Html.Hidden("CashLedgerName")
+
+        <div id="update-message"></div>
+        <table>
+            <tr>
+               @*Modified By Avishek Date:May-11-2015 Reason that Edited data grid *@
+                <td>Loan Amount</td>
+              @*  <td>@Html.DisplayFor(m => m.LoanAmount) @Html.HiddenFor(m => m.LoanAmount)</td>*@
+                <td>@Html.TextBoxFor(m => m.LoanAmount, new { @class="target form-control Next"}) @Html.ValidationMessageFor(m => m.LoanAmount)</td>
+            </tr>
+            <tr>
+                <td>Payable Amount</td>
+               @* <td>@Html.DisplayFor(m => m.PayableAmount) @Html.HiddenFor(m => m.PayableAmount)</td>*@
+                <td>@Html.TextBoxFor(m => m.PayableAmount, new { @class="target form-control Next"}) @Html.ValidationMessageFor(m => m.LoanAmount)</td>
+            </tr>
+            <tr>
+                <td>Installment</td>
+               @* <td>@Html.DisplayFor(m => m.Installment)</td>*@
+                <td>@Html.TextBoxFor(m => m.Installment, new { @class="target form-control Next"}) @Html.ValidationMessageFor(m => m.Installment)</td>
+            </tr>
+            <tr>
+                <td>Interest</td>
+               @* <td>@Html.DisplayFor(m => m.Interest)</td>*@
+                <td>@Html.TextBoxFor(m => m.Interest, new { @class="target form-control Next"}) @Html.ValidationMessageFor(m => m.Interest)</td>
+            </tr>
+            <tr>
+                <td>Term Month</td>
+              @*  <td>@Html.DisplayFor(m => m.TermMonth)</td>*@
+                <td>@Html.TextBoxFor(m => m.TermMonth, new { @class="target form-control Next"}) @Html.ValidationMessageFor(m => m.TermMonth)</td>
+            </tr>
+            <tr>
+                <td>Select Cash Ledger</td>
+                <td>@Html.DropDownListFor(m => m.CashLedgerID, (SelectList)ViewData["CashEquivalentLedgerOptions"], string.Empty, new { @class = "form-control next", @id = "drop" })</td>
+            </tr>
+        </table>
+      @* End *@
+    }
+
+<script>
+    $("#drop").live("change", function () {
+        
+        $("#CashLedgerName").val($("#drop option:selected").text());
+    })
+
+    function updateSuccessApproval(data) {
+        if (data.Success == true) {
+            alert("success");
+            ShowDropDownMessage(data.Message);
+            $('#DialogSpace1').dialog('close');
+            var rbnd = $('#UnapprovedLoanHistoryGrid').data('tGrid');
+            rbnd.rebind();
+        }
+        else
+        {   
+            $("#update-message").removeClass("alert alert-danger").addClass("alert alert-danger").html(data.ErrorMessage);
+        }
+    }
+
+    //Added by Avishek Date:May-11-2015
+    $( ".target" ).live( "keyup", function (){
+                _initRate = $( "#Interest" ).val();
+                _loanTenor = $( "#TermMonth" ).val();
+                _loanAmount = $( "#LoanAmount" ).val();
+
+                var URL = rootPath + "/Loan/Loan/GetMonthlyPayment/?_loanTenor=" + _loanTenor + "&_loanAmount=" + _loanAmount + "&_intRate=" + _initRate;
+                $.get( URL, function ( data )
+                {
+                    if ( data.Success == true )
+                    {
+                        $( "#Installment" ).val( data.Result );
+                    }
+                    else
+                    {
+                        $( "#Installment" ).val( 0 );
+                    }
+                } );
+
+    } );
+    //end
+</script>
+

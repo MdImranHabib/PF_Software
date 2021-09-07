@@ -1,0 +1,69 @@
+﻿@model DLL.ViewModel.VM_acc_VoucherDetail
+
+@{
+    ViewBag.Title = "EncashmentEntry";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+         <div class="col-md-7" id="mainDiv">
+            </div>
+       <div class="col-md-2">
+                <div id="optionDiv" class="optionDiv"></div>
+                <div id="optionDiv2" class="optionDiv"></div>
+                <div id="optionDiv3" class="optionDiv"></div>
+            </div>
+
+</div>
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+  
+                var viewUrl = "/Instrument/Encashment/GetJQFile/";
+                $.get(viewUrl, function (data) {
+                    $("#JQ").html(data);
+                    var viewUrl = "/Instrument/Encashment/EncashmentForm/";
+                    $.get(viewUrl, function (data) {
+                        $("#mainDiv").html('');
+                        $("#mainDiv").html(data);
+
+                })
+            })
+
+            var viewUrl = "/Accounting/PaymentVoucher/AccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv").html('');
+                $("#optionDiv").html(data);
+            })
+
+            var viewUrl = "/Accounting/PaymentVoucher/CashAccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv3").html('');
+                $("#optionDiv3").addClass('hidden').html(data);
+            })
+
+            var viewUrl = "/Accounting/PaymentVoucher/GetVoucherNameList/?voucherType=" + 6; // here 6 for getting encashment type voucher list
+            $.get(viewUrl, function (data) {
+                $("#optionDiv2").addClass("hidden").html(data);
+            })
+        })
+
+        function editVoucherEntry(id) {
+            $('#JQ1').remove();
+            var viewUrl = "/Accounting/PaymentVoucher/PaymentVoucher/?voucherId=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").empty();
+                $("#mainDiv").html(data);
+                $("#switchOptionDiv").click();
+                $("#save_btn").focus();
+                $('.not-new').removeClass('hidden');
+            })
+        }
+
+    </script>
+    <script src="~/Scripts/custom/AccVoucherCommon.js"></script>
+}
+

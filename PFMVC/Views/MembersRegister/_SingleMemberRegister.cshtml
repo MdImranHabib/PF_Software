@@ -1,0 +1,112 @@
+﻿@model  List<DLL.ViewModel.VM_Employee>
+
+@{
+    Layout = null;
+}
+
+<fieldset>
+    <legend>Single Members Register
+    </legend>
+
+    <div class="row">
+        <div class="col-md-4">
+            <table class="smaller">
+                <tr>
+                    <td>Employee ID</td>
+                    <td>@ViewBag.IdentificationNumber</td>
+                </tr>
+                <tr>
+                    <td>Employee Name</td>
+                    <td>@ViewBag.EmpName</td>
+                </tr>
+                <tr>
+                    <td>Designation</td>
+                    <td>@ViewBag.Designation</td>
+                </tr>
+                <tr>
+                    <td>Designation</td>
+                    <td>@ViewBag.Department</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br />
+    <table class="table table-condensed table-striped smaller" id="data">
+        <tr class="bold blueFont">
+            <td>Opening Balance</td>
+            <td>Own Cont.</td>
+            <td>Emp Cont.</td>
+            <td>Own Profit</td>
+            <td>Emp Profit</td>
+            <td>Withdrawal</td>
+            <td>Forfeiture</td>
+            <td>Loan Adjustment</td>
+            <td>Balance</td>
+        </tr>
+
+
+
+        @{ 
+            if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+            <tr>
+                <td>
+                    @item.OpeningBalance.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.OwnCont.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.EmpCont.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.OwnProfit.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.EmpProfit.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.Withdrawal.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.Forfeiture.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.LoanAdjustment.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.ShowSummaryBalance.ToString("#,###,##0.00") @*edited by Avishek Date:Feb-4-2015*@
+                </td>
+            </tr>	
+            
+                }
+            }
+        }
+
+    </table>
+</fieldset>
+<script>
+
+
+    function FilterTable() {
+        //InfoNotify("Key Press");
+        index = -1;
+        inp = $('#filterBox').val();
+
+        //InfoNotify(inp);
+        //This should ignore first row with th inside
+        $("#data:visible tr:not(:has(>th))").each(function () {
+            if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+                // Show the row (in case it was previously hidden)
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+</script>
+

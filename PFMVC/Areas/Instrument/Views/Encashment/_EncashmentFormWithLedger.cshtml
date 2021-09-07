@@ -1,0 +1,135 @@
+﻿@model DLL.ViewModel.VM_Instrument
+
+@{
+    Layout = null;
+}
+
+
+<fieldset>
+    <legend>Encashment Form</legend>
+    @using (Ajax.BeginForm("EncashmentForm", "Encashment", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccess"
+}, new { @id = "DialogForm1" }))
+    {   
+        <div id="update-message" class="alert-dismissible">@ViewBag.Message</div>
+        @Html.HiddenFor(m => m.InstrumentID, new { @id = "instrumentID" })
+        <table class="table table-striped">
+            <tr>
+                <td>Instrument Type</td>
+                <td>@Html.TextBoxFor(m => m.InstrumentType, new { disabled = "disabled", @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentType)</td>
+                <td>Instrument Number</td>
+                <td>@Html.TextBoxFor(m => m.InstrumentNumber, new { disabled = "disabled", @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InstrumentNumber)</td>
+                <td>Institution</td>
+                <td>@Html.TextBoxFor(m => m.Institution, new { disabled = "disabled", @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.Institution)</td>
+                <td>Branch</td>
+                <td>@Html.TextBoxFor(m => m.Branch, new { disabled = "disabled", @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.Branch)</td>
+            </tr>
+            <tr>
+                <td>Date of Deposit</td>
+                <td>
+                    @Html.TextBoxFor(m => m.DepositDate, "{0:dd'/'MMM'/'yyyy}", new { disabled = "disabled", @class = "form-control Next dateTimePicker", @readonly = true })
+                    @Html.ValidationMessageFor(v => v.DepositDate)
+                </td>
+                <td>Date of Maturity</td>
+                <td>
+                    @*@Html.TextBoxFor(m => m.MaturityDate, "{0:dd'/'MMM'/'yyyy}", new { disabled = "disabled", @class = "form-control Next dateTimePicker", @readonly = true })*@
+                    @Html.TextBoxFor(m => m.MaturityDate, "{0:dd'/'MMM'/'yyyy}", new {@class = "form-control Next dateTimePicker", @readonly = true })
+
+                    @Html.ValidationMessageFor(v => v.MaturityDate)
+                </td>
+                <td>Maturity Period<span style="font-size: smaller; color: blue"><br />
+                    (In Month)</span></td>
+                <td>@Html.TextBoxFor(m => m.MaturityPeriod, new { disabled = "disabled", @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.MaturityPeriod)</td>
+                <td>Principal Amount</td>
+                <td>@Html.TextBoxFor(m => m.Amount, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.Amount)</td>
+            </tr>
+            <tr>
+                <td>Accrued Interest </td>
+                <td>
+                    @Html.TextBoxFor(m => m.EncashmentAmount, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InterestRate)
+                </td>
+                <td>Interest Income</td>
+                <td>
+                    @Html.TextBoxFor(m => m.InterestIncome, new { @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InterestRate)
+                </td>
+                <td>Interest Rate <span style="color: blue">(%)</span></td>
+                <td>
+                    @*@Html.TextBoxFor(m => m.InterestRate, new { disabled = "disabled", @class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InterestRate)*@
+                    @Html.TextBoxFor(m => m.InterestRate, new {@class = "form-control Next" }) @Html.ValidationMessageFor(v => v.InterestRate)
+                </td>
+                <td>Tax</td>
+                <td>@Html.TextBoxFor(m => m.FDRTax, new { @class = "form-control Next", value = "0" })</td>
+               
+            </tr>
+            <tr>
+                <td>Excise Duty</td>
+                <td>@Html.TextBoxFor(m => m.BankCharge, new { @class = "form-control Next", value = "0" }) </td>
+                <td>Other Charge</td>
+                <td>@Html.TextBoxFor(m => m.TDSonFDR, new { @class = "form-control Next", value = "0" })</td>
+                <td>Date of Encashment</td>
+                <td>
+                    @Html.TextBoxFor(m => m.EncashmentDate, "{0:dd'/'MMM'/'yyyy}", new { @class = "form-control Next dateTimePicker", @readonly = true })
+                    @Html.ValidationMessageFor(v => v.EncashmentDate)
+                </td>
+                <td>Ledger</td>
+                <td colspan="3">
+                    @Html.DropDownListFor(m => m.LedgerID, (SelectList)ViewData["LedgerOptions"], string.Empty, new { @class = "form-control Next", @id = "ddlLedger", placeholder = "Select the ledger head" })
+                <span style="color: blue">Please select the <span style="font-weight: bold">Debit ledger head</span> for <span style="font-weight: bold">Investment</span> account</span>
+            </td>
+            </tr>
+
+        </table>        
+        <button type="button" class="pull-right btn btn-success btn-xs Next" onclick="save();" id="save_btn">Save</button>
+    @*<button class="pull-right btn btn-xs btn-primary" onclick="InstrumentDetail(@ViewBag.InstrumentID)">Renew</button>*@
+    <button >@Html.ActionLink("Renew", "InstrumentIndex", "Encashment", new { id = ViewBag.InstrumentID }, null)</button>
+        }
+</fieldset>
+
+
+
+
+<script>
+    $(document).ready(function () {
+    });
+
+    function save() {
+        $("#DialogForm1").submit();
+    }
+
+    function InstrumentDetail(instrumentID) {
+        GetInstrumentForm(instrumentID);
+    }
+    function EncashmentInvestment() {
+        debugger;
+        var instrumentId = $("#SelectedInstrumentID").val();
+       
+        
+            var viewUrl = rootPath + "/Instrument/Instrument/Create/?instrumentID=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html('');
+                $("#mainDiv").html(data);
+            
+        });
+    }
+    function GetInstrumentForm(id) {
+        var viewUrl = rootPath + "/Instrument/Instrument/Create/?instrumentID=" + id;
+        $.get(viewUrl, function(data) {
+            $("#instrumentForm").html("");
+            $("#instrumentForm").html(data);
+        });
+    }
+
+    function updateSuccess(data) {
+        if (data.Success === true) {
+            $("#instrumentID").val(data.InstrumentID);
+            $("#update-message").html(data.Message).removeClass("alert alert-danger").addClass("alert alert-success");
+            //GetInstrumentList();
+        } else {
+            $("#update-message").html(data.ErrorMessage).removeClass("alert alert-success").addClass("alert alert-danger");
+        }
+    }
+</script>

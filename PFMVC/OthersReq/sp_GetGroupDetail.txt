@@ -1,0 +1,23 @@
+USE [PFTM]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_GetGroupDetail]    Script Date: 20-Sep-14 9:18:32 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER proc [dbo].[sp_GetGroupDetail]
+--@groupID int,
+@fromDate datetime,
+@toDate datetime,
+@groupID int
+AS
+Begin
+select isnull(a.Debit, 0) as Debit, isnull(a.Credit,0) as Credit, b.InitialBalance as InitialBalance, d.GroupName, d.GroupID, b.LedgerID, b.LedgerName
+ from acc_VoucherDetail a right join acc_Ledger b on a.LedgerID = b.LedgerID left join (select c.Narration,c.VoucherID, c.VNumber,	c.TransactionDate from acc_VoucherEntry c where c.TransactionDate >= @fromDate and c.TransactionDate<=@toDate) c
+ on c.VoucherID = a.VoucherID, acc_Group d
+  where
+    	d.GroupID = b.GroupID and
+		d.GroupID = @groupID
+		--group by d.GroupID, d.GroupName
+End

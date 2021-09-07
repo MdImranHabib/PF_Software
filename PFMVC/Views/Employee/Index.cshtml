@@ -1,0 +1,139 @@
+﻿@{
+    ViewBag.Title = "Employee Information";
+}
+
+<style>
+    .t-filter-options.t-group.t-popup {
+        display: block;
+        margin-top: 0;
+        width: 170px;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-8">
+        @if (DLL.Utility.ApplicationSetting.Branch == true)
+{
+          <div class="col-md-3" style="margin-bottom : 10px;">
+
+                <select name="branch_name" class="form-control" id="branch_name">
+                    <option value="">All Branch</option>
+                    @foreach (var item in ViewBag.branchList)
+                    {
+                        if (item.BranchID != null)
+
+                        {
+                            <option value="@item.BranchID">@item.BranchName</option>
+                        }
+                        
+                    }
+                </select>
+
+            </div>
+}
+        <fieldset>
+            <legend>@ViewBag.PageName</legend>
+            @(Html.Telerik().Grid<DLL.ViewModel.VM_Employee>()
+    .Name("EmployeeGrid").HtmlAttributes(new { @class = "A" })
+        .DataKeys(keys => { keys.Add(s => s.EmpID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("New Employee").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectEmployees", "Employee");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.EmpID).Visible(false);
+                    columns.Bound(c => c.IdentificationNumber).Title("ID");
+                    columns.Bound(c => c.EmpName);
+                    if (DLL.Utility.ApplicationSetting.Branch == true)
+                    {
+                        columns.Bound(c => c.BranchName);
+                    }
+                    columns.Bound(c => c.opDepartmentName);
+                    columns.Bound(c => c.opDesignationName);
+                    columns.Bound(c => c.EmpImg).Hidden().HtmlAttributes(new { @class = "empIMG" });
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("Edit");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("DeleteCommand").HtmlAttributes(new { }).Text("DELETE").Ajax(true)
+                                   .ButtonType(GridButtonType.Image)
+                                   .ImageHtmlAttributes(new { @class = "t-delete" });
+                        }
+                    ).Width(40).Title("Delete");
+                }
+            )
+            .Sortable()
+            .Filterable()
+            .Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                {
+                    events.OnRowSelect("EmployeeGridOnRowSelect");
+                    events.OnCommand("EmployeeGridOnCommand");
+                })
+                .Selectable()
+)
+            <br />
+
+            @Html.ActionLink("You may also upload from  Import from EXCEL file", "Import", "Employee", null, new { @class = "btn btn-success btn-xs" })
+        </fieldset>
+
+    </div>
+
+    <div class="col-md-2">
+
+        <div id="dvEmpDetail"></div>
+
+    </div>
+    <div class="hidden col-md-2" id="Attachments">
+        <fieldset>
+            <legend>Attachments</legend>
+            <div id="dvEmpPhoto" align="center"></div>
+            <br />
+            <div id="dvUploadImage" align="center">
+                <input type="button" class="btn btn-default btn-sm" value="Change photo" onclick="test()" /></div>
+            <div align="center" class="hidden">
+                @(Html.Telerik().Upload().Multiple(false)
+            .Name("EmpImgFile").Async(async => async.Save("SaveImage", "Employee"))
+            .ShowFileList(false)
+            .ClientEvents(events => events
+             .OnUpload("onUpload")
+            .OnSuccess("onSuccess")
+            .OnError("onError"))
+            )
+            </div>
+        </fieldset>
+        <br />
+
+        <div id="dvEmpSign" align="center"></div>
+        <br />
+        <div id="dvUploadSign" align="center">
+            <input type="button" class="btn btn-default btn-sm" value="Change signature" onclick="signtest()" /></div>
+        <div align="center" class="hidden">
+            @(Html.Telerik().Upload().Multiple(false)
+            .Name("EmpSignFile").Async(async => async.Save("SaveSignature", "Employee"))
+            .ShowFileList(false)
+            .ClientEvents(events => events
+             .OnUpload("onUpload")
+            .OnSuccess("onSuccessSign")
+            .OnError("onError"))
+            )
+        </div>
+
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="~/Scripts/custom/Employee.js"></script>
+}
+
+

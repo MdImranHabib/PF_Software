@@ -1,0 +1,23 @@
+﻿@model List<PFMVC.Areas.Accounting.Controllers.GroupTree>
+@{
+    ViewBag.Title = "MVC3 Tree with jsTree";
+}
+
+
+<div id="divtree">
+<ul id="tree" >
+    @foreach(var item in Model)
+    {
+         <li>
+           <a href="#" class="usr1">@item.GroupName</a>
+            @Html.Partial("Catree2",item)
+         </li>
+    }
+</ul>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#divtree").jstree();
+    });
+</script>

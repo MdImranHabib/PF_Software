@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<fieldset><legend>Employee Web User</legend>
+
+    <div class="form-inline">
+        <input type="text" id="empid" class="form-control Next" placeholder="Filter: Employee ID" style="width: 200px;" />
+        <input type="text" id="name" class="form-control Next" placeholder="Filter: Name" style="width: 200px;" />
+        <input type="button" value="Search" name="Search" class="btn btn-info Next" onclick="search()" />
+  </div>
+</fieldset>
+<br /><br />
+
+<div class="row">
+    <div class="col-md-6">
+<div id="result">
+</div>
+        </div>
+    </div>
+
+      
+@section scripts{
+<script>
+    function search() {
+
+        $.ajax({
+            type: "GET",
+            url: rootPath + "/UserManagement/EmployeeWebUser/GetEmployee/",
+            data: { id: $('#empid').val(), name: $('#name').val() }
+        })
+          .done(function (data) {
+              $('#result').html('');
+              $('#result').html(data);
+          });
+        //$("#name").val("");
+        //$("#empid").val("");
+        //$("#selectedEmpId").val("");
+    }
+
+    $(document).ready(function () {
+        $('#empid').focus();
+    })
+
+    $("#empid").autocomplete({
+        source: rootPath + "/UserManagement/EmployeeWebUser/AutocompleteSuggestionsForEmpId",
+        minLength: 1,
+        select: function (event, ui) {
+            $("#empid").val(ui.item.label);
+            $("#name").val(ui.item.value);
+            //GetEmpId();
+            return false;
+        }
+    });
+
+    // Added by Fahim 04/11/2015
+    $("#name").autocomplete({
+        source: rootPath + "/UserManagement/EmployeeWebUser/AutocompleteSuggestionsName",
+        minLength: 1,
+        select: function (event, ui) {
+            $("#name").val(ui.item.label);
+            $("#empid").val(ui.item.value);
+            //GetEmpId();
+            return false;
+        }
+    });
+
+    //function GetEmpId() {
+    //    var empId = $("#empid").val();
+    //    $.ajax({
+    //        type: 'POST',
+    //        url: rootPath + "/UserManagement/EmployeeWebUser/GetEmpId",
+    //        data: { identificationNo: empId },
+    //        dataType: "json",
+    //        async: false,
+    //        success: function (data) {
+    //            $("#empid").val(empId);
+    //            $("#selectedEmpId").val(data);
+    //        },
+    //        error: function (XMLHttpRequest, textStatus, errorThrown) {
+    //            alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+    //        }
+    //    });
+    //}
+</script>
+    }

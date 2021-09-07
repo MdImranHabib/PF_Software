@@ -1,0 +1,63 @@
+﻿@model List<DLL.ViewModel.VM_RolesInModules>
+@*<h4 style="font-weight:bold; color:green">Module Access: @ViewData["RoleName"]</h4>*@
+@using (Ajax.BeginForm("GetModuleList", "UserManagement", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccessRM"
+}, new { @id = "DialogForm1" }))
+{
+    
+    <div id="update-message-rm" class="error"></div>
+    <input name="RoleName" type="hidden" value="@ViewData["RoleName"]" />
+    
+    <table style="text-align:center" class="table table-striped table-condensed smaller">
+        <tr style="font-weight:bold">
+            <td></td>
+            <td>Module Name</td>
+            <td>Page Name</td>
+            <td>Can Visit</td>
+            <td>Can Edit</td>
+            <td>Can Delete</td>
+            <td>Can Execute</td>
+        </tr>
+        @for (int i = 0; i < Model.Count;i++ )
+        {
+            <tr >
+                <td>@Html.HiddenFor(m => m[i].PageID) @Html.HiddenFor(m => m[i].RoleID)</td>
+                <td>@Model[i].ModuleName</td>
+                <td>@Model[i].PageName</td>
+                <td>@Html.CheckBoxFor(m => m[i].CanVisit, new { @class = "forVisit"})</td>
+                <td>@Html.CheckBoxFor(m => m[i].CanEdit, new { @class = "forEdit"})</td>
+                <td>@Html.CheckBoxFor(m => m[i].CanDelete, new { @class = "forDelete"})</td>
+                <td>@Html.CheckBoxFor(m => m[i].CanExecute, new { @class = "forExecute"})</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3"></td>
+            <td>@Html.CheckBox("forView", false, new  {@id ="forVisit", @class = "cb" })</td>
+            <td>@Html.CheckBox("forEdit", false, new  {@id ="forEdit" , @class = "cb" })</td>
+            <td>@Html.CheckBox("forDelete", false, new  {@id ="forDelete" , @class = "cb" })</td>
+            <td>@Html.CheckBox("forExecute", false, new  {@id ="forExecute" , @class = "cb" })</td>
+        </tr>
+    </table>
+    
+}
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#RoleModuleGrid .t-refresh').css({ "display": "none" });
+    })
+
+    $('.cb').change(function () {
+        var name = $(this).attr('id');
+        if ($(this).is(':checked')) {
+            $('.'+name).attr('checked', 'checked');
+        }
+        else {
+            $('.'+name).removeAttr('checked');
+        }
+    })
+</script>

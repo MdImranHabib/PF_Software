@@ -1,0 +1,172 @@
+﻿@model IEnumerable<DLL.tbl_PFLoan>
+
+@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+
+
+    function LoanHistoryOnRowDataBound(e) {
+        if (e.dataItem.ApprovedByName) {
+        }
+        else {
+            e.row.cells[0].innerHTML += "*";
+            e.row.style["color"] = "red";
+        }
+    }
+
+    function LoanHistoryOnDataBinding(e) {
+        var empID = $("#EmpID").val();
+        var loanID = $("#LoanID").val();
+
+        // pass additional values by setting the "data" field of the event argument
+        e.data = {
+            // the key ("category") specifies the variable name of the action method which will contain the specified value
+            empID: empID,
+            loanID: loanID
+        };
+    }
+
+    function search() {
+        var grid = $("#LoanHistoryGrid").data("tGrid");
+        grid.ajaxRequest();
+    }
+
+    function AutocompleteEmployee() {
+        $("#EmpID").autocomplete({
+            source: rootPath + "/Loan/LoanList/AutocompleteSuggestionsForEmp",
+            minLength: 1,
+            select: function (event, ui) {
+                $('input[name="EmpID"]').val(ui.item.label);
+                $('input[name="EmpName"]').val(ui.item.value);
+                SetEmpID();
+                return false;
+            }
+        });
+    }
+
+    function AutocompleteEmployeName() {
+        $("#EmpName").autocomplete({
+            source: rootPath + "/Loan/LoanList/AutocompleteSuggestionsByName",
+            minLength: 1,
+            select: function (event, ui) {
+                $('input[name="EmpName"]').val(ui.item.label);
+                $('input[name="EmpID"]').val(ui.item.value);
+                SetEmpID();
+                return false;
+            }
+        });
+    }
+
+    function AutocompleteLoan() {
+        debugger;
+        $("#LoanID").autocomplete({
+            source: rootPath + "/Loan/LoanList/AutocompleteSuggestionsForLoan",
+            minLength: 1,
+            select: function (event, ui) {
+                $('input[name="LoanID"]').val(ui.item.label);
+                $('input[name="EmpID"]').val(ui.item.value);
+                GetEmpName();
+                return false;
+            }
+        });
+    }
+
+
+    function GetEmpName() {
+        var identificationNo = $("#EmpID").val();
+        var loanID = $("#LoanID").val();
+        $.ajax({
+            type: 'POST',
+            url: rootPath + "/Loan/LoanList/GetEmpName",
+            data: { identificationNo: identificationNo, loanID: loanID },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $("#EmpName").val(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+            }
+        });
+    }
+
+
+
+    function SetEmpID() {
+        var identificationNo = $("#EmpID").val();
+        debugger;
+        $.ajax({
+            type: 'POST',
+            url: rootPath + "/Loan/LoanList/SetEmpID",
+            data: { identificationNo: identificationNo },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+            }
+        });
+    }
+
+</script>
+<div class="row">
+    <div class="col-md-12">
+
+        <fieldset>
+            <legend>Employee Loan History</legend>
+
+
+            <div class="form-inline">
+                <input type="text" id="EmpID" class="form-control" name="EmpID" placeholder="Employee ID" style="width: 200px;" onkeypress="AutocompleteEmployee()" />
+                <input type="text" id="EmpName" class="form-control" name="EmpName" placeholder="Employee Name" style="width: 200px;" onkeypress="AutocompleteEmployeName()" />
+                <input type="text" id="LoanID" class="form-control" name="LoanID" placeholder="Loan ID" style="width: 200px;" onkeypress="AutocompleteLoan()" />
+                <input type="button" value="Search" name="Search" class="btn btn-primary" onclick="search()" />
+            </div>
+
+            <br />
+            @(Html.Telerik().Grid<DLL.ViewModel.VM_PFLoan>()
+    .Name("LoanHistoryGrid").HtmlAttributes(new { @class = "A" })
+        .DataKeys(keys => { keys.Add(s => s.EmpID); })
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectLoanHistory", "LoanList");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.IdentificationNumber);
+                    columns.Bound(c => c.PFLoanID).Title("Loan ID");
+                    columns.Bound(c => c.LoanAmount);
+                    columns.Bound(c => c.TermMonth).Title("Tenor");
+                    columns.Bound(c => c.Interest).Title("Intrst (%)");
+                    columns.Bound(c => c.Installment).Title("Monthly Pay");
+                    columns.Bound(c => c.StartDate).HtmlAttributes(new { style = "text-align:center" }).Format("{0:dd/MMM/yyyy}"); ;
+                    columns.Bound(c => c.ApprovedByName).Title("Approved By");
+
+                }
+            )
+            .Sortable()
+            .Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                {
+                    events.OnDataBinding("LoanHistoryOnDataBinding");
+                    events.OnRowDataBound("LoanHistoryOnRowDataBound");
+                })
+                .Selectable()
+)
+            <br />
+
+
+        </fieldset>
+
+
+    </div>
+</div>

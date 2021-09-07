@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*added by Fahim 19/12/2015 //Forfeiture*@
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            <legend>Forfeiture Section Reporting</legend>
+        </fieldset> 
+        <div class="pull-right">
+            <table class="table table-striped" style="font-weight: bold">                
+                <tr>
+                    <td>From Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtFromDate" /></td>
+                </tr>
+                <tr>
+                    <td>To Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtToDate" /></td>
+                </tr>
+            </table>
+        </div>       
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="pull-right">
+            <tr>
+                <td>
+                    <input type="button" value="Report" onclick="GenerateForfeitureReportRDLC('PDF')" class="btn btn-warning" /></td>
+                <td>
+                    <input type="button" value="Excel" onclick="GenerateForfeitureReportRDLC('Excel')" class="btn btn-success" /></td>
+                <td>
+                    <input type="button" value="Word" onclick="GenerateForfeitureReportRDLC('Word')" class="btn btn-info" /></td>
+                <td>
+                    <input type="button" value="Remove Filter" id="RemoveFilter" class="btn btn-danger pull-right" /></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div id="ModalSpace" title="">
+    <p id="ModalMessage"></p>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        $(function () {
+            $("#ui-datepicker-div").hide();
+        });
+
+        $("#RemoveFilter").click(function () {
+            $("#txtFromDate").val("");
+            $("#txtToDate").val("");
+        });
+
+        function GenerateForfeitureReportRDLC(fileType) {
+            debugger;
+            var d = new Date();
+            var fromDate = $('#txtFromDate').val();
+            var toDate = $('#txtToDate').val();
+            if (Date.parse(fromDate) > Date.parse(toDate)) {
+                ShowModalMessage("To Date must be Greater than From Date");
+                return false;
+            }
+
+            if ((fromDate == "" || toDate == "")) {
+                ShowModalMessage("Pl's Fill To Date & From Date");
+                return false;
+            }
+
+            $("#txtFromDate").val("");
+            $("#txtToDate").val("");
+
+            var viewURL = '../../Report/ReportForfeiture/Report/?fileType=' + fileType + "&fromDate=" + fromDate + "&toDate=" + toDate;
+            FancyBox(viewURL);
+        }
+
+    </script>    
+}

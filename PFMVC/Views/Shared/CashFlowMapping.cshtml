@@ -1,0 +1,51 @@
+﻿    <div class="col-md-12">
+        <fieldset>
+            <legend>Mapping Details</legend>
+            @(Html.Telerik().Grid<DLL.ViewModel.VM_acc_Cash_Flow_Mapping>()
+    .Name("MappingGrid").HtmlAttributes(new { @class = "A" })
+                .DataKeys(keys => { keys.Add(s => s.CashFlowMapping_Id); })
+            //.ToolBar(commands => commands.Custom().Name("InsertCommand").Text("New Employee").ButtonType(Telerik.Web.Mvc.UI.GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectAllMapping", "CashFlow");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.CashFlowMapping_Id).Visible(false);
+                    columns.Bound(c => c.CashFlow_Group).Title("Cash Flow Group");
+                    columns.Bound(c => c.CashFlowType).Title("Cash Flow Type");
+                    columns.Bound(c => c.LedgerName).Title("Ledger");                    
+                  
+                    //columns.Command(commands =>
+                    //    {
+                    //        commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                    //       .ButtonType(Telerik.Web.Mvc.UI.GridButtonType.Image)
+                    //       .ImageHtmlAttributes(new { @class = "t-edit" });
+                    //    }
+                    //).Width(40).Title("Edit");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("DeleteCommand").HtmlAttributes(new { }).Text("DELETE").Ajax(true)
+                                   .ButtonType(Telerik.Web.Mvc.UI.GridButtonType.Image)
+                                   .ImageHtmlAttributes(new { @class = "t-delete" });
+                        }
+                    ).Width(40).Title("Delete");
+                }
+            )
+            .Sortable()
+            .Filterable()
+            .Pageable(s => s.PageSize(10))
+                            .ClientEvents(events =>
+                                {
+                                    events.OnCommand("MappingGridOnCommand");
+                                })
+                .Selectable()
+)
+        </fieldset>
+
+    </div>
+
+
+

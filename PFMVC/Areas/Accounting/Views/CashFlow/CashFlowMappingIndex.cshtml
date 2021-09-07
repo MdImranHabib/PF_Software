@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+@section scripts{
+
+    <script>
+        $(document).ready(function () {
+            GetGroupForm();
+        })
+
+
+        function GetGroupForm() {
+            var viewUrl = rootPath + "/Accounting/CashFlow/CashFlowMappingForm/?MappingID=0";
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html("");
+                $("#mainDiv").html(data);
+                var viewUrl = "/Accounting/CashFlow/GetMappingJQFile/";
+                $.get(viewUrl, function (data) {
+                    $("#JQ").html(data);
+                })
+            })
+
+            var viewUrl = rootPath + "/Accounting/CashFlow/GetMappingTypeName/?filter=0&name=All";
+
+            $.get(viewUrl, function (data) {
+                $("#optionDiv").html('');
+                $("#optionDiv").html(data);
+            })
+
+
+        }
+
+        $(function () {
+            $("table tr").hover(function () {
+                $(this).find(".editbtn").removeClass("hidden");
+            }, function () {
+                $(this).find(".editbtn").addClass("hidden");
+            });
+        });
+
+        function editType(id) {
+            var viewUrl = rootPath + "/Accounting/CashFlow/CashFlowMappingForm/?MappingID=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html("");
+                $("#mainDiv").html(data);
+            });
+        }
+
+
+        $(function () {
+            $("table tr").hover(function () {
+                $(this).find(".editbtn").removeClass("hidden");
+            }, function () {
+                $(this).find(".editbtn").addClass("hidden");
+            });
+        });
+
+
+        $("#CashFlow_Type").unbind('keydown');
+        var index = -1;
+       // 38 up, 40down
+        $("#CashFlow_Type").live("keydown", (function (e) {
+            if (e.keyCode === 40) {
+                //InfoNotify("IN>" + index + " and length>" + $('#GNL tr:visible td.can_be_selected').length);
+                index = (index + 1 >= $('#GNL tr:visible td.can_be_selected').length) ? 0 : index + 1;
+                //InfoNotify(index);
+                $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+                $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+
+                //debugger;
+                var s = $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').position();
+                $("div").scrollTop(s.top);
+
+                return false;
+            }
+            else if (e.keyCode === 38) {
+                //InfoNotify(index);
+                index = (index <= 0) ? $('#GNL tr:visible td.can_be_selected').length - 1 : index - 1;
+                $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+                $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+
+                var s = $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').position();
+                $("div").scrollTop(s.top);
+
+                return false;
+            }
+            else if (e.keyCode == 13) {
+
+                if (index > -1) {
+                    //InfoNotify("after enter index>" + index);
+                    var groupName = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 0 + ')');
+                    var parentGroupID = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 1 + ')');
+                    //InfoNotify("led id>" + groupName.text());
+                    $('#CashFlow_Type').val(groupName.text());
+                    $('#CashFlowType_Id').val(parentGroupID.text());
+                    $('#CashFlow_Type').css({ "background-color": "white" });
+                    index = -1;
+
+                    $('#GNL td.can_be_selected').removeClass('selectedRow');
+
+                }
+            }
+        }));
+    </script>
+}

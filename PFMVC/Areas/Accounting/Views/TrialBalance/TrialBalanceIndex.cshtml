@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var viewUrl = "/Accounting/TrialBalance/TrialBalanceFilter/";
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html('');
+                $('#mainDiv').css('display', 'none');
+                $('#mainDiv').fadeIn(1000).html(data);
+                $("#mainDiv").removeClass("col-md-8").addClass("col-md-10");
+            })
+        })
+    </script>
+}

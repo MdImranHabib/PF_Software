@@ -1,0 +1,185 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="row">
+    <div class="col-md-6">
+        <fieldset>
+            <legend id="legendID">Profit Distribution
+                <span class="pull-right" style="font-size: x-small">
+                    <span>From Date</span> &nbsp<input type="text" value=" " class="dateTimePickerNoFuture strongBlue " style="width:120px; font-size:x-small" placeholder="" readonly="true" id="fromDate"/>
+                    <span>To Date</span> &nbsp<input type="text" value=" " class="dateTimePicker strongBlue " style="width:120px; font-size:x-small" placeholder="" readonly="true" id="toDate"/>
+                    <input type="button" value="Process" class="btn btn-danger btn-xs " style="font-weight: bold;" onclick='GetData($("#fromDate").val(), $("#toDate").val(), 0)' id="search"/>
+                </span>
+            </legend>
+            <div id="resultDiv">
+
+            </div>
+
+        </fieldset>
+    </div>
+
+    <div class="col-md-6 pull-right">
+        <div id="listDiv"></div>
+    </div>
+</div>
+
+@{
+    ViewBag.Title = "CompanyInformation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+}
+
+
+@section scripts{
+    <script>
+    
+
+
+
+        $(document).ready(function () {
+            PreviouslyDistributedList();
+            $("#search").focus();
+            $("#AmountCheck").hide();
+        })
+
+        function ValueCheck() {
+            if ($("#amount").val() != "") {
+                $("#AmountCheck").hide();
+            }
+        }
+
+        function GetData(fromDate, toDate, amount) {
+            if ($("#fromDate").val() == "" || $("#toDate").val() == "") {
+                alert("Pl's select the date ");
+                return;
+            }
+            if ($("#amount").val() == "" || $("#amount").val() == 0) {
+                $("#AmountCheck").show();
+                //return;
+            //} else if ($("#hdfAmount").val() < $("#amount").val()) {
+            //    $("#AmountCheck").show();}
+            }else {
+                $("#AmountCheck").hide();
+                var viewUrl =rootPath + "/ProfitDistribution/ProfitDistribution/ProcessCalculation/?fromDate=" + fromDate + "&toDate=" + toDate + "&amount=" + amount;
+                $.get(viewUrl, function (data) {
+                    $("#resultDiv").html('');
+                    $('#resultDiv').css('display', 'none');
+                    $("#resultDiv").html("").fadeIn(1000).html(data);
+                })
+            }
+        }
+
+        function PreviouslyDistributedList() {
+            var viewUrl = rootPath + "/ProfitDistribution/ProfitDistribution/PreviouslyDistributed/";
+            $.get(viewUrl, function (data) {
+                $("#listDiv").html("");
+                $("#listDiv").html(data);
+            })
+        }
+
+
+        function CompanyDetail(companyID) {
+            GetCompanyForm(companyID);
+        }
+
+        function updateSuccessCompanyInformation(data) {
+
+            if (data.Success == true) {
+                $("#CompanyID").val(data.CompanyID);
+                $("#update-message-company-info").html(data.Message).removeClass("alert alert-danger").addClass("alert alert-success");
+                ShowDropDownMessage(data.Message);
+                GetCompanyList();
+            }
+            else {
+
+                $("#update-message-company-info").html("").html(data.ErrorMessage).removeClass("alert alert-success").addClass("alert alert-danger");
+            }
+        }
+
+
+
+
+        function save() {
+
+            $("#DialogForm").submit();
+        }
+
+        function ProcessDelete(id) {
+            
+            if (id < 1) {
+                ShowModalMessage("Please select record to delete it...");
+                return;
+            }
+            //========
+            var viewUrl = rootPath + "/ProfitDistribution/ProfitDistribution/DeleteProfitDistributionPossible/?id=" + id;
+
+            $.get(viewUrl, function (data) {
+
+                if (data.Success == true) {
+                    $("#ModalSpace").html(data.Message),
+                       $("#ModalSpace").dialog({
+                           width: 'auto',
+                           resizable: false,
+                           modal: true,
+                           show: "slide",
+                           hide: "slide",
+
+                           title: "Alert",
+                           buttons: [{
+                               text: "Yes", click: function () {
+                                   var viewURL = rootPath + "/ProfitDistribution/ProfitDistribution/DeleteProfitDistributionConfirm/?id=" + id;
+                                   $.post(viewURL, function (data) {
+                                       if (data.Success == true) {
+                                           ShowModalMessage(data.Message);
+                                           PreviouslyDistributedList();
+                                           $("#resultDiv").html("");
+                                           $("#ModalSpace").dialog("close");
+                                       }
+                                       else {
+                                           ShowModalMessage(data.ErrorMessage);
+                                           ErrorNotify(data.ErrorMessage);
+                                       }
+                                   });
+                               }
+                           }, {
+                               text: "Close",
+                               click: function () {
+                                   $(this).dialog("close");
+                                   //ErrorNotify("You cancelled the operation!");
+                               }
+                           }]
+                       });
+                    //========
+                }
+                else {
+                    ShowModalMessage(data.ErrorMessage);
+                }
+            });
+        }
+
+
+        function updateSuccessProfitDistribution(data) {
+            if (data.Success == true) {
+                $(".update-message").removeClass("alert alert-danger").addClass("alert alert-success").html(data.Message);
+                PreviouslyDistributedList();
+                $("#btnSubmit").remove();
+            }
+            else {
+                $(".update-message").removeClass("alert alert-success").addClass("alert alert-danger").html(data.ErrorMessage);
+            }
+        }
+
+
+        function ViewProcess(id) {
+            var viewUrl = rootPath + "/ProfitDistribution/ProfitDistribution/ViewProfitDistributionDetail/?processID=" + id;
+            $.get(viewUrl, function (data) {
+                $("#resultDiv").html('');
+                $('#resultDiv').css('display', 'none');
+                $("#resultDiv").html("").fadeIn(1000).html(data);
+            })
+        }
+
+    </script>
+}

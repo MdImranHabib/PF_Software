@@ -1,0 +1,121 @@
+﻿@model List<DLL.ViewModel.VM_acc_VoucherDetail>
+
+@{
+    Layout = null;
+
+}
+<div class="col-md-12">
+    <div style="font-size: smaller; color: darkgreen">
+        <div class="pull-left">
+            @Html.Label("Voucher No:")@ViewBag.VoucherNo
+        </div>
+        <div class="pull-right">
+            @Html.Label("Transaction Date")
+            @ViewBag.TransactionDate
+        </div>
+    </div>
+
+    @Html.Hidden("voucherId", (int)ViewBag.voucherId, new { @id=  "voucherId" })
+    @Html.Hidden("VoucherType", (string)ViewBag.VoucherType, new { @id=  "VoucherType" })
+
+    <table class="smaller table-striped" id="VoucherTable">
+        <tr style="text-align: center; font-weight: bold">
+
+            <td style="width: 100%">Head of Account</td>
+            <td style="max-width: 150px">Chq./Desc.</td>
+            <td style="max-width: 100px">Debit</td>
+            <td style="max-width: 100px">Credit</td>
+        </tr>
+        @{int i = 0;}
+        @foreach (var item in Model)
+            {   
+            <tr>
+                <td>
+                    @if(item.Debit != 0)
+                        {
+                        <span id='inputType-@i' style="font-weight:bold">Dr.</span>
+                        } else
+                        {
+                        <span id='inputType-@i' style="font-weight:bold">Cr.</span>
+                        }
+                    @item.LedgerName</td>
+                <td>@item.ChequeNumber</td>
+                <td class="debit" id="Debit-@i">
+                    @if(item.Debit != 0)
+                        {
+                        @item.aDebit
+                        } else
+                        {
+                        @item.aDebit 
+                        }
+                </td>
+
+                <td class="credit" id="Credit-@i">
+                    @if(item.Credit != 0)
+                        {
+                        @item.aCredit
+                        } else 
+                        {
+                        @item.aCredit 
+                        }
+                </td>
+            </tr>
+                        i++;
+            }
+
+    </table>
+</div>
+<div class="mini">
+
+    <label id="result_credit">0.0</label><label id="result_debit"> 0.0</label><br />
+    <label style="color: blue">Narration: @ViewBag.Narration</label><br />
+    @if(Model != null)
+        { 
+        <label class="mini">@ViewBag.User</label>
+            }
+
+    <button class="btn btn-link" type="button" onclick="getreport($('#voucherId').val(), $('#VoucherType').val())" id="report">
+        Print
+    </button>
+</div>
+
+<script>
+
+    $( document ).ready( function ()
+    {
+        ProcessGrid();
+        function ProcessGrid()
+        {
+            var d = 0;
+            var c = 0;
+            var table = document.getElementById( 'VoucherTable' );
+
+            var rowLength = table.rows.length;
+
+            for ( var i = 0; i < rowLength; i += 1 )
+            {
+                if ( $( '#Debit-' + i ).text().replace( /,/g, "" ) > 0 )
+                {
+                    $( '#inputType-' + i ).text( 'Dr.' );
+                    d = parseFloat( d ) + parseFloat( $( '#Debit-' + i ).text().replace( /,/g, "" ) );
+                }
+                else if ( $( '#Credit-' + i ).text().replace( /,/g, "" ) > 0 )
+                {
+                    $( '#inputType-' + i ).text( 'Cr.' );
+                    c = parseFloat( c ) + parseFloat( $( '#Credit-' + i ).text().replace( /,/g, "" ) );
+                }
+            }
+            debugger;
+            $( '#result_debit' ).text( "Total Debit: " + d.toLocaleString( "en-IN" ) + "/=" );
+            $( '#result_credit' ).text( "Total Credit: " + c.toLocaleString( "en-IN" ) + "/=" );
+        }
+    } )
+
+    function getreport( voucherID, type )
+    {
+        var viewURL = '../../Accounting/Base/VoucherReport/?voucherID=' + voucherID + "&type=" + type;
+        //window.open(viewURL, 'window name', 'window settings')
+        FancyBox( viewURL );
+    }
+
+</script>

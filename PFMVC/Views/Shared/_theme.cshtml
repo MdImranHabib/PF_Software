@@ -1,0 +1,37 @@
+﻿@{ HttpCookie cookie = Request.Cookies["Theme"];}
+
+@if (cookie != null)
+{
+    if (cookie.Values["ThemeName"].ToString() == "cosmo")
+    {
+    <link href="~/BootstrapTheme/css/cosmo/bootstrap.css" rel="stylesheet" />
+    }
+    else if (cookie.Values["ThemeName"].ToString() == "cerulean")
+    { 
+       <link href="~/BootstrapTheme/css/cerulean/bootstrap.css" rel="stylesheet" />
+    }
+    else if (cookie.Values["ThemeName"].ToString() == "spacelab")
+    { 
+       <link href="~/BootstrapTheme/css/spacelab/bootstrap.css" rel="stylesheet" />
+    }
+    else if (cookie.Values["ThemeName"].ToString() == "amelia")
+    { 
+       <link href="~/BootstrapTheme/css/amelia/bootstrap.css" rel="stylesheet" />
+    }
+    else if (cookie.Values["ThemeName"].ToString() == "united")
+    { 
+       <link href="~/BootstrapTheme/css/united/bootstrap.css" rel="stylesheet" />
+    }
+    else if (cookie.Values["ThemeName"].ToString() == "superhero")
+    { 
+       <link href="~/BootstrapTheme/css/superhero/bootstrap.css" rel="stylesheet" />
+    }
+    else
+    {
+       <link href="~/BootstrapTheme/css/cerulean/bootstrap.css" rel="stylesheet" />
+    }
+}
+else
+{    
+    <link href="~/BootstrapTheme/css/cerulean/bootstrap.css" rel="stylesheet" />
+}

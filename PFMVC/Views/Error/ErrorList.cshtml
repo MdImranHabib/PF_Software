@@ -1,0 +1,46 @@
+﻿@model List<DLL.tbl_ErrorLog>
+
+@{
+    ViewBag.Title = "ErrorList";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset><legend style="color:red">Error List</legend>
+            @*<table class="table table-striped table-condensed">
+                <tr style="font-weight:bold">
+                    <td>Exception</td>
+                    <td>Inner_Exception</td>
+                    <td>User_Login_Name</td>
+                    <td>Terminal</td>
+                    <td>Time</td>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Message</td>
+                        <td>@item.InnerException</td>
+                        <td>@item.UserName</td>
+                        <td>@item.Terminal</td>
+                        <td style="max-width:100px">@item.Time</td>
+                    </tr>
+                }
+            </table>*@
+
+            @Html.Telerik().Grid(Model).Name("ErrorLog").Columns(columns =>
+                {
+                    columns.Bound(o => o.Type);
+                    columns.Bound(o => o.Message).Width("300").HtmlAttributes(new { @style = "word-break:break-all;" }); ;
+                    columns.Bound(o => o.InnerException).Width("300").HtmlAttributes(new { @style = "word-break:break-all;" });
+                    columns.Bound(o => o.UserName);
+                    columns.Bound(o => o.Terminal);
+                    columns.Bound(o => o.Time);
+                })
+            
+
+            
+
+        </fieldset>
+    </div>
+</div>
+

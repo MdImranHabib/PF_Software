@@ -1,0 +1,118 @@
+﻿@model List<DLL.ViewModel.VM_acc_VoucherDetail>
+@{
+    Layout = null;
+}
+
+
+    <table class="table table-striped table-condensed" style=" font-size:smaller" id="LBook">
+        <tr style="font-weight:bold;">
+            <td>Nature</td>
+            <td>Group</td>
+            <td>Ledger Name</td>
+            @*<td style="text-align:right">Initial Balance</td>*@
+            <td style="text-align:right">Debit</td>
+            <td style="text-align:right">Credit</td>
+            @*<td style="text-align:right">Balance</td>*@
+        </tr>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@Model[i].NatureName</td>
+                <td>@Model[i].GroupName</td>
+                <td>@Model[i].LedgerName</td>
+
+                @*<td id="init-@i" style="text-align:right">@if (@Model[i].InitialBalance != 0)
+                                  { @Model[i].InitialBalance }</td>*@
+
+                <td id="debit-@i" style="text-align:right">@if (@Model[i].Debit != 0)
+                                  { @Model[i].Debit }</td>
+                <td id="credit-@i" style="text-align:right">@if (@Model[i].Credit != 0)
+                                   { @Model[i].Credit }</td>
+
+                @*<td id="balance-@i" style="text-align:right"></td>*@
+            </tr>
+        }
+           <tr style=" font-weight:bold">
+            <td colspan="3"></td>
+            @*<td id="c_init" style="text-align:right"></td>*@
+            <td id="c_debit" style="text-align:right"></td>
+            <td id="c_credit" style="text-align:right"></td>
+            @*<td id="c_balance" style="text-align:right"></td>*@
+        </tr>
+    </table>
+    <hr />
+      <div class="alert alert-info smaller">
+        In Trial balance Debit & Credit amount must be equal. IF NOT contact system admin to resolve system inconsistency.
+    </div>
+
+
+
+<script>
+    $(document).ready(function () {
+        var res_debit = 0;
+        var res_credit = 0;
+        var res_init = 0;
+
+        var c_init = 0;
+        var c_debit = 0;
+        var c_credit = 0;
+
+        var table = document.getElementById('LBook');
+
+        var rowLength = table.rows.length;
+
+        for (var i = 0; i < rowLength; i += 1) {
+          
+            // credit
+            if (parseFloat($('#credit-' + i).text())) {
+                res_credit = parseFloat($('#credit-' + i).text());
+                c_credit = c_credit + res_credit;
+            }
+            else {
+                res_credit = 0;
+            }
+
+            //debit
+            if (parseFloat($('#debit-' + i).text())) {
+                res_debit = parseFloat($('#debit-' + i).text());
+                c_debit = c_debit + res_debit;
+            }
+            else {
+                res_debit = 0;
+            }
+
+            //init
+            if (parseFloat($('#init-' + i).text())) {
+                res_init = parseFloat($('#init-' + i).text());
+                c_init = c_init + res_init;
+            }
+            else {
+                res_init = 0;
+            }
+
+            var result = parseFloat(res_init) + parseFloat(res_credit) - parseFloat(res_debit);
+            if (!result) {
+                result = 0;
+            }
+            var res_bal = result;
+            if (parseFloat(res_bal) < 0) {
+                $('#balance-' + i).text((res_bal)*(-1)+" Dr.");
+            }
+            else {
+                $('#balance-' + i).text(res_bal+" Cr.");
+            }
+        }
+
+        $('#c_init').text(c_init+"");
+        $('#c_debit').text(c_debit + "");
+        $('#c_credit').text(c_credit + "");
+        var summary = parseFloat(c_init) + parseFloat(c_credit) - parseFloat(c_debit);
+        if (summary < 0) {
+            $('#c_balance').text((summary)*(-1)+" Dr.");
+        }
+        else {
+            $('#c_balance').text(summary + " Cr.");
+        }
+    });
+
+</script>

@@ -1,0 +1,81 @@
+﻿@model List<DLL.ViewModel.VM_Employee>
+@{
+    ViewBag.Title = "AddPFMember";
+}
+
+<fieldset><legend>Add PF member from employee list...</legend></fieldset>
+
+  
+      <div id="update-message1"></div>
+       <table class="table table-striped table-condensed smaller">
+        <tr style="font-weight:bold; text-align:center">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+            <td>Joining Date</td>
+            <td>PF Activate Date</td>
+            
+            <td></td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+            <tr style="text-align:center; vertical-align:middle !important" id="empid-@Html.ValueFor(m => m[i].EmpID)">
+                <td>@Html.DisplayFor(m => m[i].IdentificationNumber) @Html.HiddenFor(m => m[i].EmpID)</td>
+                <td>@Html.DisplayFor(m => m[i].EmpName)</td>
+                <td id="jdate-@Model[i].EmpID">@Model[i].JoiningDate.Value </td>
+                <td >@Html.TextBoxFor(m => m[i].PFActivationDate, new { @class = "dateTimePickerNoFuture PFActivationDate form-control input-mini",  @readonly= "readonly", @id="PF"+Html.ValueFor(m => m[i].EmpID) } ) </td>
+                
+                <td ><button class="btn btn-primary btn-xs editdata"  onclick="AddPFMember(@Model[i].EmpID)">Add to PF member</button></td>
+            </tr>
+        }
+    </table>
+  @*<button type="submit" class="btn btn-warning">Process</button>*@
+
+  
+
+
+@section scripts{
+    
+    <script type="text/javascript">
+
+        function AddPFMember(empid) {
+
+            
+            var jDate = $('#jdate-' + empid).text();
+            
+//            $('.PFActivationDate').attr('readonly', false);
+
+            var pfdate = $('#PF' + empid).val();
+
+          
+            if (pfdate) {
+
+                var url = rootPath + "/Employee/AddPFMember/?empId="+empid+"&pfDate="+pfdate.trim()+"&joiningDate="+jDate;
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    success: function (data) {
+                        if (data.Success == true) {
+                            $('#empid-' + empid).remove();
+                            ShowDropDownMessage(data.Message);
+                            $("#update-message1").hide().removeClass('alert alert-danger');
+                        }
+                        else {
+                                    $("#update-message1").html(data.ErrorMessage).addClass('alert alert-danger');
+                                    $("#update-message1").show();
+                        }
+                    }
+                });
+
+                
+            }
+            else {
+                ShowModalMessage('select PF activation date...');
+            }
+        }
+       
+
+     
+
+    </script>
+    
+    }

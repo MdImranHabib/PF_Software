@@ -1,0 +1,78 @@
+﻿@model DLL.ViewModel.VM_CompanyInformation
+
+@{ Layout = null; }
+
+
+        <fieldset>
+            <legend>Company Information</legend>
+@using( Ajax.BeginForm("CompanyInformation", "Company" , null, new AjaxOptions
+{
+    	InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessCompanyInformation(data)"
+}, new { @id = "DialogForm" }))
+{
+    
+     <div id="update-message-company-info" class="alert alert-success">@ViewBag.Message</div>
+    @Html.HiddenFor(m => m.CompanyID, new { @id = "CompanyID"} )
+    <table class="table table-striped">
+        <tr>
+            <td>Company Name</td>
+            <td>@Html.TextBoxFor(m => m.CompanyName, new { @class= "form-control Next"}) @Html.ValidationMessageFor(m => m.CompanyName)</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>@Html.TextBoxFor(m => m.CompanyAddress, new { @class= "form-control Next"}) @Html.ValidationMessageFor(m => m.CompanyAddress)</td>
+        </tr>
+        <tr>
+            <td>System implementation date</td> 
+            <td>
+                @Html.TextBoxFor(m => m.SystemImplementationDate, "{0:dd'/'MMM'/'yyyy}", new { @class= "form-control dateTimePickerNoFuture Next", @readonly=true})
+            </td>
+        </tr>
+        <tr>
+            <td>Accounting year beginning from</td>
+            <td>
+                @if(Model.AccountingYearBeginningFrom != null)
+                {
+                    @Html.TextBoxFor(m => m.AccountingYearBeginningFrom, "{0:dd MMMM}", new { @class ="form-control Next dateTimePickerNoYear", @readonly=true })
+                }
+                else
+                {
+                    @Html.TextBoxFor(m => m.AccountingYearBeginningFrom, new { @class ="form-control Next dateTimePickerNoYear", @readonly=true })
+                }
+                    
+            </td>
+        </tr>
+    </table>
+    <button type="button" class="btn btn-warning btn-xs" onclick="addNew()">
+        <span class="glyphicon glyphicon-plus"></span> 
+    </button>
+    <button type="button" class="btn btn-xs btn-danger" onclick="CompanyDelete($('#CompanyID').val())">
+        <span class="glyphicon glyphicon-trash"></span>
+    </button>
+    <button type="button" class="pull-right btn btn-success btn-xs Next" onclick="save();" id="save_btn">Save
+        <span class="glyphicon glyphicon-floppy-disk"></span> 
+    </button>
+    
+}        
+            </fieldset>
+           @if (Model != null)
+           {
+               if (!string.IsNullOrEmpty(Model.EditUserName))
+               {
+                <br />
+                <div class="alert alert-warning">This information was updated by @Model.EditUserName at @Model.EditDate</div>
+               }
+            }
+
+
+    <script>
+        $(document).ready(function () {
+            $(".dateTimePickerNoYear").live("focus", function () {
+                $('.dateTimePickerNoYear').datepicker({
+                    dateFormat: "dd MM", changeYear: true, changeMonth: true
+                });
+            });
+        })
+    </script>

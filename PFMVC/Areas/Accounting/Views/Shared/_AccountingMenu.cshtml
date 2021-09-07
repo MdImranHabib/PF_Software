@@ -1,0 +1,109 @@
+﻿
+<div class="row">
+    <div class="col-md-2 sidebar">
+        <fieldset>
+            <legend>Accounting Menu<button class="pull-right btn btn-default btn-xs menuSwitch" onclick="menuSwitch()"><span class="glyphicon glyphicon-align-justify"></span> </button></legend>
+            <table class="table table-striped table-condensed hover">
+              
+                <tr>
+                    <td>@Html.ActionLink("Group Entry", "GroupIndex", "Group", new { Area = "Accounting" }, null)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Ledger Entry", "LedgerIndex", "Ledger", new { Area = "Accounting" },  null)</td>
+                </tr>
+                @if (DLL.Utility.ApplicationSetting.Subsidiary == true)
+                {
+                <tr>
+                    <td>@Html.ActionLink("Subsidiary Entry", "SubsidiaryIndex", "Subsidiary", new { Area = "Accounting" },  null)</td>
+                </tr>
+                }
+                
+                @if (DLL.Utility.ApplicationSetting.CashFlow == true)
+                {
+                 <tr>
+                    <td>@Html.ActionLink("Cash Flow Group Entry", "CashFlowGroupIndex", "CashFlow", new { Area = "Accounting" },  null)</td>
+                </tr>
+                 <tr>
+                    <td>@Html.ActionLink("Cash Flow Type Entry", "CashFlowTypeIndex", "CashFlow", new { Area = "Accounting" },  null)</td>
+                </tr>
+                 <tr>
+                    <td>@Html.ActionLink("Cash Flow Mapping", "CashFlowMappingIndex", "CashFlow", new { Area = "Accounting" },  null)</td>
+                </tr>
+                }
+            </table>
+            <br />
+            
+            <table class="table table-striped table-condensed hover">
+             
+                 <tr>
+                    <td>@Html.ActionLink("Payment Voucher", "PaymentIndex", "PaymentVoucher", new { Area = "Accounting" }, null)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Receipt Voucher", "ReceiptIndex", "ReceiptVoucher", new { Area = "Accounting" }, null)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Contra Voucher", "ContraIndex", "ContraVoucher", new { Area = "Accounting" },null)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Journal Voucher", "JournalIndex2", "JournalVoucher2", new { Area = "Accounting" },null)</td>
+                </tr>
+                 <tr>
+                    <td>@Html.ActionLink("System Voucher", "SystemVoucherIndex", "SystemVoucher", new { Area = "Accounting" },null)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Profit Distribution Voucher", "EarlyProfitDistributionView", "SystemVoucher", new { Area = "Accounting" },null)</td>
+                </tr>
+            </table>
+            <br />
+            
+            <table class="table table-striped table-condensed hover">
+                <tr>
+                    <td>@Html.ActionLink("Trial Balance", "Index", "TrialBalance2", new { Area = "Accounting" },null)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Balance Sheet", "BalanceSheetIndex", "BalanceSheet", new { Area = "Accounting" },null)</td>
+                </tr>
+                <tr>
+                    <td>@Html.ActionLink("Ledger Book", "LedgerBookIndex", "LedgerBook", new { Area = "Accounting" },null)</td>
+                </tr>
+               @* <tr>
+                    <td>@Html.ActionLink("Cash Book", "CacheIndex", "CacheBook", new { Area = "Accounting" },null)</td>
+                </tr>*@
+                  <tr>
+                    <td>@Html.ActionLink("Income Statement", "IncomeStatementIndex", "IncomeStatement", new { Area = "Accounting" },null)</td>
+                </tr>
+                 <tr>
+                    <td>@Html.ActionLink("Receipt & Payment", "RPIndex", "RP", new { Area = "Accounting" },null)</td>
+                </tr>
+            </table>
+            <br />
+@*               <table class="table table-striped table-condensed hover">
+              
+                <tr>
+                    <td>@Html.ActionLink("Reset", "ResetAccountingCompany", "UnfeedMyDB", new { Area = "" }, null)</td>
+                </tr>
+                
+            </table>*@
+            
+        </fieldset>
+
+          </div>
+    <div class="col-md-8" id="mainDiv">
+        
+    </div>
+    <div class="col-md-2">
+        <div id="optionDiv" class="optionDiv" ></div>
+        <div id="optionDiv2" class="optionDiv" ></div>
+        <div id="optionDiv3" class="optionDiv"></div>
+    </div>
+</div>
+
+<style>
+  
+</style>
+<script>
+    //function menuSwitch()
+    //{
+    //    $(".menuSwitch").notify("Will be implemented later", "Info");
+    //}
+</script>

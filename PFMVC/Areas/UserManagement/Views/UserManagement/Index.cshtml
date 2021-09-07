@@ -1,0 +1,92 @@
+﻿@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "User Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+      <fieldset><legend>User Mangement</legend>
+                
+    <div class="pull-left">            
+                            
+                            @(Html.Telerik().Grid<DLL.ViewModel.VM_UserInfo>()
+    .Name("UserGrid").HtmlAttributes(new { @class = "A" })
+            .DataKeys(keys => { keys.Add(s => s.UserId); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("Add User").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0; font-weight:bold;", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectUsers", "UserManagement");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(s => s.UserId).Visible(false);
+                    columns.Bound(s => s.BranchID).Visible(false);
+                    columns.Bound(s => s.UserName);
+                    columns.Bound(s => s.FullName);
+                    columns.Bound(s => s.CompanyName);
+                    columns.Bound(s => s.Phone);
+                    columns.Bound(s => s.IsActive).HtmlAttributes(new { style = "text-align:center" })
+                        .ClientTemplate("<input type='checkbox' disabled='disabled' name='IsActive' <#=IsActive? checked='checked' : '' #> />");
+                    columns.Bound(s => s.Email);
+                    columns.Bound(s => s.EmailNotificationActive).Title("Notification").HtmlAttributes(new { style = "text-align:center" })
+                    .ClientTemplate("<input type='checkbox' disabled='disabled' name='EmailNotificationActive' <#=EmailNotificationActive? checked='checked' : '' #> />");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                    //columns.Command(commands =>
+                    //{
+                    //    commands.Custom("DeleteCommand").Text("Delete").Ajax(true)
+                    //   .ButtonType(GridButtonType.Image)
+                    //   .ImageHtmlAttributes(new { @class = "t-delete" });
+                    //}
+                    //).Width(40).Title("");
+
+                }
+            )
+            .Sortable()
+            .ClientEvents(events =>
+                {
+                    events.OnCommand("UGOnCommand");
+                    events.OnRowSelected("UGOnRowSelect");
+                })
+                .Selectable()
+                .ColumnContextMenu()
+                .Resizable(resizing => resizing.Columns(true))
+)
+                                
+                            <label style="font-size: smaller; color: blue;"><em>Right click header to explore more field.</em></label>
+
+                        </div>
+                        <div class="pull-right">
+                            <div id="UserRolesDiv"></div>
+                            <br />
+                            <div id="RoleModuleDiv"></div>
+                        </div>
+                    
+</fieldset>                    
+            </div>
+           
+        </div>
+
+
+@section scripts{
+    <script src="~/Scripts/custom/UserManagement.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            $("#tabs").tabs();
+        });
+    </script>
+}
+
+

@@ -1,0 +1,164 @@
+﻿
+
+<div class="row">
+    <div class="col-md-12">
+        
+@{ Html.Telerik().Menu()
+        .Name("MainMenu")
+        .Items(menu =>
+        {
+            //menu.Add().Text("Subra ERP")
+            //.Items(item =>
+            //{
+            //    item.Add().Text("Homepage").Url("http://114.31.10.20:8081/Home.aspx?UserName=admin");
+            //});
+            
+            menu.Add().Text("Setting")
+            .Items(item =>
+            {
+                //item.Add().Text("Step 1: Basic Info").Url("~/CompanyInformation/Company/Index");
+                //item.Add().Text("Step 2: Members' Info").Url("~/Employee/Index");
+                //item.Add().Text("Step 3: Deposit/Instrument Info").Url("~/Instrument/Instrument/Index");
+                //item.Add().Text("Step 4: Create Forfeiture Account & Rules").Url("~/CompanyInformation/Company/CreateForfeitureAccount");
+                //item.Add().Text("Step 5: Incorporating Other Heads of Initial Balance Sheet").Url("~/Accounting/Ledger/LedgerIndex");
+                //item.Add().Text("Step 6: Incorporating the Initial Balance Sheet").Url("~/Accounting/BalanceSheet/BalanceSheetIndex");
+                item.Add().Text("Company Info").Url("~/CompanyInformation/Company/Index");
+                if (DLL.Utility.ApplicationSetting.Branch == true)
+                {
+                    item.Add().Text("Branch Setup").Url("~/Branch/Index");
+                }
+                item.Add().Text("Create Settlement Rules").Url("~/CompanyInformation/Company/CreateForfeitureAccount");
+                item.Add().Text("Account Maping").Url("~/AccountMapping/Index");
+            });
+            
+            menu.Add().Text("Accounting")
+            .Items(item =>
+            {
+                item.Add().Text("Gateway").Url("~/Accounting/Base/Index");
+            });
+            
+            menu.Add()
+                .Text("Employee")              
+                .Items(item =>
+                {
+                    item.Add().Text("Employee Information").Url("~/Employee/Index");
+                    item.Add().Text("Employee Import from Excel").Url("~/Employee/Import");
+                    item.Add().Text("Withdrawal/Settlement of Fund").Url("~/Employee/PFMembers");
+                    item.Add().Text("Send Mails").Url("~/Employee/_MailingEmployeeList");
+                    item.Add().Text("Closed Members List").Url("~/Employee/PFMembershipClosedList");
+                    item.Add().Text("Profit Distribution").Url("~/ProfitDistribution/ProfitDistribution/Index");
+                    item.Add().Text("Members Register").Url("~/MembersRegister/Index");
+                });
+            menu.Add()
+                .Text("Contribution")
+                .Items(item =>
+                  {
+                    //item.Add().Text("Employee Salary History").Url("~/Salary/Index");
+                    //item.Add().Text("Salary Import from Excel (System Rule)").Url("~/Salary/Import");
+                    //item.Add().Text("Contribution").Url("~/Salary1/Contribution");
+                    //if (DLL.Utility.ApplicationSetting.ContributionFromPayroll == true)
+                    //{
+                    //    item.Add().Text("Contribution From Payroll").Url("~/PFContribution/Contribution/Index");
+                    //}
+                    item.Add().Text("Contribution Import from Excel (Manual)").Url("~/Salary1/Import");
+                    item.Add().Text("Monthly PF Status").Url("~/PFSettings/PFMonthlyStatus/PFMonthlyStatus");
+                    item.Add().Text("Member PF Status").Url("~/PFSettings/MemberPFStatus/MemberPFStatus");
+                    //item.Add().Text("Missing Contribution").Url("~/Contribution/MissingContribution/Index");                      
+                });
+                
+            menu.Add().Text("Loan")
+                 .Items(item =>
+                  {
+                    item.Add().Text("Employee Loan").Url("~/Loan/Loan/Index");
+                    item.Add().Text("Loan List").Url("~/Loan/LoanList/Index");
+                    item.Add().Text("Loan Closed").Url("~/Loan/LoanList/LoanClosed");
+                    item.Add().Text("Loan Approval").Url("~/Loan/Approval/Index");
+                    item.Add().Text("Loan Payment").Url("~/Loan/Import/Index");
+                    item.Add().Text("Unpaid Loans").Url("~/Loan/UnpaidLoan/Index");
+                    item.Add().Text("Loan  Rules").Url("~/Loan/LoanRules/Index");
+                    //item.Add().Text("processing Loan receivable").Url("~/Loan/LoanReceivable/Index");
+                });
+
+            menu.Add().Text("Instrument")
+           .Items(item =>
+           {
+               item.Add().Text("Create Instrument").Url("~/Instrument/Instrument/Index");
+               item.Add().Text("Encashment Entry").Url("~/Instrument/Encashment/EncashmentEntry");
+               if (DLL.Utility.ApplicationSetting.InstrumentAccruedProcess == true)
+               {
+                   item.Add().Text("Instrument Accrude Interest Process").Url("~/Instrument/Instrument/AccrudeInterest");
+               }
+               //item.Add().Text("Matured and Closed").Url("~/Instrument/Instrument/MaturedAndClosed");
+           });
+          
+            
+            //menu.Add().Text("PF Core")
+            // .Items(item =>
+            // {
+            //     //item.Add().Text("PF Rules").Url("~/PFSettings/Index");
+            //     //item.Add().Text("Contribution Rules").Url("~/PFSettings/ContributionRules/PFContributionRules");
+            //     //item.Add().Text("Yearly Interest").Url("~/PFSettings/YearlyInterest/YearlyInterest");
+            //     item.Add().Text("Membership closing rules").Url("~/PFSettings/MembershipClosed/Index");
+            // });
+
+            menu.Add().Text("Report")
+            .Items(item =>
+            {
+                item.Add().Text("PF Section").Url("~/Report/ReportPF/Index");
+                item.Add().Text("Loan Section").Url("~/Report/ReportLoan/Index");
+                item.Add().Text("Investment Section").Url("~/Report/ReportInvestment/Index");
+                if (DLL.Utility.ApplicationSetting.InstrumentAccruedProcess == true)
+                {
+                    item.Add().Text("Forfeiture Section").Url("~/Report/ReportForfeiture/Index");
+                }
+            });
+
+            //menu.Add().Text("System")
+            //.Items(item =>
+            //{
+            //    item.Add().Text("Error Log").Url("~/Error/ErrorList");
+            //});
+
+
+            
+            
+            //menu.Add()
+            //    .Text("Settings")
+
+            //    .Items(item =>
+            //    {
+            //        item.Add().Text("Branch").Url("~/Branch/Index");
+            //        item.Add().Text("Country").Url("~/Country/Index");
+            //        item.Add().Text("Department").Url("~/Department/Index");
+            //        item.Add().Text("Designation").Url("~/Designation/Index");
+            //    });
+            menu.Add()
+                .Text("User Management")
+
+                .Items(item =>
+                {
+                    item.Add().Text("System User").Url("~/UserManagement/UserManagement/Index");
+                    item.Add().Text("System User Login history").Url("~/UserManagement/UserManagement/UserLoginHistory");
+                    item.Add().Text("Employee Web User").Url("~/UserManagement/EmployeeWebUser/Index");
+                    item.Add().Text("Audit Lock").Url("~/UserManagement/AuditLog/Index");
+                    
+                    if (DLL.Utility.ApplicationSetting.DbBackUpPath != null)
+                    {
+                        item.Add().Text("DB BackUp").Url("~/UserManagement/AuditLog/_DBBackUp");
+                    }
+                    //item.Add().Text("Web User Login history").Url("~/UserManagement/WebUserManagement/UserLoginHistory");
+                });
+            
+            
+            //menu.Add()
+            //    .Text("Member In/Out")
+
+            //    .Items(item =>
+            //    {
+            //        item.Add().Text("In/Out").Url("~/MemberInOut/MemberInOut/Index");
+            //    });
+        })
+        .Render();
+}
+        </div>
+</div>

@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "ForfeitureAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <fieldset>
+            <legend>Forfeiture Account</legend>
+        @using (Ajax.BeginForm("CreateForfeitureAccount", "Company", null, new AjaxOptions
+            {
+                InsertionMode = InsertionMode.Replace,
+                HttpMethod = "POST",
+                OnSuccess = "updateSuccess"
+            }))
+        {
+            <div id="update-message">@ViewBag.Message</div>
+            <table class="table table-striped">
+                <tr>
+                    <td>Implementation Date</td>
+                    <td>@ViewBag.ImplementationDate</td>
+                </tr>
+                <tr>
+                    <td>Forfeiture Amount</td>
+                    <td>@Html.TextBox("ForfeitedAmount", (decimal)ViewBag.ForfeitedAmount, new {@class = "form-control" })</td>
+                </tr>
+            </table>
+            <button class="btn btn-save btn-success" type="submit">Save</button>
+        }
+            </fieldset>
+         @if (string.IsNullOrEmpty(ViewBag.EditUserName))
+            {
+                <br />
+                <div class="alert alert-warning">This information was updated by @ViewBag.EditUserName at @ViewBag.EditDate</div>
+            }
+    </div>
+</div>
+<hr />
+@{ Html.RenderPartial("PFRuleList");}
+
+@section scripts{
+    <script>
+        function updateSuccess(data) {
+            if (data.Success == true) {
+                $("#update-message").html(data.Message).removeClass("alert alert-danger").addClass("alert alert-success");
+                ShowDropDownMessage(data.Message);
+            }
+            else {
+                $("#update-message").html(data.ErrorMessage).removeClass("alert alert-success").addClass("alert alert-danger");
+            }
+        }
+    </script>
+    <script src="~/Scripts/custom/PFMembershipCloseRules.js"></script>
+    }

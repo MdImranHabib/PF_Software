@@ -1,0 +1,9 @@
+﻿delete from [dbo].tbl_Contribution
+delete from [dbo].tbl_ContributionMonthRecord
+delete from [dbo].tbl_PFL_Amortization
+delete from [dbo].tbl_PFLoan
+delete from [dbo].tbl_Employees
+delete from [dbo].acc_VoucherDetail
+delete from [dbo].acc_VoucherEntry
+delete from [dbo].acc_Ledger
+delete from [dbo].acc_Group

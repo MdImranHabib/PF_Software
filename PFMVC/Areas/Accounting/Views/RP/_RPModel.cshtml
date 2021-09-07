@@ -1,0 +1,224 @@
+﻿@model Tuple<List<DLL.ViewModel.VM_acc_VoucherDetail>, List<DLL.ViewModel.VM_acc_VoucherDetail>, List<DLL.ViewModel.VM_acc_VoucherDetail>, List<DLL.ViewModel.VM_acc_VoucherDetail>>
+
+
+
+
+<div style="width: 45%; float: left">
+    <fieldset>
+        <legend>Opening Balance</legend>
+        <em class="blueFont">AS ON : @ViewBag.FromDate</em>
+        <br />
+
+
+        <table id="ob" class=" table table-striped table-condensed smaller">
+            <tr class="bold">
+                <td>Cash account name</td>
+                <td class="right">Amount</td>
+            </tr>
+            @if (Model.Item1.Count() > 0)
+            {
+                foreach (var item in Model.Item1)
+                {
+                <tr>
+                    <td>
+                        @item.LedgerName
+                    </td>
+                    <td class="right">
+                        @item.Balance
+                    </td>
+                </tr>
+                }
+            }
+            <tr>
+                
+                <td colspan="2" class="right bold blueFont obTotal"></td>
+            </tr>
+        </table>
+
+    </fieldset>
+
+    <fieldset>
+        <legend>Receipts</legend>
+        <em class="blueFont">From @ViewBag.FromDate TO @ViewBag.ToDate</em>
+        <br />
+
+        <table id="rv" class="table table-striped table-condensed smaller">
+            <tr class="bold">
+                <td>Account name</td>
+                <td class="right">Credit Amount</td>
+            </tr>
+            @if (Model.Item2.Count() > 0)
+            {
+                foreach (var item in Model.Item2)
+                {
+                    if (item.Credit > 0)
+                    {
+                <tr>
+                    <td>
+                        @item.LedgerName
+                    </td>
+                    <td class="right">
+                        @item.Credit
+                    </td>
+                </tr>
+                    }
+                }
+      }
+            <tr>
+                
+                <td colspan="2" class="right bold blueFont rvTotal"></td>
+            </tr>
+        </table>
+
+    </fieldset>
+
+
+<hr />
+
+    <fieldset><legend>Payments</legend>
+        <em class="blueFont">From @ViewBag.FromDate TO @ViewBag.ToDate</em> <br />
+     
+            <table id="pv" class="table table-condensed table-striped smaller">
+                <tr class="bold">
+                    <td>Account name</td>
+                    <td class="right">Debit Amount</td>
+                </tr>
+                @if (Model.Item3.Count() > 0)
+     {
+                foreach (var item in Model.Item3)
+                {
+                    if (item.Debit > 0)
+                    {
+                        <tr>
+                            <td>
+                                @item.LedgerName
+                            </td>
+                            <td class="right">
+                                @item.Debit
+                            </td>
+                        </tr>
+                    }
+                }
+                }
+                <tr><td  colspan="2"  class="right bold blueFont pvTotal"></td></tr>
+            </table>
+     
+        </fieldset>
+
+    <fieldset><legend>Closing Balance</legend>
+        <em class="blueFont">AS ON : @ViewBag.ToDate</em> <br />
+ 
+            <table id="cb" class="table table-striped table-condensed smaller">
+                <tr class="bold">
+                    <td>Cash account name</td>
+                    <td class="right">Amount</td>
+                </tr>
+                @if (Model.Item4.Count() > 0)
+                    {
+                foreach (var item in Model.Item4)
+                {
+                    
+                        <tr>
+                            <td>
+                                @item.LedgerName
+                            </td>
+                            <td class="right">
+                                @item.Balance
+                            </td>
+                        </tr>
+                    }
+                }
+                <tr><td colspan="2" class="right bold blueFont cbTotal"></td></tr>
+            </table>
+        </fieldset>
+</div>
+
+<div style="width: 45%; float: right">
+    <fieldset>
+        <legend>Summary</legend>
+        <table>
+            <tr class="bold blueFont">
+                <td></td><td>Timespan</td><td>Amount</td>
+            </tr>
+            <tr>
+                <td>Opening Balance</td><td>AS ON @ViewBag.FromDate</td><td class="obTotal"></td>
+            </tr>
+            <tr>
+                <td>Receipt Voucher</td><td>From @ViewBag.FromDate TO @ViewBag.ToDate</td><td class="rvTotal"></td>
+            </tr>
+            <tr>
+                <td>Payment Voucher</td><td>From @ViewBag.FromDate TO @ViewBag.ToDate</td><td class="pvTotal"></td>
+            </tr>
+            <tr class="blueFont">
+                <td colspan="2">Opening Balance + Receive Voucher - Payment Voucher</td><td class="cbTotal_calc"></td>
+            </tr>
+            <tr>
+                <td>Closing Balance</td><td>AS ON @ViewBag.FromDate</td><td class="cbTotal"></td>
+            </tr>
+        </table>
+    </fieldset>
+
+</div>
+
+<script>
+    var result = 0;
+    var cbTotal_calc = 0;
+
+
+    //payment voucher
+    $('#pv').find('tr').each(function (i, el) {
+        var $tds = $(this).find('td');
+        var amount = parseFloat($tds.eq(1).text());
+        
+            if (typeof amount === "number" && !isNaN(amount)) {
+                result = parseFloat(result) + parseFloat(amount);
+            }
+    });
+    $('.pvTotal').text(AccFormatMoney(result));
+    cbTotal_calc = parseFloat(cbTotal_calc) - parseFloat(result);
+    result = 0;
+
+
+    //closing voucher
+    $('#cb').find('tr').each(function (i, el) {
+        var $tds = $(this).find('td');
+        var amount = parseFloat($tds.eq(1).text());
+
+        if (typeof amount === "number" && !isNaN(amount)) {
+            result = parseFloat(result) + parseFloat(amount);
+        }
+    });
+    $('.cbTotal').text(AccFormatMoney(result));
+    result = 0;
+
+
+    //receipt voucher
+    $('#rv').find('tr').each(function (i, el) {
+        var $tds = $(this).find('td');
+        var amount = parseFloat($tds.eq(1).text());
+
+        if (typeof amount === "number" && !isNaN(amount)) {
+            result = parseFloat(result) + parseFloat(amount);
+        }
+    });
+    $('.rvTotal').text(AccFormatMoney(result));
+    cbTotal_calc = parseFloat(cbTotal_calc) + parseFloat(result);
+    result = 0;
+
+    //opening balance
+    $('#ob').find('tr').each(function (i, el) {
+        var $tds = $(this).find('td');
+        var amount = parseFloat($tds.eq(1).text());
+
+        if (typeof amount === "number" && !isNaN(amount)) {
+            result = parseFloat(result) + parseFloat(amount);
+        }
+    });
+    $('.obTotal').text(AccFormatMoney(result));
+
+
+    cbTotal_calc = parseFloat(cbTotal_calc) + parseFloat(result);
+    $('.cbTotal_calc').text(AccFormatMoney(cbTotal_calc));
+    result = 0;
+
+</script>

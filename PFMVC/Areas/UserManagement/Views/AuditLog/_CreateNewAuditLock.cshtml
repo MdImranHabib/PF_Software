@@ -1,0 +1,36 @@
+﻿@model DLL.ViewModel.VM_AuditLog
+
+@{
+    Layout = null;
+}
+
+@using (Ajax.BeginForm("AddNewAudit", "AuditLog", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccessUI" // Update Audit Lock info grid
+}, new { @id = "DialogForm1" }))
+{
+    <div id="update-message1" class="error "></div>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+       
+        <div>
+            <table class="table table-striped table-bordered" style="font-weight: bold">
+                <tr>
+                    @*<td>@Html.LabelFor(m => m.LastAuditDate)</td>*@
+                    <td>Audit Lock Date</td>
+                    <td>@Html.TextBoxFor(m => m.LastAuditDate, new { @class = "dateTimePicker form-control" })</td>
+                </tr>
+
+            </table>
+        </div>
+}
+
+
+<script>
+   
+    $(document).ready(function () {
+        $("#CompanyID").val(@ViewData["CompanyId"]);
+    });
+</script>

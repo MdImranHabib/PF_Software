@@ -1,0 +1,39 @@
+﻿USE [PFTM]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_GenerateTrialBalance]    Script Date: 07/09/2014 17:37:37 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE proc [dbo].[sp_GenerateTrialBalance]
+@ledgerID uniqueidentifier = null,
+@groupID int = NULL,
+@natureID int = null,
+@fromDate datetime = null,
+@toDate datetime = null
+AS
+Begin
+SET NOCOUNT ON;
+select 
+a.NatureName, a.NatureID, 
+b.GroupName, b.GroupID,
+c.LedgerName, 
+c.InitialBalance, 
+c.LedgerID,
+sum(d.Credit) as Credit, sum(d.Debit) as Debit
+		 from  acc_Nature a, 
+		 acc_Group b, 
+		 acc_Ledger c left join acc_VoucherDetail d on c.LedgerID = d.LedgerID
+		 where 
+		 a.NatureID = b.NatureID and
+		  b.GroupID = c.GroupID and
+		  c.LedgerID = isnull(@ledgerID, c.LedgerID) and
+		  b.GroupID = isnull(@groupID, b.GroupID) and
+		  a.NatureID = isnull(@natureID, a.NatureID)
+		  group by a.NatureName
+		   ,c.LedgerName,b.GroupName,c.LedgerID, c.InitialBalance,   b.GroupID,  a.NatureID
+		--  isnull(@ledgerID, b.LedgerID) and
+		--a.VoucherID = c.VoucherID and
+		--a.LedgerID = @ledgerID and c.TransactionDate >= @fromDate and c.TransactionDate<=@toDate
+End

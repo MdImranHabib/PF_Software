@@ -1,0 +1,35 @@
+﻿@model DLL.ViewModel.VM_Branch
+
+           
+    @using (Ajax.BeginForm("BranchForm", "Branch", new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace, 
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccess1"
+	}, new { @id = "DialogForm1" }))
+    {
+    @Html.ValidationSummary(true)
+    <div id="update-message1" class="error"></div>
+        @Html.HiddenFor(model => model.BranchID)
+        
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.BranchName, "Branch Name: ")
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BranchName, new { style="max-width: 200px; max-height: 70px; min-width: 199px; ",@class="form-control Next"})
+                @Html.ValidationMessageFor(model => model.BranchName)
+            </td>
+        </tr>
+         <tr>
+            <td>
+                @Html.LabelFor(model => model.BranchLocation, "Branch Short Name: ")
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.BranchLocation, new { style="max-width: 100px; max-height: 40px; min-width: 100px; ", @class="form-control Next"})
+                @Html.ValidationMessageFor(model => model.BranchLocation)
+            </td>
+        </tr>
+    </table>
+}

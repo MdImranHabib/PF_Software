@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutWebUser.cshtml";
+}
+<br />
+
+@*empployee id will be determine at server side*@
+<input type="hidden" id="SelectedEmpID" value='@ViewBag.EmployeeID'/>
+test
+@*<div id="tabs" style="height:500%">
+    <ul>
+        <li><a href="#tabs-1">PF Reporting</a></li>
+        <li><a href="#tabs-2">Loan Section Reporting</a></li>
+        <li><a href="#tabs-3">Request for a Loan</a></li>
+        <li><a href="#tabs-4">Personal Settings</a></li>
+    </ul>
+   <div id="tabs-1">
+        @Html.Partial("_ReportPF")
+    </div>
+     
+    <div id="tabs-3">
+        @Html.Partial("_LoanForm")
+    </div>
+    <div id="tabs-2">
+        @Html.Partial("_ReportLoan")
+    </div>
+    
+    <div id="tabs-4">
+        @Html.Partial("_ResetPassword")
+    </div>
+    
+</div>*@
+
+
+@*<div id="ModalSpace" title="">
+    <p id="ModalMessage"></p>
+</div>
+<div id="dvLoanPaymentDetail"></div>*@
+
+
+@section scripts{
+    <script src="~/Scripts/custom/Report_PF.js"></script>
+    <script src="~/Scripts/custom/Report_Loan.js"></script>
+    <script type="text/javascript">
+        $("#RemoveFilterLoan").click(function () {
+            $("txtLoanID").val("");
+            $("#txtFromDateLoan").val("");
+            $("#txtToDateLoan").val("");
+        });
+
+        $("#RemoveFilterPF").click(function () {
+            $("#txtFromDatePF").val("");
+            $("#txtToDatePF").val("");
+        });
+
+        $(function () {
+            $("#txtLoanID").autocomplete({
+                source: rootPath + "/Report/WebUserReport/AutocompleteSuggestionsForEmpId",
+                minLength: 1,
+                select: function (event, ui) {
+                }
+            });
+        });
+
+        $(function () {
+            $(".ui-datepicker").hide();
+            $('.dateTimePicker').datepicker({ dateFormat: "dd/M/yy", changeYear: true });
+            $("#tabs").tabs();
+        });
+
+
+        $('.target').keyup(function () {
+            _initRate = $("#Interest").val();
+            _loanTenor = $("#TermMonth").val();
+            _loanAmount = $("#LoanAmount").val();
+
+            var URL = rootPath + "/Loan/Loan/GetMonthlyPayment/?_loanAmount=" + _loanAmount + "&_loanTenor=" + _loanTenor + "&_intRate=" + _initRate;
+            $.get(URL, function (data) {
+                if (data.Success == true) {
+                    $("#Installment").val(data.Result);
+                }
+                else {
+                    $("#Installment").val(0);
+                }
+            });
+        });
+
+        function SaveLoan() {
+            loanAmount = $("#LoanAmount").val();
+            termMonth = $("#TermMonth").val();
+            interest = $("#Interest").val();
+            installment = $("#Installment").val();
+            startDate = $("#StartDate").val();
+            debugger;
+            $.ajax({
+                type: "POST",
+                url: rootPath + "/Report/WebUserReport/LoanForm",
+                data: { loanAmount: loanAmount, termMonth: termMonth, interest: interest, installment: installment, startDate: startDate },
+                dataType: "json",
+                success: function (data) {
+                    if (data.Message != null) {
+                        $("#Success").show();
+                        $("#Error").hide();
+                        $("#SuccessMessege").val("");
+                        $("#SuccessMessege").val(data.Message);
+                        alert("Loan Successfully Requested");
+                    }
+                    if (data.ErrorMessage == "Currently one user cannot change other user password except ADMIN.") {
+                        $("#Success").hide();
+                        $("#Error").show();
+                        $("#ErrorMessage").val("");
+                        $("#ErrorMessage").val(data.ErrorMessage);
+                    }
+                }
+            });
+        }
+    </script>
+}
+

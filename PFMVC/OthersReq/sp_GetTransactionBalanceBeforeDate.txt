@@ -1,0 +1,39 @@
+﻿USE [PFTM]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_GetTransactionBalanceBeforeDate]    Script Date: 07/09/2014 17:37:12 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+ CREATE PROCEDURE [dbo].[sp_GetTransactionBalanceBeforeDate]
+        -- Add the parameters for the stored procedure here
+        @ledgerID uniqueidentifier,
+        @fromDate datetime,
+        @oInitialBalance money out,
+        @oBalanceBeforeDate money out,
+        @oGroupName varchar(50) out
+        AS
+        BEGIN
+        Declare 
+			@_initialBalance money,
+			@vTemp money,
+			@_groupName varchar(50);
+			SET NOCOUNT ON;
+			--Initial Balance
+			SET @vTemp = 0
+			select @_initialBalance = InitialBalance from acc_Ledger a where a.LedgerID = @ledgerID
+			--Cumulative Balance before date
+			select @vTemp = sum(b.Credit) - sum(b.Debit) 
+			from acc_VoucherEntry a, acc_VoucherDetail b
+			where a.VoucherID = b.VoucherID and
+			b.LedgerID = @ledgerID and
+			a.TransactionDate < @fromDate
+			Group By b.VoucherID
+			--Get Ledger Under which group
+			select @_groupName = GroupName from acc_Group a, acc_Ledger b where a.GroupID = b.GroupID and b.LedgerID = @ledgerID
+			
+			SET @oGroupName =  @_groupName
+			SET @oBalanceBeforeDate = isnull(@_initialBalance , 0)+ isnull(@vTemp, 0)
+			SET @oInitialBalance = isnull(@_initialBalance , 0)
+
+        END

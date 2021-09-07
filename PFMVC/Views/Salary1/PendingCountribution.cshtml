@@ -1,0 +1,36 @@
+﻿@model List<DLL.ViewModel.VM_Contribution>
+
+@{
+    ViewBag.Title = "PendingCountribution";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+@*<div class="alert alert-warning">@ViewBag.Message</div>*@
+
+<table class="table table-condensed table-striped smaller">
+    <tr style="font-weight:bold">
+        <td>Employee ID</td>
+        <td>Employee Name</td>
+        <td>Last payment Date</td>
+        <td>Total Pending</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdentificationNumber</td>
+            <td>@item.EmpName</td>
+            <td>@item.ProcessDate</td>
+            <td>@item.TotalPendingMonth</td>
+            
+        </tr>
+    }
+</table>
+
+@*@using (Html.BeginForm("PassVoucherConfirm", "Employee", null, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary pull-right btn-xs">Pass Voucher</button>
+}*@

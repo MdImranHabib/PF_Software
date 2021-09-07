@@ -1,0 +1,69 @@
+﻿@model List<DLL.acc_VoucherEntry>
+
+@{
+    Layout = null;
+}
+
+<style>
+    #scroller {
+        width: 170px;
+        height: 400px;
+    }
+
+    #inner {
+        width: 100%;
+        overflow-y: scroll;
+        height: 100%;
+    }
+</style>
+
+<fieldset>
+    <legend style="color: deeppink">@ViewBag.LegendName</legend>
+    <div class="form-group">
+        <label>Search Voucher:</label>
+        <input type="text" class="form-control" placeholder="Enter Voucher Number" style="width:100%" name="Search" id="Search" onkeyup="FilterTable()"/>
+    </div>
+    <div id="scroller">
+        <div id="inner">
+            <table class="table table-striped table-condensed" id="tblVoucherEntry">
+                @foreach (var item in Model)
+                {
+                    <tr class="myrow" id="ve-@item.VoucherID">
+                        <td>@item.VNumber
+                            <button class="btn btn-xs btn-default hidden editbtn pull-right" onclick="editVoucherEntry(@item.VoucherID);">View</button></td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</fieldset>
+
+<script>
+
+    $(function () {
+        $("table tr").hover(function () {
+            $(this).find(".editbtn").removeClass("hidden");
+        }, function () {
+            $(this).find(".editbtn").addClass("hidden");
+        });
+    });
+
+    function FilterTable() {
+        debugger;
+        //InfoNotify("Key Press");
+        index = -1;
+        inp = $('#Search').val();
+
+        //InfoNotify(inp);
+        //This should ignore first row with th inside
+        $("#tblVoucherEntry:visible tr:not(:has(>th))").each(function () {
+            if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+                // Show the row (in case it was previously hidden)
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $("#tblVoucherEntry").show();
+    }
+</script>

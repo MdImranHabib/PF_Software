@@ -1,0 +1,14 @@
+﻿@using (Html.BeginForm("ResetCompany", "UnfeedMyDB", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <table>
+        <tr>
+            <td>Pselect company to delete it's data</td><td>@Html.DropDownList("companyID", (SelectList)ViewData["CompanyOptions"], string.Empty)</td>
+        </tr>
+        <tr>
+            <td>Passcode </td><td><input type="password" id="passcode" name="passcode" /></td>
+        </tr>
+    </table>
+    <br />
+    <input type="submit" />
+}

@@ -1,0 +1,77 @@
+﻿@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Audit Log Information";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset><legend>Audit Log Information</legend>
+        <div class="pull-left" id="admin-table">
+
+            @(Html.Telerik().Grid<DLL.ViewModel.VM_AuditLog>()
+            .Name("AuditLogGrid").HtmlAttributes(new { @class = "A" })
+            .DataKeys(keys => { keys.Add(s => s.LogID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("Add Audit Lock").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0; font-weight:bold;", @class = "t-add" }).Ajax(true))
+            .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectAuditLog", "AuditLog");
+            }
+                ).Columns(columns =>
+                        {
+                            columns.Bound(s => s.LogID).Visible(false);
+                            columns.Bound(s => s.EditUserName).Title("Name");
+                            columns.Bound(s => s.LastAuditDate).Title("Last Audit Date");
+                            columns.Bound(s => s.LogDate).Title("Date");
+                            //columns.Command(commands =>
+                            //    {
+                            //        commands.Custom("EditCommand").Text("Edit Audit Lock").Ajax(true)
+                            //       .ButtonType(GridButtonType.Image)
+                            //       .ImageHtmlAttributes(new { @class = "t-edit btn-isab" })
+                            //       .HtmlAttributes(new { @class = "hide" })
+                                   
+                            //       ;
+                            //    }
+                            //).Width(40).Title("");
+                            //columns.Command(commands =>
+                            //{
+                            //    commands.Custom("DeleteCommand").Text("Delete").Ajax(true)
+                            //   .ButtonType(GridButtonType.Image)
+                            //   .ImageHtmlAttributes( new { @class = "t-delete" });
+                            //}
+                            //).Width(40).Title("");
+
+                        }
+                            )
+                            .Sortable()
+                    .ClientEvents(events =>
+                        {
+                            events.OnCommand("UGOnCommand");
+                            //events.OnRowSelected("UGOnRowSelect");
+                        })
+                        .Selectable()
+                        .ColumnContextMenu()
+                        .Resizable(resizing => resizing.Columns(true))
+
+
+)
+
+        </div>
+
+        </fieldset>
+
+
+
+    </div>
+
+
+</div>
+
+@section scripts{
+    <script src="~/Scripts/custom/AuditLogManagement.js"></script>
+   
+}
+
+

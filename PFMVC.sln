@@ -1,0 +1,53 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PFMVC", "PFMVC\PFMVC.csproj", "{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DLL", "DLL\DLL.csproj", "{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 2
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://192.168.0.39:8080/tfs/ssl
+		SccProjectUniqueName0 = PFMVC\\PFMVC.csproj
+		SccProjectName0 = PFMVC
+		SccAuxPath0 = http://192.168.0.39:8080/tfs/ssl
+		SccLocalPath0 = PFMVC
+		SccProvider0 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccProjectUniqueName1 = DLL\\DLL.csproj
+		SccProjectName1 = DLL
+		SccAuxPath1 = http://192.168.0.39:8080/tfs/ssl
+		SccLocalPath1 = DLL
+		SccProvider1 = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Debug|x64.ActiveCfg = Debug|x64
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Debug|x64.Build.0 = Debug|x64
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Debug|x64.Deploy.0 = Debug|x64
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Release|x64.ActiveCfg = Release|x64
+		{A8638B0A-C2E1-45D1-8D0D-A69D6960415C}.Release|x64.Build.0 = Release|x64
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Debug|x64.ActiveCfg = Debug|x64
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Debug|x64.Build.0 = Debug|x64
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Debug|x64.Deploy.0 = Debug|x64
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Release|x64.ActiveCfg = Release|x64
+		{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

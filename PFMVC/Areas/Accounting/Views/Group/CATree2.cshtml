@@ -1,0 +1,17 @@
+﻿
+
+@model PFMVC.Areas.Accounting.Controllers.GroupTree
+@foreach (var item in Model.GTs)
+{ 
+    <ul>
+    @if (item != null)
+    {        
+        <li><a href="#"  class="usr1">@item.GroupName</a>
+        @if (item.GTs.Count > 0)
+        {         
+            @Html.Partial("CATree2", item.GroupName)           
+        }
+        </li>
+    }
+    </ul>
+}

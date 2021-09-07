@@ -1,0 +1,79 @@
+﻿
+@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-7">
+    <fieldset>
+        <legend>PF Yearly Interest</legend>
+@(Html.Telerik().Grid<DLL.ViewModel.VM_InterestRate>()
+    .Name("PFYearlyInterestGrid").HtmlAttributes(new { @class = "A" })
+        //.DataKeys(keys => { keys.Add(s => s.ROWID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("New Rules").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectPFYearlyInterest", "YearlyInterest");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.ConYear).Visible(false);
+                    columns.Bound(c => c.ConMonth).Visible(false);
+                    columns.Bound(c => c.MonthYear);
+                    columns.Bound(c => c.InterestRate).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EditUserName).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EditDate).HtmlAttributes(new { style = "text-align:center" }).Format("{0:dd/MM/yyyy}");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                  //  columns.Command(commands =>
+                  //  {
+                  //      commands.Custom("DeleteCommand").Text("Delete").Ajax(true)
+                  //     .ButtonType(GridButtonType.Image)
+                  //     .ImageHtmlAttributes(new { @class = "t-delete" });
+                  //  }
+                  //).Width(40).Title("");
+              
+        
+                }
+            )
+            .Sortable()
+            //.Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                {
+                    events.OnCommand("PFYearlyInterestGridOnCommand");
+                })
+                .Selectable()
+)
+        </fieldset>
+    </div>
+    <div class="col-md-3 pull-right"> 
+        <fieldset>
+            <legend>Note</legend>
+            <div class="alert alert-warning">
+            Yearly interest rules are required to generate interest amount for PF members' saving amount. 
+                To make a rule we need 2 information: Effective date and Interest percentage.
+            <br /><u>Same rule based on particular timespan is not possible.</u> 
+            <br />
+            <strong>Please note, </strong>
+            <br />
+            A rule is not allowed edit or delete if it is used once!
+        </div>
+        </fieldset>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/custom/PFYearlyInterest.js"></script>
+}

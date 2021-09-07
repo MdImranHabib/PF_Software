@@ -1,0 +1,11 @@
+﻿@{
+    ViewBag.Title = "Reset Database...";
+}
+
+@using (Html.BeginForm("Index", "UnfeedMyDB", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="password" id="passcode" name="passcode" />
+    <input type="submit" />
+    
+}

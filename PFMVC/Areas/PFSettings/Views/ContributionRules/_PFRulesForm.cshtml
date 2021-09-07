@@ -1,0 +1,41 @@
+﻿@model DLL.ViewModel.VM_PFRules
+
+@{
+    Layout = null;
+}
+
+
+@using (Ajax.BeginForm("PFRulesForm", "ContributionRules",null, new AjaxOptions
+{
+	InsertionMode = InsertionMode.Replace,
+	HttpMethod = "POST",
+    OnSuccess = "updateSuccessPFRulesForm"
+}, new { @id = "DialogForm1" }))
+{
+    
+<div id="update-message1" class="error"></div>
+    @Html.HiddenFor(model => model.ROWID)
+    <table>
+        <tr><td>@Html.LabelFor(m => m.WorkingDurationInMonth)</td><td>@Html.TextBoxFor(m => m.WorkingDurationInMonth, new { @style="width:100px"}) @Html.ValidationMessageFor(m => m.WorkingDurationInMonth)</td></tr>
+        <tr><td>@Html.LabelFor(m => m.EmployeeContribution.ToString("#,###,##0.000"))</td><td>@Html.TextBoxFor(m => m.EmployeeContribution, new { @style="width:100px"}) @Html.ValidationMessageFor(m => m.EmployeeContribution)</td></tr>
+        <tr><td>@Html.LabelFor(m => m.EmployerContribution.ToString("#,###,##0.000"))</td><td>@Html.TextBoxFor(m => m.EmployerContribution, new { @style="width:100px"}) @Html.ValidationMessageFor(m => m.EmployerContribution)</td></tr>
+        <tr><td>@Html.LabelFor(m => m.IsActive)</td><td>@Html.CheckBoxFor(m => m.IsActive) @Html.ValidationMessageFor(m => m.EmployerContribution)</td></tr>
+        @if(Model.EffectiveFrom.HasValue)
+        {
+            <tr><td>@Html.LabelFor(m => m.EffectiveFrom)</td><td>@Html.TextBoxFor(m => m.EffectiveFrom,"{0:dd'/'MMM'/'yyyy}", new { @style="width:100px", @class= "dateTimePicker", @readonly="readonly"}) @Html.ValidationMessageFor(m => m.EmployerContribution)</td></tr>
+        }
+        else
+        {
+            <tr><td>@Html.LabelFor(m => m.EffectiveFrom)</td><td>@Html.TextBoxFor(m => m.EffectiveFrom, new { @style="width:100px", @class= "dateTimePicker", @readonly="readonly"}) @Html.ValidationMessageFor(m => m.EmployerContribution)</td></tr>
+        }
+    </table>
+    <label style="font-size:smaller; color:red;">Deactivated rule cannot be Re-activate again.</label><br />
+    <label style="font-size:smaller; color:blue;">If any rule has been used in transaction process that rule cannot be edit again.</label>
+}
+
+
+<script>
+    $(function () {
+        $('.dateTimePicker').datepicker({ dateFormat: "dd/M/yy", changeYear: true, changeMonth: true });
+    });
+</script>

@@ -1,0 +1,56 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_PFLoanPayment>
+@{
+    ViewBag.Title = "LoanPaymentErrorFound";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+
+
+<div class="alert alert-danger"><strong>@ViewBag.Message</strong> </div>
+
+  @using (Ajax.BeginForm("", "", null, new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessSalaryProcess"
+	}, new { @id = "DialogForm1" }))
+    {
+    
+    <div id="update-message1" class="error"></div>
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" />
+    <table class="table table-striped table-condensed" style="text-align:center">
+           <tr style="font-weight:bold;" >
+            <td>Employee ID</td>
+            <td>Loan ID</td>
+            <td>Paid Amount</td>
+            <td>Installment Amount</td>
+            <td>Installment Number</td>
+            <td>Payment Date</td>
+            <td>Error Message (If Any)</td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].EmployeeID) @Html.HiddenFor(m => m[i].EmployeeID)</td>
+                <td>@Html.DisplayFor(m => m[i].LoanID) @Html.HiddenFor(m => m[i].LoanID)</td>
+                <td>@Html.DisplayFor(m => m[i].PaymentAmount.ToString("#,###,##0.000")) @Html.HiddenFor(m => m[i].PaymentAmount)</td>
+                <td>@Html.DisplayFor(m => m[i].InstallmentAmount.ToString("#,###,##0.000")) @Html.HiddenFor(m => m[i].InstallmentAmount)</td>
+                <td>@Html.DisplayFor(m => m[i].InstallmentNumber) @Html.HiddenFor(m => m[i].InstallmentNumber)</td>
+                <td>@Html.DisplayFor(m => m[i].PaymentDate) @Html.HiddenFor(m => m[i].PaymentDate)</td>
+                <td style="color:red; font-size:smaller;">@Html.DisplayFor(m => m[i].PreImportMessage)</td>
+            </tr>
+        }
+    </table>
+<hr />
+        @*@Html.ActionLink("Process Data", "MonthlyContributionSubmit", "Salary", new{ _dtMonth = ViewBag.Month }, new { @class="btn btn-danger"})*@
+  @Html.ActionLink("Re-Upload", "Index", "Import", new { area= "Loan", @class="btn btn-danger"})
+     
+  }
+
+    </div>
+</div>

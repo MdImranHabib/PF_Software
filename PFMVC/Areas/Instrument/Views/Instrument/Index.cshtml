@@ -1,0 +1,341 @@
+﻿
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+    #instrumentList{
+    height:500px;
+    overflow-y: scroll;
+}
+</style>
+
+<div class="row">
+    <div class="col-md-4" id="instrumentList">
+
+    </div>
+    <input type="hidden" id="instrumentId" name="instrumentId" value="@ViewBag.instrumentId" />
+    <div class="col-md-6" id="instrumentForm">
+    </div>
+    @*------------------- Added By Izab 07 April 2020---------------------------*@
+    <div class="col-md-1" id="rate">
+        <div>Interest Rate</div>
+        <div id="RateTable"></div>
+
+    </div>
+    @*------------------- End ---------------------------*@
+    @*------------------- Add By Izab---------------------------*@
+    <div class="col-md-2" id="periodicDate">
+        @{int i = 0;}
+        <table class="table table-striped table-condensed" id="PeriodicDateTable">
+            <tr>
+                <td>
+                    @Html.TextBox("periodicdate", null, new { @class = "form-control next dateTimePicker", @id = "periodicdate" + i })
+                </td>
+                @*  <td>
+                        <button type="button" class="btn btn-default btn-xs" onclick="addRaw()" >Add New</button>
+                    </td>*@
+
+            </tr>
+        </table>
+        <button type="button" class="btn btn-default btn-xs" onclick="addRaw()" style="margin-left: 36%">Add New</button>
+    </div>
+    @*------------------- End ---------------------------*@
+</div>
+
+@section scripts{
+     <script>
+         function PeriodicDateAdd() {
+             if ($("#CheckBoxValue").is(":checked")) {
+                 $("#periodicDate").show();
+                 $("#NoofPeriod").show();
+                 //$("#Comment").val("PERIODIC");
+             } else {
+                 $("#periodicDate").hide();
+                 $("#NoofPeriod").hide();
+                 //$("#Comment").val("NOPERIODIC");
+             }
+         }
+
+
+         $(document).ready(function () {
+             $("#periodicDate").hide();
+             $("#NoofPeriod").hide();
+             $("#rate").hide();
+            GetInstrumentList();
+            GetInstrumentForm(0);
+
+
+            //$(function () {
+
+            //    alert("1");
+            //    var _maturityPeriod = 0;
+            //    var _depositDate = "";
+
+
+            //        _maturityPeriod = $("#MaturityPeriod").val();
+            //        _depositDate = $("#DepositDate").val();
+
+            //        _depositDate = new Date(_depositDate);
+            //        var _date = new Date(_depositDate.getFullYear, _depositDate.getMonth + _maturityPeriod, _depositDate.getDate);
+
+            //        meturityDate = $.format.date(_date, 'dd M yy');
+
+            //})
+            
+        })
+
+
+       
+        //$(function () {
+
+        //});
+
+        function GetInstrumentForm(id) {
+            var ins_id = $("#instrumentId").val();
+            if (ins_id > 0) {
+                id = ins_id
+            }
+
+            if (id != 0) {
+                GetInterestList(id);
+            }
+            var viewUrl = rootPath + "/Instrument/Instrument/Create/?instrumentID="+id;
+
+            $.get(viewUrl, function (data) {
+                $("#instrumentForm").html("");
+                $("#instrumentForm").html(data);
+                //var viewUrl = rootPath + "/Accounting/Group/GetJQFile/";
+                //$.get(viewUrl, function (data) {
+                //    $("#JQ").html(data);
+                //})
+            })
+        }
+
+        function GetInstrumentList() {
+            var viewUrl = rootPath + "/Instrument/Instrument/InstrumentList/";
+
+            $.get(viewUrl, function (data) {
+                $("#instrumentList").html("");
+                $("#instrumentList").html(data);
+            })
+        }
+
+
+        function InstrumentDetail(instrumentID) {
+            GetInstrumentForm(instrumentID);
+        }
+
+        function updateSuccess(data) {
+            if (data.Success == true) {
+                $("#instrumentID").val(data.InstrumentID);
+                
+                $("#update-message").html(data.Message).removeClass("alert alert-danger").addClass("alert alert-success");
+                //ShowDropDownMessage(data.Message);
+                GetInstrumentList();
+            }
+            else {
+                $("#update-message").html(data.ErrorMessage).removeClass("alert alert-success").addClass("alert alert-danger");
+            }
+        }
+
+        function addNew() {
+            
+            $(".Next").val("");
+            $("#instrumentID").val(0);
+            $(".editUser").html("").removeClass("alert alert-warning");
+            $("#update-message").html("").removeClass("alert alert-warning alert-success");
+        }
+
+        function passVoucher(id) {
+            
+            var viewURL = rootPath + "/Instrument/Instrument/PassVoucher/?instrumentID=" + id;
+            $.post(viewURL, function (data) {
+                if (data.Success == true) {
+                    $("#update-message").removeClass("alert alert-danger").addClass("alert alert-success").html("").html(data.Message);
+                    ShowDropDownMessage(data.Message);
+                }
+                else {
+                    $("#update-message").removeClass("alert alert-success").addClass("alert alert-danger").html("").html(data.ErrorMessage);
+                    ErrorNotify(data.ErrorMessage);
+                }
+            });
+        }
+
+        function save() {
+            // added by Izab 07 April 2020
+            SaveInterestRate();
+            //End by Izab
+            
+            $("#DialogForm1").submit();
+        }
+
+      
+
+        function InstrumentDelete(id) {
+
+            if (id < 1) {
+                ShowModalMessage("Please select instrument to delete it...");
+                return;
+            }
+            //========
+            $("#ModalSpace").html("Confirm? This instrument will be deleted and also accounting voucher related to this instrument will be deleted!!!"),
+               $("#ModalSpace").dialog({
+                   width: 'auto',
+                   resizable: false,
+                   modal: true,
+                   show: "slide",
+                   hide: "slide",
+
+                   title: "Confirm Accounting Transaction?",
+                   buttons: [{
+                       text: "Yes", click: function () {
+                           var viewURL = rootPath + "/Instrument/Instrument/DeleteInstrumentConfirm/?instrumentID=" + id;
+                           $.post(viewURL, function (data) {
+                               if (data.Success == true) {
+                                   $("#update-message").removeClass("alert alert-danger").addClass("alert alert-success").html("").html(data.Message);
+                                   ShowDropDownMessage(data.Message);
+                                   GetInstrumentList();
+                                   $("#ModalSpace").dialog("close");
+                               }
+                               else {
+                                   $("#update-message").removeClass("alert alert-success").addClass("alert alert-danger").html("").html(data.ErrorMessage);
+                                   ErrorNotify(data.ErrorMessage);
+                                   
+                               }
+                           });
+                       }
+                   }, {
+                       text: "Close",
+                       click: function () {
+                           $(this).dialog("close");
+                           //ErrorNotify("You cancelled the operation!");
+                       }
+                   }]
+               });
+            //========
+         
+        }
+
+        var currentAccountHeadIndex = 0;
+
+        function addRaw() {
+            debugger;
+            var totalPeriod = $("#NoofPeriod").val();
+            var tableId = "PeriodicDateTable";
+            var table = document.getElementById(tableId);
+            var rowCount = table.rows.length;
+            if (parseInt(totalPeriod) < rowCount + 1) {
+                ShowDropDownMessage("You can't add more date from Total Coupon No");
+                return;
+            } else {
+                var row = table.insertRow(rowCount);
+                var j = rowCount;
+                var cell0 = row.insertCell(0);
+                var element0 = document.createElement("input");
+                element0.type = "text";
+                element0.id = "periodicdate" + j;
+                element0.className = "form-control next dateTimePicker";
+                cell0.appendChild(element0);
+
+                //var cell1 = row.insertCell(1);
+                //var element1 = document.createElement("input");
+                //element1.type = "button";
+                //element1.className = "btn btn-default btn-xs";
+                //element1.value = "Add New";
+                //element1.onclick = "addRaw()";
+                //cell1.appendChild(element1);
+            }
+        }
+
+        //function SaveCouponDate() {
+        //    var priodicDate = "";
+        //    $('#PeriodicDateTable tr').each(function (row, tr) {
+        //        priodicDate = priodicDate
+        //            + $(tr).find('td:eq(0)').find('input').val() + ',';
+        //    });
+        //    var viewUrl =rootPath + "/Instrument/Instrument/GetPeriodicDate/?periodicDates=" + priodicDate;
+        //    //var viewUrl = rootPath + "/GF/GFInstrument/GetPeriodicDate/?periodicDates=" + priodicDate;
+        //    $.get(viewUrl, function (data) {
+        //        return;
+        //    });
+        //}
+
+        // added by Izab 07 April 2020
+        function SaveInterestRate() {
+            var interestRate = "";
+            $('#RateTable').find('div').each(function () {
+                interestRate = interestRate
+                    + $(this).find('input').val() + ',';
+            });
+            var viewUrl = rootPath + "/Instrument/Instrument/GetInterestRate/?interestRate=" + interestRate;
+            $.get(viewUrl, function (data) {
+                return;
+            });
+        }
+        //End by Izab
+
+        function GetInterestList(id) {
+
+            var viewUrl2 = rootPath + "/Instrument/Instrument/GetInterestList/?instrumentID=" + id;
+
+            $.get(viewUrl2, function (data) {
+                var data = data.data;
+
+
+                var _year = data[0].InterestRateCount;
+                $('#RateTable').html("");
+                $('#RateTable').empty();
+                if (_year > 1) {
+                    //$("#rate").show();
+                    var td = "";
+                    for (var i = 0; i < _year; i++) {
+                        td += '<div style="padding:5px;"><input type="text" value="' + data[i].InterestRate + '" name="rate_' + i + '" class="form-control _interestRate" id="rate_' + i + '"/></div>';
+                    }
+                    $('#RateTable').append(td);
+                    $("#rate").show();
+                }
+                else {
+                    $("#rate").hide();
+                    $('#RateTable').empty();
+                }
+            })
+
+
+        }
+
+        function GetInterestList(id) {
+
+            var viewUrl2 = rootPath + "/Instrument/Instrument/GetInterestList/?instrumentID=" + id;
+
+            $.get(viewUrl2, function (data) {
+                var data = data.data;
+
+
+                var _year = data[0].InterestRateCount;
+                $('#RateTable').html("");
+                $('#RateTable').empty();
+                if (_year >= 1) {
+                    //$("#rate").show();
+                    var td = "";
+                    for (var i = 0; i < _year; i++) {
+                        td += '<div style="padding:5px;"><input type="text" value="' + data[i].InterestRate + '" name="rate_' + i + '" class="form-control _interestRate" id="rate_' + i + '"/></div>';
+                    }
+                    $('#RateTable').append(td);
+                    $("#rate").show();
+                }
+                else {
+                    $("#rate").hide();
+                    $('#RateTable').empty();
+                }
+            })
+
+
+        }
+
+     </script>
+    }
+         

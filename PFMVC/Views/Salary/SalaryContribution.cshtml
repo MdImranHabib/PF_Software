@@ -1,0 +1,34 @@
+﻿@model IEnumerable<DLL.ViewModel.VM_Contribution>
+
+@{
+    ViewBag.Title = "SalaryContribution";
+}
+
+<fieldset>
+    <legend>PF contribution for month : @ViewBag.Month</legend>
+    <table>
+        <tr>
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+            <td>Joining Date</td>
+            <td>Working Duration</td>
+            <td>Salary</td>
+            <td>Emp Contribution</td>
+            <td>Org Contribution</td>
+            <td>Total</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.EmpID</td>
+                <td>@item.EmpName</td>
+                <td>@item.JoiningDate</td>
+                <td>@item.WorkingDuration</td>
+                <td>@item.Salary</td>
+                <td>@item.EmpContribution (@item.EmpContributionPercentage %)</td>
+                <td>@item.OrgContributionPercentage (@item.OrgContributionPercentage %)</td>
+                <td>@item.Total</td>
+            </tr>
+        }
+    </table>
+</fieldset>

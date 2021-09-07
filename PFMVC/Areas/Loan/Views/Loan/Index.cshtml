@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Employee Loan";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table>
+            <tr>
+                <td>Employee ID</td>
+                <td>
+                    <input type="text" class="form-control" id="txtEmpID" name="txtEmpID" placeholder="Type Employee ID" />
+                    <input type="hidden" id="SelectedID" name="SelectedID" />
+                </td>
+                <td>
+                    <input type="button" class="btn btn-info" value="Find" onclick="GetEmployee()" id="GetEmployee" />
+                </td>
+            </tr>
+            <tr>
+                <td>Employee Name</td>
+                <td>
+                    <input type="text" class="form-control" id="txtEmpName" name="txtEmpName" placeholder="Type Employee Name" />
+                </td>
+                <td>
+                    <input type="button" class="btn btn-info" value="Find" onclick="GetEmployee()"  />
+                </td>
+            </tr>
+        </table>
+        <br />
+        <div id="dvMessage"></div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-3">
+        <div id="dvEmpDetail"></div>
+    </div>
+    <div class="pull-right">
+        <div id="dvLoanHistory"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="dvLoanPaymentDetail"></div>
+    </div>
+</div>
+
+
+
+@section scripts{
+    <script src="~/Scripts/custom/Loan.js"></script>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $("#txtEmpID").autocomplete({
+                source: rootPath + "/Loan/Loan/AutocompleteSuggestions",
+                minLength: 1,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('input[name="txtEmpID"]').val(ui.item.label);
+                    $('input[name="txtEmpName"]').val(ui.item.value);
+                    GetEmpId();
+                    return false;
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#txtEmpID").val(ui.item.label);
+                },
+            });
+        });
+
+        $(function () {
+            $("#txtEmpName").autocomplete({
+                source: rootPath + "/Loan/Loan/AutocompleteByEmployeeName",
+                minLength: 1,
+                select: function (event, ui) {
+                    event.preventDefault();
+                    $('input[name="txtEmpName"]').val(ui.item.label);
+                    $('input[name="txtEmpID"]').val(ui.item.value);
+                    GetEmpId();
+                    return false;
+                },
+                focus: function (event, ui) {
+                    event.preventDefault();
+                    $("#txtEmpName").val(ui.item.label);
+                },
+            });
+        });
+
+
+        function GetEmpId() {
+            debugger;
+            var identificationNo = $("#txtEmpID").val();
+            $.ajax({
+                type: 'POST',
+                url: rootPath + "/Loan/Loan/GetEmpId",
+                data: { identificationNo: identificationNo },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    //$("#txtEmpID").val(identificationNo);
+                    $("#SelectedID").val(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+                }
+            });
+        }
+    </script>
+
+}

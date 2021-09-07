@@ -1,0 +1,38 @@
+﻿@model List<DLL.acc_Ledger>
+
+@{
+    ViewBag.Title = "_LedgerNameList";
+    Layout = null;
+}
+
+<style>
+    #scroller {
+        width: 170px;
+        height: 400px;
+    }
+
+    #inner {
+        width: 100%;
+        overflow-y: scroll;
+        height: 100%;
+        position:relative;
+    }
+</style>
+
+
+<fieldset>
+    <legend style="color: green">@ViewBag.LegendName</legend>
+    <div id="scroller">
+        <div id="inner">
+            <table class="table table-striped table-condensed LLT smaller" id="LLTCash" style="position:relative;top:0px;">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="can_be_selected">@item.LedgerName <span style="color: green">- @item.LedgerCode</span> </td>
+                        <td class="hidden">@item.LedgerID</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</fieldset>

@@ -1,0 +1,50 @@
+﻿@model List<DLL.tbl_ProfitDistributionSummary>
+
+
+
+<fieldset>
+    <legend>Previously Distributed</legend>
+    @if(Model.Count >0)
+{
+        <table class="table smaller table-striped">
+            <tr>
+                <td>From Date</td>
+                <td>To Date</td>
+                <td>Distributable Amount</td>
+                <td>Self Amount</td>
+                <td>Emp Amount</td>
+                <td>Operation Date</td>
+                <td>User</td>
+                <td>View</td>
+                <td>Delete</td>
+            </tr>
+            @foreach (var item in Model)
+        {
+
+                <tr>
+                    <td>@item.FromDate.Value.ToString("dd/MMM/yyyy")</td>
+                    <td>@item.ToDate.Value.ToString("dd/MMM/yyyy")</td>
+                    <td>@Convert.ToDecimal(item.DistributableAmount).ToString("#,##,##,##0.000")</td>
+                    <td>@Convert.ToDecimal(item.SelfTotalProfit).ToString("#,##,##0.00")</td>  
+                    <td>@Convert.ToDecimal(item.EmpTotalProfit).ToString("#,##,##,##0.00")</td>
+                    <td>@item.EditTime.Value.ToShortDateString()</td>
+                    <td>@item.EditUserName</td>
+                    <td>
+                        <button type="button" onclick="ViewProcess(@item.ProcessID)"  class="btn btn-xs btn-info">
+                            <span class="glyphicon glyphicon-fullscreen"></span>
+                        </button>
+                    </td>
+                    <td>
+                        <button type="button" onclick='ProcessDelete(@item.ProcessID)' class="btn btn-xs btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
+                </tr>    
+        }
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-warning">No Record Found!</div>
+    }
+</fieldset>

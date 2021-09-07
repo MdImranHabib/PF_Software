@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Import";
+}
+<div class="row">
+    
+
+      
+
+            <div class="col-md-7">
+                  <fieldset><legend>Import Contribution From Excel</legend>
+                      @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                      {
+                          <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+                      }
+                      @if (!string.IsNullOrEmpty(ViewBag.Message))
+                      {
+                          <div class="alert alert-success">@ViewBag.Message</div>
+                      }
+
+
+                     @using (Html.BeginForm("ImportExcel", "Salary1", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                     {
+                         <table>
+                             <tr style="font-weight: bold">
+                                 <td>Contribution month</td>
+                                 <td>
+                                     <input type="text" id="date" name="date" class="dateTimePickerNoFuture form-control", readonly = "readonly" style="width:120px;"/>
+                                     <input type="hidden" id="hiddenDate" value="@ViewBag.Month" />
+                                 </td>
+                                 <td style="font-weight: bold">Excel file</td>
+                                 <td>
+                                     <input type="file" id="FileUpload1" name="FileUpload1" /></td>
+                                 <td>
+                                     <input type="submit" id="Submit" name="Submit" value="Submit" class="btn btn-success" /></td>
+                                 <td><a href="/Salary1/Import/" class="btn btn-danger">Reset</a></td>
+                             </tr>
+                         </table>
+                     }
+
+                <br />
+                <br />
+
+                <div class="alert alert-info">
+                    You need to upload contribution file for the month. This file should be in excel format containing the required field.
+            <em>After uploading the file you will see a validation page which contain necessary information</em>
+                    <br />
+                    <u>We don't keep the EXCEL file after information has been extracted.</u>
+                    <br />
+                    <strong>Please note, </strong>
+                    <br />
+                    This process will not finally execute if your excel file contain any single error!
+                </div>
+        </fieldset>
+    </div>
+
+            
+        
+
+
+       <div class="col-md-3 pull-right smaller">
+           <fieldset><legend>Instruction</legend>
+          <p class="alert alert-warning">
+            <label style="color:green; font-weight:bold">Excel file should contain the following header with correct spelling...</label><br /><br />
+        </p>
+         <table class="table table-condensed smaller">
+             <thead style="font-weight:bold"><tr><td>Header</td><td>Cell Type</td><td></td></tr></thead>
+                  <tr><td>EMPLOYEE ID</td><td>Text</td><td>*</td></tr>
+                <tr><td>EMPLOYEE NAME</td><td>TExt</td><td></td></tr>
+             <tr><td>OWN CONT</td><td>Number</td><td>*</td></tr>
+             <tr><td>EMPLOYER CONT</td><td>Number</td><td>*</td></tr>
+             
+            
+            </table>
+            @Html.ActionLink("Download sample excel", "SampleSalaryImportSheet", "Download", null, new { @class = "link", @style = "font-size:smaller;" })
+               </fieldset>
+        
+    </div>
+
+
+       </div>         
+<br />
+<div id="SalaryMonthRecord">
+
+
+</div>
+
+@section scripts{
+    <script>
+        var viewURL = rootPath + "/Salary1/SalaryMonthRecord/";
+        $.get(viewURL, function (data) {
+            $("#SalaryMonthRecord").html("").html(data);
+        });
+
+
+        $(document).ready(function () {
+            
+            $("#Submit").focus();
+
+            var v = $("#hiddenDate").val();
+            
+            var datetime = v;
+            if (v) {
+                if (datetime.indexOf('-') > 0) {
+                    var dd = v.split('-')[0];
+                    var mm = v.split('-')[1];
+                    var yy = v.split('-')[2];
+                    datetime = dd + '/' + mm + '/' + yy;
+                    //alert(dd + '---' + mm + '----' + yy);
+                }
+                $("#date").val(datetime);
+                
+            }
+
+        })
+
+    </script>
+    
+    
+    }

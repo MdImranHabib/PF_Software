@@ -1,0 +1,240 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*Created by Fahim 13/12/2015 // Guided by Avishek*@
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            <legend>Investment Section Reporting</legend>
+            <div class="col-md-4">
+                <label class="radio">
+                    <input type="radio" name="ReportOptionInvestment" value="InvestmentWithDateRange" checked="checked" /><strong>Investment report with date range</strong>
+                    <br />
+                </label>
+                <label class="radio">
+                    <input type="radio" name="ReportOptionInvestment" value="InvestmentWithInstrumentWise" /><strong>Investment report instrument wise</strong>
+                    <br />
+                </label>
+            </div>
+        </fieldset>
+        
+        <div class="pull-right">
+            <table class="table table-striped table-bordered" style="font-weight: bold">
+               @* <tr>
+                    <td>Instrument Number</td>
+                    <td>
+                        <input type="text" class="form-control" id="txtInstrumentID" name="txtInstrumentID" autofocus />
+                        <input type="hidden" id="SelectedInstrumentID" name="SelectedInstrumentID" /></td>
+                </tr>*@
+                <tr>
+                    <td>Institution Name</td>
+                    <td>
+                        <input type="text" class="form-control" id="txtInstitution" name="txtInstitution" />
+                        <input type="hidden" name="SelectedInstitution" id="SelectedInstitution" /></td>
+                </tr>
+               @* <tr>
+                    <td>Branch Name</td>
+                    <td>
+                        <input type="text" class="form-control" id="txtBranch" name="txtBranch" />
+                        <input type="hidden" name="SelectedBranch" id="SelectedBranch" /></td>
+                </tr>*@
+                <tr>
+                    <td>From Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtFromDate" /></td>
+                </tr>
+                <tr>
+                    <td>To Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtToDate" autofocus="" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+
+        <table class="pull-right">
+            <tr>
+                <td>
+                    <input type="button" value="Report" onclick="GenerateReportRDLC('PDF')" class="btn btn-warning" /></td>
+                <td>
+                    <input type="button" value="Excel" onclick="GenerateReportRDLC('Excel')" class="btn btn-success" /></td>
+                <td>
+                    <input type="button" value="Word" onclick="GenerateReportRDLC('Word')" class="btn btn-info" /></td>
+                
+            </tr>
+        </table> 
+        <input type="button" value="Remove Filter" id="RemoveFilter" class="btn btn-danger pull-left" />      
+    </div>
+
+</div>
+
+@section scripts{
+     <script src="~/Scripts/custom/Report_PF.js"></script>
+
+    <script type="text/javascript">
+        $("#txtBranch").prop('disabled', true);
+
+        $(function () {
+            $("#ui-datepicker-div").hide();
+        });
+
+        $(function () {
+            $("#ui-datepicker-div").hide();
+            $("#txtEmpID").val("");
+            var x = document.querySelector('input[name="ReportOptionInvestment"]:checked').value;
+            if (x == "InvestmentWithDateRange") {
+
+                $("#txtInstrumentID").prop('disabled', true);
+                $("#txtInstitution").prop('disabled', true);
+                $("#txtBranch").prop('disabled', true);
+            }
+
+            $("input[name='ReportOptionInvestment']").change(function () {
+                var x = document.querySelector('input[name="ReportOptionInvestment"]:checked').value;
+                if (x == "InvestmentWithDateRange") {
+
+                    $("#txtInstrumentID").prop('disabled', true);
+                    $("#txtInstitution").prop('disabled', true);
+                    $("#txtBranch").prop('disabled', true);
+                    $("#txtFromDate").prop('disabled', false);
+                    $("#txtToDate").prop('disabled', false);
+                    $("#txtInstitution").val('');
+                }
+                if (x == "InvestmentWithInstrumentWise") {
+
+                    $("#txtInstrumentID").prop('disabled', true);
+                    $("#txtInstitution").prop('disabled', false);
+                    $("#txtBranch").prop('disabled', true);
+                    $("#txtFromDate").prop('disabled', true);
+                    $("#txtToDate").prop('disabled', true);
+                    $("#txtFromDate").val('');
+                    $("#txtToDate").val('');
+                }
+
+                //End Fahim
+            });
+
+
+            //End Fahim
+        });
+
+        $(function () {
+            $("#txtInstrumentID").autocomplete({
+                source: rootPath + "/Report/ReportInvestment/AutocompleteSuggestionsForInstrument",
+                minLength: 1,
+                select: function (event, ui) {
+                    $('input[name="txtInstrumentID"]').val(ui.item.label);
+                    $("#SelectedInstrumentID").val(ui.item.value);
+                    GetInstrumentInformation();
+                    return false;
+                }
+            });
+        });
+
+        $(function () {
+            $("#txtInstitution").autocomplete({
+                source: rootPath + "/Report/ReportInvestment/AutocompleteSuggestionsForInstitution",
+                minLength: 1,
+                select: function (event, ui) {
+                    $('input[name="txtInstitution"]').val(ui.item.label);
+                    $("#SelectedInstitution").val(ui.item.value);
+                    SetSessionInstitution();
+                    $("#txtBranch").prop('disabled', false);
+                    return false;
+                }
+            });
+        });
+
+        $(function () {
+            $("#txtBranch").autocomplete({
+                source: rootPath + "/Report/ReportInvestment/AutocompleteSuggestionsForBranch",
+                minLength: 1,
+                select: function (event, ui) {
+                    $('input[name="txtBranch"]').val(ui.item.value);
+                    $('input[name="SelectedBranch"]').val(ui.item.label);
+                    $("#SelectedBranch").val(ui.item.value);
+                    return false;
+                }
+            });
+        });
+
+        function GetInstrumentInformation() {
+            var instrumentId = $("#SelectedInstrumentID").val();
+            $.ajax({
+                type: 'POST',
+                url: rootPath + '/Report/ReportInvestment/GetInstrumentInformation',
+                data: { identificationNumber: instrumentId },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#txtInstitution").val(data.value);
+                    $("#SelectedInstitution").val(data.value);
+                    $("#txtBranch").val(data.label);
+                    $("#SelectedBranch").val(data.label);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+                }
+            });
+        }
+
+        function SetSessionInstitution() {
+            var institution = $("#SelectedInstitution").val();
+            var instrumentId = $("#SelectedInstrumentID").val();
+            $.ajax({
+                type: 'POST',
+                url: rootPath + '/Report/ReportInvestment/SetBranchSessionId',
+                data: { institution: institution, instrumentId: instrumentId },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                },
+            });
+        }
+
+        $("#RemoveFilter").click(function () {
+            $("#SelectedInstrumentID").val("");
+            $("#SelectedInstitution").val("");
+            $("#SelectedBranch").val("");
+            $("#txtInstrumentID").val("");
+            $("#txtInstitution").val("");
+            $("#txtBranch").val("");
+            $("#txtFromDate").val("");
+            $("#txtToDate").val("");
+            $("#txtBranch").prop('disabled', true);
+        });
+
+        function GenerateReportRDLC(fileType) {
+            var x = document.querySelector('input[name="ReportOptionInvestment"]:checked').value;
+            var InstrumentId = $("#txtInstrumentID").val();
+            var Institute = $("#SelectedInstitution").val();
+            var branch = $("#txtInstrumentID").val();
+            var fromDate = $('#txtFromDate').val();
+            var toDate = $('#txtToDate').val();
+            if (Institute == "" || Institute == undefined) {
+                Institute = "";
+            }
+            if (x == "InvestmentWithDateRange") {
+                if (Date.parse(fromDate) > Date.parse(toDate)) {
+                    ShowModalMessage("To Date must be Greater than From Date");
+                    return false;
+                }
+
+                if ((fromDate == "" || toDate == "")) {
+                    ShowModalMessage("Pl's Fill To Date & From Date");
+                    return false;
+                }
+            }
+            var viewURL = '../../Report/ReportInvestment/Report/?fileType=' + fileType + '&reportOptions=' + x + '&Institute=' + Institute + "&fromDate=" + fromDate + "&toDate=" + toDate;
+            FancyBox(viewURL);
+        }
+
+    </script>
+}

@@ -1,0 +1,144 @@
+﻿@model DLL.ViewModel.VM_acc_Cash_Flow_Mapping
+
+@{
+    Layout = null;
+    
+}
+
+
+
+<fieldset>
+    <legend id="addGroupLegend">Add Cash Flow Type</legend>
+
+@using (Ajax.BeginForm("CashFlowMappingForm", "CashFlow", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccess"
+}, new { @id = "DialogForm1" }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="update-message1"></div>
+       
+        <table class="table table-striped">
+          
+
+              <tr>
+                <td class="a">@Html.Label("New Cash Flow Type")</td>
+                
+                  <td>@Html.TextBoxFor(m => m.CashFlowType, new { @class = "form-control next", @id = "CashFlow_Type", placeholder="Use up/down arrow and select from right side list..." }) </td>
+                    <td class="hidden">@Html.TextBoxFor(m => m.CashFlowType_Id)</td>
+                     <td class="hidden">@Html.TextBoxFor(m => m.CashFlowMapping_Id)</td>
+                   </tr>
+              <tr>
+                <td class="a">@Html.Label("Cash Flow Ledger")</td>
+                <td>@Html.DropDownListFor(m => m.LedgerID, (SelectList)ViewData["Ledger"], string.Empty, new { @class = "form-control next", @id = "drop" })</td>
+            </tr>
+           
+
+          
+            
+        </table>
+    <label style="color:lightsteelblue; font-style:italic">Press ENTER to move on NEXT</label>
+        <hr />
+        <button class="btn btn-success pull-right 3 next" type="button" onclick="save();" id="save_btn">
+            <span class="glyphicon glyphicon-saved"></span> Save
+        </button>
+    
+        @Html.Partial("CashFlowMapping")
+    }
+     @if (Model != null)
+     {
+        <br />
+        <hr />
+        <label class="mini">@ViewBag.User</label>
+    }
+
+
+        
+
+</fieldset>
+
+
+
+<style>
+    .a {
+        vertical-align:middle !important;
+        max-width:80px;
+    }
+
+</style>
+
+<script>
+    $('#CashFlow_Type').focus();
+
+
+    function MappingGridOnCommand(e) {
+
+        $(".ui-dialog-buttonpane").show();
+        var row = e.row;
+        var grid = $(this).data("tGrid");
+        var dataItem = grid.dataItem(row);
+
+        
+       if (e.name == "DeleteCommand") {
+           var mapID = dataItem.CashFlowMapping_Id;
+
+           var viewUrl = rootPath + "/CashFlow/DeletePossible/?id=" + mapID;
+
+            $.get(viewUrl, function (data) {
+
+                if (data.Success == true) {
+                    $("#ModalSpace").html("Are you sure you want to delete this record? "),
+                    $("#ModalSpace").dialog({
+                        width: 'auto',
+                        resizable: false,
+                        modal: true,
+                        show: "blind",
+                        hide: "blind",
+
+                        title: "Delete " + dataItem.CashFlow_Group,
+                        buttons: [{
+                            text: "Yes", click: function () {
+                                viewUrl = rootPath + "/CashFlow/MappingDeleteConfirm/?id=" + mapID;
+                                $.post(viewUrl, function (data) {
+
+                                    if (data.Success == true) {
+
+
+                                        $("#ModalSpace").dialog('close');
+                                        $("#ModalSpace").html('');
+                                        ShowDropDownMessage(data.Message);
+                                        //clear the related info
+                                        $("#dvEmpDetail").html('');
+                                        $("#dvEmpPhoto").html('');
+                                        $("#dvEmpSign").html('');
+                                        $("#Attachments").addClass("hidden");
+
+                                        grid.ajaxRequest();
+                                    }
+                                    else {
+
+                                        $("#ModalSpace").html("Something Problem while deleting!!!");
+                                    }
+
+                                })
+                            }
+                        }, {
+                            text: "Cancel", click: function () {
+                                $(this).dialog("close");
+                            }
+                        }]
+                    });
+                }
+                else {
+                    ShowModalMessage(data.ErrorMessage);
+                }
+            });
+            return false;
+
+        }
+
+
+    }
+</script>

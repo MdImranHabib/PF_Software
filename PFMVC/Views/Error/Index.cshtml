@@ -1,0 +1,20 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+    <fieldset>
+        <legend style="color:red">Error Encountered</legend>
+            <div class="alert alert-warning">
+                <strong>Exception :</strong>  @ViewBag.Exception
+            </div>
+        
+        
+            <div class="alert alert-danger">
+                 <strong>Inner Exception :</strong> @ViewBag.InnerException
+            </div>
+    </fieldset>
+        </div>
+</div>

@@ -1,0 +1,783 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{432AFFDC-260C-4DF0-9EE9-E1E70B7D1E3C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DLL</RootNamespace>
+    <AssemblyName>DLL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\..\..\BanglaVision\Application\DLL\bin\Debug\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="acc_Chart_of_Account_Maping.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_Group.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_Group_Maping.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_Ledger.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_Nature.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_tbl_Group_MIS.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_tbl_MIS.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_VoucherDetail.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_VoucherEntry.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="acc_VoucherType.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ac_Cheque_BankInfo.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ac_Cheque_ClientInfo.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Ac_Cheque_Print.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.bg-BG.designer.cs">
+      <DependentUpon>EditorLocalization.bg-BG.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.da-DK.designer.cs">
+      <DependentUpon>EditorLocalization.da-DK.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.de-DE.designer.cs">
+      <DependentUpon>EditorLocalization.de-DE.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.designer.cs">
+      <DependentUpon>EditorLocalization.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.en-US.designer.cs">
+      <DependentUpon>EditorLocalization.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.fr-FR.designer.cs">
+      <DependentUpon>EditorLocalization.fr-FR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.nl-NL.designer.cs">
+      <DependentUpon>EditorLocalization.nl-NL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.pl-PL.designer.cs">
+      <DependentUpon>EditorLocalization.pl-PL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.pt-BR.designer.cs">
+      <DependentUpon>EditorLocalization.pt-BR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.pt-PT.designer.cs">
+      <DependentUpon>EditorLocalization.pt-PT.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.ru-RU.designer.cs">
+      <DependentUpon>EditorLocalization.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.uk-UA.designer.cs">
+      <DependentUpon>EditorLocalization.uk-UA.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\EditorLocalization.zh-CN.designer.cs">
+      <DependentUpon>EditorLocalization.zh-CN.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.bg-BG.designer.cs">
+      <DependentUpon>GridLocalization.bg-BG.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.da-DK.designer.cs">
+      <DependentUpon>GridLocalization.da-DK.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.de-DE.designer.cs">
+      <DependentUpon>GridLocalization.de-DE.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.designer.cs">
+      <DependentUpon>GridLocalization.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.en-US.designer.cs">
+      <DependentUpon>GridLocalization.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.es-ES.designer.cs">
+      <DependentUpon>GridLocalization.es-ES.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.fr-FR.designer.cs">
+      <DependentUpon>GridLocalization.fr-FR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.nl-NL.designer.cs">
+      <DependentUpon>GridLocalization.nl-NL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.pl-PL.designer.cs">
+      <DependentUpon>GridLocalization.pl-PL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.pt-BR.designer.cs">
+      <DependentUpon>GridLocalization.pt-BR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.pt-PT.designer.cs">
+      <DependentUpon>GridLocalization.pt-PT.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.ru-RU.designer.cs">
+      <DependentUpon>GridLocalization.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.uk-UA.designer.cs">
+      <DependentUpon>GridLocalization.uk-UA.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\GridLocalization.zh-CN.designer.cs">
+      <DependentUpon>GridLocalization.zh-CN.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.bg-BG.designer.cs">
+      <DependentUpon>UploadLocalization.bg-BG.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.da-DK.designer.cs">
+      <DependentUpon>UploadLocalization.da-DK.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.en-US.designer.cs">
+      <DependentUpon>UploadLocalization.en-US.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.fr-FR.designer.cs">
+      <DependentUpon>UploadLocalization.fr-FR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.nl-NL.designer.cs">
+      <DependentUpon>UploadLocalization.nl-NL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.pl-PL.designer.cs">
+      <DependentUpon>UploadLocalization.pl-PL.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.pt-BR.designer.cs">
+      <DependentUpon>UploadLocalization.pt-BR.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.pt-PT.designer.cs">
+      <DependentUpon>UploadLocalization.pt-PT.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.ru-RU.designer.cs">
+      <DependentUpon>UploadLocalization.ru-RU.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="App_GlobalResources\UploadLocalization.zh-CN.designer.cs">
+      <DependentUpon>UploadLocalization.zh-CN.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="DataPrepare\DP_Branch.cs" />
+    <Compile Include="DataPrepare\DP_Country.cs" />
+    <Compile Include="DataPrepare\DP_Department.cs" />
+    <Compile Include="DataPrepare\DP_Designation.cs" />
+    <Compile Include="DataPrepare\DP_Employee.cs" />
+    <Compile Include="DataPrepare\DP_PFLoan.cs" />
+    <Compile Include="DataPrepare\DP_UserManagement.cs" />
+    <Compile Include="LU_tbl_Branch.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_CompanyInformation.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_Country.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_Department.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_Designation.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_District.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_LoanRules.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_MembershipClosingRules.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LU_tbl_PFRules.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\HRM_DEPARTMENTS.cs">
+      <DependentUpon>PRModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\HRM_DESIGNATIONS.cs">
+      <DependentUpon>PRModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\HRM_Emp_PF_Contribution.cs">
+      <DependentUpon>PRModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\HRM_Pay_Salary.cs" />
+    <Compile Include="PayRollAccess\HRM_PersonalInformations.cs">
+      <DependentUpon>PRModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\HRM_SECTIONS.cs">
+      <DependentUpon>PRModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\PRModel.Context.cs" />
+    <Compile Include="PayRollAccess\PRModel.Context1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PRModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\PRModel.cs" />
+    <Compile Include="PayRollAccess\PRModel.Designer.cs">
+      <DependentUpon>PRModel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\PRModel1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PRModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\PRModel1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PRModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="PayRollAccess\Repository\CustomeRepository.cs" />
+    <Compile Include="PayRollAccess\Repository\PRUnitOfWork.cs" />
+    <Compile Include="PayRollAccess\ViewModel\VM_Salary.cs" />
+    <Compile Include="PFModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PFModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PFModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PFModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>PFModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AccountingRepository.cs" />
+    <Compile Include="Repository\CustomRepository.cs" />
+    <Compile Include="Repository\GenericRepository.cs" />
+    <Compile Include="Repository\SPRepository.cs" />
+    <Compile Include="Repository\UnitOfWork.cs" />
+    <Compile Include="SA_tbl_Module.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_tbl_Page.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SA_tbl_PagePermission.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_Contribution.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ContributionMonthRecord.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_Employees.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ErrorLog.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_FinancialAuditLog.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_Instrument.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_Instrument_Accured_Interest.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_Instrument_Interest_Rate.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_LoginHistory.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_NomineeInformation.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_PFLoan.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_PFL_Amortization.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ProfitDistributionDetail.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_ProfitDistributionSummary.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_User.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_UserPassword.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_UserRedirected.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="tbl_UserRole.cs">
+      <DependentUpon>PFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Utility\ApplicationSetting.cs" />
+    <Compile Include="Utility\Cheque_BankInfo_DAL.cs" />
+    <Compile Include="Utility\DataFormat.cs" />
+    <Compile Include="Utility\MediaContentManager.cs" />
+    <Compile Include="ViewModel\ChequeR.cs" />
+    <Compile Include="ViewModel\VMPaymentReceiveStatement.cs" />
+    <Compile Include="ViewModel\VM_acc_ Subsidiary.cs" />
+    <Compile Include="ViewModel\VM_acc_Cash_Flow_Group.cs" />
+    <Compile Include="ViewModel\VM_acc_Cash_Flow_Mapping.cs" />
+    <Compile Include="ViewModel\VM_acc_Cash_Flow_Type.cs" />
+    <Compile Include="ViewModel\VM_acc_Chart_Of_Account_Mapping.cs" />
+    <Compile Include="ViewModel\VM_acc_group.cs" />
+    <Compile Include="ViewModel\VM_acc_ledger.cs" />
+    <Compile Include="ViewModel\VM_acc_SubsidiaryVoucherDetail.cs" />
+    <Compile Include="ViewModel\VM_Amortization.cs" />
+    <Compile Include="ViewModel\VM_Branch.cs" />
+    <Compile Include="ViewModel\VM_CompanyInformation.cs" />
+    <Compile Include="ViewModel\VM_Contribution.cs" />
+    <Compile Include="ViewModel\VM_Country.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModel\VM_Emp.cs" />
+    <Compile Include="ViewModel\VM_empList.cs" />
+    <Compile Include="ViewModel\VM_EmployeePFStatus.cs" />
+    <Compile Include="ViewModel\VM_EmployeeWebUser.cs" />
+    <Compile Include="ViewModel\VM_forfeiture.cs" />
+    <Compile Include="ViewModel\VM_GroupDetail.cs" />
+    <Compile Include="ViewModel\VM_GroupSummary.cs" />
+    <Compile Include="ViewModel\VM_Instrument.cs" />
+    <Compile Include="ViewModel\VM_InterestRate.cs" />
+    <Compile Include="ViewModel\VM_InterestRateViewModel.cs" />
+    <Compile Include="ViewModel\VM_LoanRules.cs" />
+    <Compile Include="ViewModel\VM_LoanSummery.cs" />
+    <Compile Include="ViewModel\VM_MembershipClosingRules.cs" />
+    <Compile Include="ViewModel\VM_MIS.cs" />
+    <Compile Include="ViewModel\VM_MonthlyPFInterest.cs" />
+    <Compile Include="ViewModel\VM_NomineeInformation.cs" />
+    <Compile Include="ViewModel\VM_PFLoan.cs" />
+    <Compile Include="ViewModel\VM_PFLoanPayment.cs" />
+    <Compile Include="ViewModel\VM_PFMember.cs" />
+    <Compile Include="ViewModel\VM_Department.cs" />
+    <Compile Include="ViewModel\VM_Designation.cs" />
+    <Compile Include="ViewModel\VM_Employee.cs" />
+    <Compile Include="ViewModel\VM_PFMonthlyStatus.cs" />
+    <Compile Include="ViewModel\VM_PFRules.cs" />
+    <Compile Include="ViewModel\VM_PFStatus.cs" />
+    <Compile Include="ViewModel\VM_Salary.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ViewModel\VM_Settlement_FirstTime.cs" />
+    <Compile Include="ViewModel\VM_AuditLog.cs" />
+    <Compile Include="ViewModel\VM_tbl_Loan_Receivable.cs" />
+    <Compile Include="ViewModel\VM_UserInfo.cs" />
+    <Compile Include="ViewModel\VM_UserLoginHistory.cs" />
+    <Compile Include="ViewModel\VM_acc_VoucherDetail.cs" />
+    <Compile Include="ViewModel\VM_acc_VoucherEntry.cs" />
+    <Compile Include="ViewModel\VM_YearlyLoan.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+    <EntityDeploy Include="PayRollAccess\PRModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PRModel1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="PayRollAccess\PRModel.edmx.diagram">
+      <DependentUpon>PRModel.edmx</DependentUpon>
+    </None>
+    <EntityDeploy Include="PFModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>PFModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="PFModel.edmx.diagram">
+      <DependentUpon>PFModel.edmx</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.bg-BG.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.bg-BG.designer.cs</LastGenOutput>
+    </Content>
+    <Content Include="PayRollAccess\PRModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PRModel.Context1.cs</LastGenOutput>
+    </Content>
+    <Content Include="PayRollAccess\PRModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>PRModel1.cs</LastGenOutput>
+    </Content>
+    <Content Include="PFModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PFModel.edmx</DependentUpon>
+      <LastGenOutput>PFModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="PFModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>PFModel.edmx</DependentUpon>
+      <LastGenOutput>PFModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.da-DK.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.da-DK.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.de-DE.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.de-DE.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.en-US.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.en-US.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.fr-FR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.nl-NL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.nl-NL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.pl-PL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.pl-PL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.pt-BR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.pt-BR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.pt-PT.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.pt-PT.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.ru-RU.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.ru-RU.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.uk-UA.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.uk-UA.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\EditorLocalization.zh-CN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>EditorLocalization.zh-CN.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.bg-BG.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.bg-BG.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.da-DK.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.da-DK.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.de-DE.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.de-DE.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.en-US.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.en-US.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.es-ES.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.es-ES.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.fr-FR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.nl-NL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.nl-NL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.pl-PL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.pl-PL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.pt-BR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.pt-BR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.pt-PT.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.pt-PT.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.ru-RU.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.ru-RU.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.uk-UA.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.uk-UA.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\GridLocalization.zh-CN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>GridLocalization.zh-CN.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.bg-BG.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.bg-BG.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.da-DK.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.da-DK.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.en-US.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.en-US.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.fr-FR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.fr-FR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.nl-NL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.nl-NL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.pl-PL.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.pl-PL.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.pt-BR.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.pt-BR.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.pt-PT.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.pt-PT.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.ru-RU.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.ru-RU.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_GlobalResources\UploadLocalization.zh-CN.resx">
+      <Generator>GlobalResourceProxyGenerator</Generator>
+      <LastGenOutput>UploadLocalization.zh-CN.designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

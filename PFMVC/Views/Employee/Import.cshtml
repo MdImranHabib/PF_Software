@@ -1,0 +1,55 @@
+﻿
+@{
+    ViewBag.Title = "Import";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-md-12">
+<fieldset>
+    <legend>Import Employee from Excel</legend>
+    <div class="pull-left">
+    <strong class="error">@ViewBag.Message</strong>
+     @using (Html.BeginForm("ImportExcel", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+     {
+         <table class="table table-striped">
+             <tr>
+                 <td><input  type="file"  id="FileUpload1" name="FileUpload1" class="btn btn-default"/></td>
+             </tr>
+             <tr><td><input  type="submit" id="Submit" name="Submit" value="Submit" class="btn btn-success"/></td></tr>
+         </table>
+     }
+        </div>
+    <div class="pull-right col-md-3">
+        <p class="alert alert-warning">
+            <label style="color:green; font-weight:bold">Excel file should contain the following header with correct spelling...</label><br /><br />
+        </p>
+         <table class="table table-condensed table-striped">
+             <thead style="font-weight:bold"><tr><td>Header</td><td>Cell Type</td><td></td></tr></thead>
+                  <tr><td>Employee ID</td><td>Text</td><td>*</td></tr>
+                <tr><td>Employee Name</td><td>Text</td><td>*</td></tr>
+                <tr><td>Branch</td><td>Text</td><td>*</td></tr>
+
+                <tr><td>Joining Date</td><td>Date</td><td>*</td></tr>
+             <tr><td>PF Activation Date</td><td>Text<td></td></tr>
+                @*<tr><td>Basic Salary</td><td>Number</td><td>*</td></tr>
+                <tr><td>Effective Date</td><td>Date</td><td>*</td></tr>*@
+                <tr><td>Email</td><td>Text<td></td></tr>
+                <tr><td>Gender</td><td>Text</td><td></td></tr>
+                <tr><td>National ID</td><td>Text</td><td></td></tr>
+                <tr><td>Opening Balance</td><td>Number</td><td></td></tr>
+            </table>
+        
+            @Html.ActionLink("Download sample excel", "SampleEmployeeImportSheet", "Download", null, new { @class = "link", @style="font-size:smaller;"})
+    </div>
+</fieldset>
+
+<div id="dvPreImport" ></div>
+<div id="DialogSpace1" ></div>
+<div id="ModalSpace" title=""><p id="ModalMessage"></p></div>
+<div id="ModalInformation" title=""></div>
+        </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/custom/ImportEmployee.js"></script>
+    }
+

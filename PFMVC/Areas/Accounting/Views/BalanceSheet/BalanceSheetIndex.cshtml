@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        var fromDate;
+        var toDate;
+        $(document).ready(function () {
+            var viewUrl = rootPath +  "/Accounting/Base/FilterBox/";
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html('');
+                $('#mainDiv').css('display', 'none');
+                $('#mainDiv').fadeIn(1000).html(data);
+                $("#mainDiv").removeClass("col-md-8").addClass("col-md-10");
+                if ($.cookie("ckFromDate")) {
+                    $("#fromDate").val($.cookie("ckFromDate"));
+                }
+                if ($.cookie("ckToDate")) {
+                    $("#toDate").val($.cookie("ckToDate"));
+                }
+            });
+  
+        })
+
+        function GetData(fDate, tDate) {
+            if (fDate == null || fDate == "" || tDate == null || tDate == "") {
+                ErrorNotify("Please select date range");
+                return false;
+            }
+            if (Date.parse(fDate) > Date.parse(tDate)) {
+                ErrorNotify("To date must be greaer than to date!");
+                return false;
+            }
+            if (fDate.length < 2 || tDate.length < 2) {
+                ErrorNotify("Please select date range");
+            }
+            else {
+
+                $.cookie("ckFromDate", fDate,  { path: '/' });
+                $.cookie("ckToDate", tDate, { path: '/' });
+
+                Reset();
+                fromDate = fDate;
+                toDate = tDate;
+                var viewUrl = rootPath +  "/Accounting/BalanceSheet/GetBalanceSheet/?fromDate=" + fromDate + "&toDate=" + toDate;
+                $.get(viewUrl, function (data) {
+                    if (data.Success == false) {
+                        ShowModalMessage(data.ErrorMessage);
+                    }
+                    $('#mainDiv').fadeIn(1000).append(data);
+                    //var viewUrl = "/Accounting/BalanceSheet/GetLiabilities/?fromDate=" + fromDate + "&toDate=" + toDate;
+                    //$.get(viewUrl, function (data) {
+                    //    $("#mainDiv").fadeIn(2000).append(data);
+                    //})
+                })
+            }
+        }
+
+        function GetBalanceSheetReport(fromDate, toDate) {
+
+            if (Date.parse(fromDate) > Date.parse(toDate)) {
+                ErrorNotify("To date must be greaer than to date!");
+                return false;
+            }
+
+            if (fromDate.length < 2 || toDate.length < 2) {
+                ErrorNotify("Please select date range!");
+            }
+            else {
+                var viewURL = '../../Accounting/BalanceSheet/BalanceSheetReport/?fromDate=' + fromDate + "&toDate=" + toDate;
+                //window.open(viewURL, 'window name', 'window settings')
+                FancyBox(viewURL);
+            }
+        }
+
+        function GetBalanceSheetBriefReport(fromDate, toDate) {
+
+            if (Date.parse(fromDate) > Date.parse(toDate)) {
+                ErrorNotify("To date must be greaer than to date!");
+                return false;
+            }
+
+            if (fromDate.length < 2 || toDate.length < 2) {
+                ErrorNotify("Please select date range!");
+            }
+            else {
+                var viewURL = '../../Accounting/BalanceSheet/BalanceSheetBriefReport/?fromDate=' + fromDate + "&toDate=" + toDate;
+                //window.open(viewURL, 'window name', 'window settings')
+                alert(viewURL);
+                FancyBox(viewURL);
+            }
+        }
+
+        function getGroupDetail(groupID) {
+            if (groupID>0) {
+                var viewURL = '../../Accounting/BalanceSheet/GetGroupDetail/?groupID=' + groupID + '&fromDate=' + fromDate + '&toDate=' + toDate;
+                //window.open(viewURL, 'window name', 'window settings')
+                Reset();
+                $.get(viewURL, function (data) {
+                    $("#mainDiv").append(data);
+                })
+            }
+            else {
+                ErrorNotify("Invalid Group...");
+                ShowModalMessage("Invalid Group...");
+            }
+        }
+
+        function Reset() {
+            $("#fieldsetAsset").remove();
+            $("#fieldsetLiabilities").remove();
+            $("#fieldsetGroupDetail").remove();
+            $("#fieldsetLedgerDetail").remove();
+            $("#retainEarningOpening").remove();
+        }
+
+        function getLedgerDetail(ledgerID, ledgerName) {
+            
+            var viewURL = '../../Accounting/LedgerBook/GetData/?LedgerID=' + ledgerID + '&FromDate=' + fromDate + '&ToDate=' + toDate+'&LedgerName='+ledgerName;
+            //window.open(viewURL, 'window name', 'window settings')
+            
+            Reset();
+            $.post(viewURL, function (data) {
+                $("#mainDiv").append(data);
+            })
+        }
+
+
+        $("#underGroup").live("keydown", (function (e) {
+            if (e.keyCode === 40) {
+                //InfoNotify("IN>" + index + " and length>" + $('#GNL tr:visible td.can_be_selected').length);
+                index = (index + 1 >= $('#GNL tr:visible td.can_be_selected').length) ? 0 : index + 1;
+                //InfoNotify(index);
+                $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+                $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+                return false;
+            }
+            else if (e.keyCode === 38) {
+                //InfoNotify(index);
+                index = (index <= 0) ? $('#GNL tr:visible td.can_be_selected').length - 1 : index - 1;
+                $('#GNL tr:visible td.can_be_selected').removeClass('selectedRow');
+                $('#GNL tr:visible td.can_be_selected:eq(' + index + ')').addClass('selectedRow');
+                return false;
+            }
+            else if (e.keyCode == 13) {
+
+                if (index > -1) {
+                    //InfoNotify("after enter index>" + index);
+                    var groupName = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 0 + ')');
+                    var parentGroupID = $('#GNL tr:visible:eq(' + index + ') td:eq(' + 1 + ')');
+                    //InfoNotify("led id>" + groupName.text());
+                    $('#underGroup').val(groupName.text());
+                    $('#GroupID').val(parentGroupID.text());
+                    $('#underGroup').css({ "color": "black" });
+                    index = -1;
+
+                    $('#GNL td.can_be_selected').removeClass('selectedRow');
+                }
+            }
+        }));
+
+    </script>
+}

@@ -1,0 +1,92 @@
+﻿@model DLL.ViewModel.VM_UserInfo
+
+@{
+    
+    Layout = null;
+}
+
+@using (Ajax.BeginForm("Register", "UserManagement", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccessUI" // Update user info grid
+}, new { @id = "DialogForm1" }))
+{
+    <div id="update-message1" class="error "></div>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div id="tabss">
+        <ul>
+            <li><a href="#tabss-1">Required Information</a></li>
+            <li><a href="#tabss-2">Additional Information</a></li>
+            @*<li><a href="#tabss-3">Picture</a></li>*@
+        </ul>
+        <div id="tabss-1">
+            <table class="smaller">
+                <tr><td>Employe Id</td><td> @Html.DropDownListFor(m => m.IdentificationNumber, (SelectList)ViewData["EmployeOption"], string.Empty, new { @class= "form-control Next"})</td></tr>
+                <tr><td>@Html.LabelFor(m => m.FullName)</td><td>@Html.TextBoxFor(m => m.FullName, new { @class= "form-control Next"})</td></tr>
+                <tr>
+                    <td>@Html.LabelFor(m => m.UserName)</td><td>@Html.TextBoxFor(m => m.UserName, new { @class = "form-control Next" })</td>
+                    <td style="display:none">@Html.TextBoxFor(m => m.CompanyID,  new { @class = "form-control Next"})</td>
+                </tr>
+
+             @*   <tr>
+                    <td>@Html.LabelFor(m => m.CompanyName) <span style="font-size:xx-small; color:blue"> <br />(In which compnay this user is assigned for)</span> </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.CompanyID, (SelectList)ViewData["CompanyOptions"], string.Empty, new { @class= "form-control Next"})
+                        @Html.ValidationMessageFor(m => m.CompanyID)
+                    </td>
+                </tr>*@
+                <tr><td>@Html.LabelFor(m => m.Password)</td><td>@Html.PasswordFor(m => m.Password, new { @class= "form-control Next"})</td></tr>
+                <tr><td>@Html.LabelFor(m => m.ConfirmPassword)</td><td>@Html.PasswordFor(m => m.ConfirmPassword, new { @class= "form-control Next"})</td></tr>
+            </table>
+        </div>
+        <div id="tabss-2">
+            <table>
+                <tr><td>@Html.LabelFor(m => m.Phone)</td><td>@Html.TextBoxFor(m => m.Phone, new { @class= "form-control Next"})</td></tr>
+
+                <tr><td>@Html.LabelFor(m => m.IsActive)</td><td>@Html.CheckBoxFor(m => m.IsActive)@Html.ValidationMessageFor(m => m.IsActive)</td></tr>
+                <tr><td>@Html.LabelFor(m => m.Email)</td><td>@Html.TextBoxFor(m => m.Email, new { @class= "form-control Next"})@Html.ValidationMessageFor(m => m.Email)</td>
+                </tr>
+                <tr>
+                <td>
+                    @Html.Label("Email notification allowed")
+                </td>
+                <td>
+                    @Html.CheckBoxFor(m => m.EmailNotificationActive)
+                    @Html.ValidationMessageFor(m => m.EmailNotificationActive)
+                </td>
+                </tr>
+                @*<tr>
+                <td>
+                    @Html.LabelFor(m => m.BranchName)
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.BranchID, (SelectList)ViewData["BranchOptions"], string.Empty, new { @class= "form-control Next"})
+                    @Html.ValidationMessageFor(m => m.BranchID)
+                </td>
+              
+            </tr>*@
+
+            </table>
+        </div>
+        @*<div id="tabss-3">
+
+             <label for="file">Upload Image:</label> 
+            <input type="file" name="file" id="file" style="width: 100%;" /> 
+            <input type="submit" value="Upload" class="submit" /> 
+        </div>*@
+    </div>
+}
+
+
+<script>
+  $(function() {
+    $( "#tabss" ).tabs();
+  });
+
+  $(document).ready(function () {
+      $("#CompanyID").val(@ViewData["CompanyId"]);
+  });
+</script>

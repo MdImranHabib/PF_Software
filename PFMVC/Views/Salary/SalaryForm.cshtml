@@ -1,0 +1,34 @@
+﻿@{
+    Layout = null;
+}
+
+@model DLL.ViewModel.VM_Salary
+     
+    @using (Ajax.BeginForm("SalaryForm", "Salary",null, new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessSalaryForm"
+	}, new { @id = "DialogForm1" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <div id="update-message1" class="error"></div>
+        @Html.HiddenFor(model => model.EmpID)
+   <table>
+       <tr><td>Employee ID</td><td>@ViewBag.EmpName</td></tr>
+       <tr><td>Employee Name</td><td>@ViewBag.EmpID</td></tr>
+       <tr><td>Basic</td><td>@Html.TextBoxFor(m => m.Basic, new { @class = "form-control Next" }) @Html.ValidationMessageFor(m => m.Basic)</td></tr>
+       <tr><td>Effective Date</td><td>@Html.TextBoxFor(m => m.EffectiveDate, new { @class="dateTimePicker form-control Next"}) @Html.ValidationMessageFor(m => m.EffectiveDate)</td></tr>
+       <tr><td>Comment*</td><td>@Html.TextBoxFor(m => m.Comment, new { @class="form-control Next"}) @Html.ValidationMessageFor(m => m.Comment)</td></tr>
+   </table>
+            
+    }
+
+
+<script>
+    $(function () {
+        $("#tabs").tabs();
+        $('.dateTimePicker').datepicker({ dateFormat: "dd/M/yy", changeYear: true });
+    });
+</script>

@@ -1,0 +1,596 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*Project KDS Edited by Fahim 23/11/2015*@
+<div class="row">
+    <div class="col-md-12">
+        <fieldset>
+            <legend>Loan Section Reporting</legend>
+        </fieldset>
+        <div class="col-md-4">
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanList" checked="checked" /><strong>Loan List</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanDetailList" /><strong>Loan List with Outstanding</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanListWithEmpId" /><strong>Loan List with Employee Id</strong>
+                <br />
+            </label>
+            
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="UnpaidLoan" /><strong>Unpaid Loan Till Today</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="UnpaidLoanWithDate" /><strong>Unpaid Loan With Date Range</strong>
+                <br />
+            </label>
+            @*<label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="UnpaidLoanWithId" /><strong>Unpaid Loan With Employee Id</strong>
+                <br />
+            </label>*@
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="PaymentDetail" /><strong>Individual Loan Detail</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="CompanyPaymentDetail" /><strong>All Loan Detail</strong>
+                <br />
+            </label>
+            @*EAdded By Kamrul*@
+            @if (DLL.Utility.ApplicationSetting.LoanPaidandAmortization == true)
+                    { 
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanClosed" /><strong>Loan Closed List</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanClosedWithEmpId" /><strong>Loan Closed List with Employee Id</strong>
+                <br />
+            </label>
+            
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="PaidInstallmentDetail" /><strong>Paid Installment Detail</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="DueAndPaidLoanList" /><strong>Loan Report Deu and Paid</strong>
+                <br />
+            </label>
+             <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="AmortizationSchedule" /><strong>Amortization Schedule</strong>
+                <br />
+            </label>
+                <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="YearlyLoanDetail" /><strong>Yearly Loan Detail</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanSummary" /><strong>Loan Outstanding Report</strong>
+                <br />
+            </label>
+                    }
+                    
+            @*End Kamrul*@
+        </div>
+        <div class="pull-right">
+            <table class="table table-striped" style="font-weight: bold">
+                <tr>
+                    <td>Employee ID</td>
+                    <td>
+                        <input type="text" class="form-control" id="txtEmpID" name="txtEmpID" />
+                        <input type="hidden" name="SelectedEmpID" id="SelectedEmpID" /></td>
+                </tr>
+                @*Added by Fahim 04/11/2015*@
+                <tr>
+                    <td>Employee Name</td>
+                    <td>
+                        <input type="text" class="form-control" id="txtName" name="txtName" />
+                        <input type="hidden" name="SelectedName" id="SelectedName" /></td>
+                </tr>
+                @*End Fahim*@
+                <tr>
+                    <td>Loan ID</td>
+                    <td>
+                        <input type="text" class="form-control" id="txtLoanID" />
+                        <input type="hidden" name="SelectedLoanID" id="SelectedLoanID" /></td>
+                </tr>
+                <tr>
+                    <td>From Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtFromDateLoan" /></td>
+                </tr>
+                <tr>
+                    <td>To Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtToDateLoan" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+
+        <table class="pull-left">
+            <tr>
+                @*<td>
+                    <input type="button" value="Report" onclick="GenerateReport()" class="btn btn-primary" /></td>*@
+                <td>
+                    <input type="button" value="Report" onclick="GenerateLoanReportRDLC('PDF')" class="btn btn-warning" /></td>
+                <td>
+                    <input type="button" value="Excel" onclick="GenerateLoanReportRDLC('Excel')" class="btn btn-success" /></td>
+                <td>
+                    <input type="button" value="Word" onclick="GenerateLoanReportRDLC('Word')" class="btn btn-info" /></td>
+            </tr>
+        </table>
+        <input type="button" value="Remove Filter" id="RemoveFilter" class="btn btn-danger pull-right" />
+    </div>
+
+</div>
+<div id="ModalSpace" title="">
+    <p id="ModalMessage"></p>
+</div>
+@section scripts{
+    <script src="~/Scripts/custom/Report_Loan.js"></script>
+
+    <script type="text/javascript">
+
+        $(function () {
+            $("#ui-datepicker-div").hide();
+            $("#txtEmpID").val("");
+            var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+            if (x == "LoanList") {
+                $("#txtEmpID").prop('disabled', true);
+                $("#txtName").prop('disabled', true); //Added by Fahim 04/11/2015
+                $("#txtLoanID").prop('disabled', true);
+            }
+
+            $("input[name='ReportOptionLoan']").change(function () {
+                var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+                if (x == "LoanList") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                if (x == "LoanDetailList") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val("");
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true);
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                    $("#txtYear").prop('disabled', true);
+
+                }
+                if (x == "LoanListWithEmpId") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', false);
+                    $("#txtName").prop('disabled', false); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', false);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                if (x == "LoanClosed") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                if (x == "UnpaidLoan") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', false);
+                    $("#txtName").prop('disabled', false); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', false);
+                    $("#txtFromDateLoan").prop('disabled', true);
+                    $("#txtToDateLoan").prop('disabled', true);
+                }
+                if (x == "PaymentDetail") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', false);
+                    $("#txtName").prop('disabled', false); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', false);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+
+                if (x == "CompanyPaymentDetail") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+
+                if (x == "LoanClosedWithEmpId") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', false);
+                    $("#txtName").prop('disabled', false); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', true);
+                    $("#txtToDateLoan").prop('disabled', true);
+                }
+                if (x == "UnpaidLoan") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val(""); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', true);
+                    $("#txtToDateLoan").prop('disabled', true);
+                }
+                if (x == "UnpaidLoanWithDate") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val("");
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                if (x == "UnpaidLoanWithId") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val("");
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', false);
+                    $("#txtName").prop('disabled', false); //Added by Fahim 04/11/2015
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                //Added by Fahim 11/11/2015
+                if (x == "PaidInstallmentDetail") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val("");
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true);
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                if (x == "DueAndPaidLoanList") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val("");
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true);
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', true);
+                    $("#txtToDateLoan").prop('disabled', true);
+                }
+
+                if (x == "AmortizationSchedule") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val("");
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', false);
+                    $("#txtName").prop('disabled', false);
+                    $("#txtLoanID").prop('disabled', false);
+                    $("#txtFromDateLoan").prop('disabled', true);
+                    $("#txtToDateLoan").prop('disabled', true);
+                }
+                if (x == "LoanSummary") {
+                    $("#txtEmpID").val("");
+                    $("#txtName").val("");
+                    $("#txtLoanID").val("");
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#SelectedEmpID").val("");
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true);
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                if (x == "YearlyLoanDetail") {
+                    $("#txtEmpID").prop('disabled', true);
+                    $("#txtName").prop('disabled', true);
+                    $("#txtLoanID").prop('disabled', true);
+                    $("#txtFromDateLoan").val("");
+                    $("#txtToDateLoan").val("");
+                    $("#txtFromDateLoan").prop('disabled', false);
+                    $("#txtToDateLoan").prop('disabled', false);
+                }
+                //End Fahim
+            });
+
+            $("#txtLoanID").autocomplete({
+                source: rootPath + "/Report/ReportLoan/AutocompleteSuggestionsLoan",
+                minLength: 1,
+                select: function (event, ui) {
+                    if (ui.item) {
+                        //Added By Avishek Date:Aug-1-2015
+                        //var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+                        //if (x != "LoanListWithEmpId") {
+                        $("#txtLoanID").val(ui.item.label);
+                        //}
+                        //else {
+                        //$("#txtLoanID").val("");
+                        //}
+                        $("#txtEmpID").val(ui.item.value);
+                        GetEmpId();
+                        GetEmpName(); //Added by Fahim 22/11/2015
+                        return false;
+                        //End
+                    }
+                }
+            });
+
+            $("#txtEmpID").autocomplete({
+                source: rootPath + "/Report/ReportLoan/AutocompleteSuggestionsForEmpId",
+                minLength: 1,
+                select: function (event, ui) {
+                    //Added By Avishek Date:Aug-1-2015
+                    //var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+                    //if (x != "LoanListWithEmpId") {
+                    $("#txtName").val(ui.item.value);
+                    //}
+                    //else {
+                    //$("#txtLoanID").val("");
+                    //}
+                    $("#txtEmpID").val(ui.item.label);
+                    GetEmpId();
+                    //End
+                    return false;
+                }
+            });
+            // Added by Fahim 04/11/2015
+            $("#txtName").autocomplete({
+                source: rootPath + "/Report/ReportLoan/AutocompleteSuggestionsName",
+                minLength: 1,
+                select: function (event, ui) {
+                    if (ui.item) {
+                        //Added By Avishek Date:Aug-1-2015
+                        //var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+                        //if (x != "LoanListWithEmpId") {
+                        $("#txtName").val(ui.item.label);
+                        //}
+                        //else {
+                        //$("#txtLoanID").val("");
+                        //}
+                        $("#txtEmpID").val(ui.item.value);
+                        GetEmpId();
+                        return false;
+                        //End
+                    }
+                }
+            });
+
+            function GetSessionValues() {
+                var intern = '<%=Session("SelectedEmpID") %>';
+            }
+            //End Fahim
+        });
+
+        $("#RemoveFilter").click(function () {
+            $("#txtEmpID").val("");
+            $("#txtName").val("");
+            $("#txtLoanID").val("");
+            $("#txtFromDateLoan").val("");
+            $("#txtToDateLoan").val("");
+            GetEmpId(); // Added by Fahim 22/11/2015
+        })
+
+        //Added by Fahim 22/11/2015
+        $("#txtLoanID").click(function () {
+            GetEmpId(); // Added by Fahim 22/11/2015
+        })
+        //End Fahim
+
+        function GetEmpId() {
+            var empId = $("#txtEmpID").val();
+            $.ajax({
+                type: 'POST',
+                url: rootPath + "/Report/ReportLoan/GetEmpId",
+                data: { identificationNo: empId },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#txtEmpID").val(empId);
+                    $("#SelectedEmpID").val(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+                }
+            });
+        }
+
+        //Added by Fahim 22/11/2015
+        function GetEmpName() {
+            var empId = $("#SelectedEmpID").val();
+            $.ajax({
+                type: 'POST',
+                url: rootPath + "/Report/ReportLoan/GetEmpName",
+                data: { empId: empId },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#txtName").val(data);
+                    $("#SelectedName").val(data);
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+                }
+            });
+        }
+        //End Fahim
+
+
+        function GenerateLoanReportRDLC(fileType) {
+            var d = new Date();
+            var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+            var fromDate = $('#txtFromDateLoan').val();
+            var toDate = $('#txtToDateLoan').val();
+            var empID = $('#SelectedEmpID').val();
+            var loanID = $('#txtLoanID').val();
+            //Added by Fahim 14/11/2015 // There was error/bug in date comparison
+            var _fromDate = new Date($('#txtFromDateLoan').val());
+            var _toDate = new Date($('#txtToDateLoan').val());
+            //End Fahim
+            if (_fromDate > _toDate) {
+                if (x != "UnpaidLoan") {
+                    ShowModalMessage("To Date must be Greater than From Date");
+                    return false;
+                }
+            }
+
+            if ((fromDate == "" || toDate == "")) {
+                if (x == "LoanList" || x == "LoanClosed" || x == "UnpaidLoanWithDate" || x == "LoanListWithEmpId") {
+                    ShowModalMessage("Pl's Fill To Date & From Date");
+                    return false;
+                }
+            }
+
+            if (x == "LoanList") {
+                $("#txtEmpID").val("");
+                $("#txtName").val("");
+                $("#txtLoanID").val("");
+                $("#SelectedEmpID").val("");
+            }
+
+            if (x == "LoanListWithEmpId" && $("#txtEmpID").val() == "") {
+                ShowModalMessage("Please select Employee");
+                return false;
+            }
+
+            if (x == "LoanClosedWithEmpId" && $("#txtEmpID").val() == "") {
+                ShowModalMessage("Please select Employee");
+                return false;
+            }
+
+            if (x == "LoanClosed") {
+                $("#txtEmpID").val("");
+                $("#txtName").val("");
+                $("#txtLoanID").val("");
+                $("#SelectedEmpID").val("");
+            }
+
+            if (x == "UnpaidLoan") {
+                $("#txtEmpID").val("");
+                $("#txtName").val("");
+                $("#txtLoanID").val("");
+                $("#SelectedEmpID").val("");
+                $("#txtFromDateLoan").val("");
+                $("#txtToDateLoan").val("");
+            }
+
+            if (x == "PaidInstallmentDetail") {
+                if ($("#txtFromDateLoan").val() == "" || $("#txtToDateLoan").val() == "") {
+                    ShowModalMessage("Please select From & To date");
+                    return;
+                }
+                $("#txtEmpID").val("");
+                $("#txtName").val("");
+                $("#txtLoanID").val("");
+                $("#SelectedEmpID").val("");
+                $("#txtFromDateLoan").val("");
+                $("#txtToDateLoan").val("");
+            }
+
+            if (x == "CompanyPaymentDetail") {
+                //if ($("#txtEmpID").val() == "" || $("#txtLoanID").val() == "")
+                //{
+                //    ShowModalMessage("Please select Employee and Loan ID");
+                //    return;
+                //}
+                $("#txtEmpID").val("");
+                $("#txtName").val("");
+                $("#txtLoanID").val("");
+                $("#SelectedEmpID").val("");
+                $("#txtFromDateLoan").val("");
+                $("#txtToDateLoan").val("");
+            }
+
+            if (x == "UnpaidLoanWithId" && $("#txtEmpID").val() == "") {
+                ShowModalMessage("Please select Employee");
+                return false;
+            }
+
+            if (x == "PaymentDetail") {
+
+                if (loanID) {
+
+                }
+                else {
+                    ShowModalMessage("Please select loand ID to get payment detail...");
+                    return false;
+                }
+            }
+            var viewURL = '../../Report/ReportLoan/Report/?id=' + fileType + '&reportOptions=' + x + "&empId=" + empID + "&fromDate=" + fromDate + "&toDate=" + toDate + "&loanID=" + loanID;
+            FancyBox(viewURL);
+        }
+    </script>
+}

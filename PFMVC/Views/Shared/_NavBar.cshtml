@@ -1,0 +1,54 @@
+﻿<div class="navbar-collapse collapse" id="navbar-main">
+    <ul class="nav navbar-nav">
+        <li class="dropdown">
+            <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Themes <span class="caret"></span></a>
+            <ul class="dropdown-menu" aria-labelledby="themes">
+
+                <li>@Html.ActionLink("Skyblue", "ChangeTheme", "Home", new { Area = "", themename = "cerulean", returnUrl = ViewContext.HttpContext.Request.Url.PathAndQuery  }, new { }) </li>
+                <li>@Html.ActionLink("Black", "ChangeTheme", "Home", new { Area = "", themename = "cosmo", returnUrl =  ViewContext.HttpContext.Request.Url.PathAndQuery }, new { }) </li>
+                <li>@Html.ActionLink("Spacelab", "ChangeTheme", "Home", new { Area = "", themename = "spacelab", returnUrl =  ViewContext.HttpContext.Request.Url.PathAndQuery }, new { }) </li>
+                
+                <li>@Html.ActionLink("United", "ChangeTheme", "Home", new { Area = "", themename = "united", returnUrl =  ViewContext.HttpContext.Request.Url.PathAndQuery }, new { }) </li>
+                
+            </ul>
+        </li>
+    </ul>
+ <div id="dvNotification"></div>
+
+    @if (Request.IsAuthenticated)
+     {
+        <ul class="nav navbar-nav navbar-right">
+            
+            <li class="dropdown">
+              
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Signed in as <strong>@User.Identity.Name</strong> <span class="caret"></span></a>
+                <ul class="dropdown-menu" aria-labelledby="download">
+                    <li>@Html.ActionLink("Sign Out", "LogOff", "Account", new { Area = "", }, null)</li>
+                </ul>
+            </li>
+        </ul>
+    }
+    else
+    {
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                    @Html.ActionLink("Sign In", "Login", "Account", new { Area = "" }, new { @style="font-weight:bold"})
+            </li>
+        </ul>
+    }
+
+    @*else
+    {
+         
+      <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-danger">Sign in</button>
+          </form>
+         
+     }*@
+</div>

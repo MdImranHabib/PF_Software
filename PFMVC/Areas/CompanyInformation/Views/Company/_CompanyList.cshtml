@@ -1,0 +1,26 @@
+﻿
+
+@model List<@DLL.LU_tbl_CompanyInformation>
+
+@{ Layout = null; }
+
+<fieldset>
+    <legend>Company List</legend>
+    <table class="table table-striped table-condensed" style="font-size:smaller">
+    <tr style="font-weight:bold; ">
+        <td>Company Name</td><td></td>
+    </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CompanyName</td>
+                
+                <td>
+                    <button class="btn btn-xs btn-primary btn-block" onclick="CompanyDetail(@item.CompanyID)">View/edit</button>
+                    
+                </td>
+              
+            </tr>
+        }
+</table>
+</fieldset>

@@ -1,0 +1,76 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_PFLoanPayment>
+@{
+    ViewBag.Title = "LoanPaymentNoError";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+
+
+<div class="alert alert-danger"><strong id="msg">@ViewBag.Message</strong> </div>
+
+  @using (Ajax.BeginForm("RollbackConfirm", "Import",new { FileName = @ViewBag.FileName} , new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessEmployeeImport"
+	}, new { @id = "DialogForm1" }))
+    {
+    
+    <div id="update-message1" class="error"></div>
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" />
+      <div id="info">
+    <table class="table table-striped table-condensed" style="text-align:center">
+        <tr style="font-weight:bold; ">
+            <td>Employee ID</td>
+            <td>Loan ID</td>
+            <td>Paid Amount</td>
+            <td>Installment Number</td>
+            <td>Payment Date</td>
+            
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].EmployeeID) @Html.HiddenFor(m => m[i].EmployeeID)</td>
+                <td>@Html.DisplayFor(m => m[i].LoanID) @Html.HiddenFor(m => m[i].LoanID)</td>
+                <td>@Html.DisplayFor(m => m[i].PaymentAmount) @Html.HiddenFor(m => m[i].PaymentAmount)</td>
+                <td>@Html.DisplayFor(m => m[i].InstallmentNumber) @Html.HiddenFor(m => m[i].InstallmentNumber)</td>
+                <td>@Html.DisplayFor(m => m[i].PaymentDate) @Html.HiddenFor(m => m[i].PaymentDate)</td>
+                
+                
+            </tr>
+        }
+    </table>
+          </div>
+<hr />
+        @Html.ActionLink("Go Back", "Index", "Import", null  ,new { @class="btn btn-success"})
+ 
+     <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-warning pull-right">Delete Confirm!</button>
+  }
+
+        </div>
+    </div>
+
+@section scripts{
+    
+    <script type="text/javascript">
+
+        function updateSuccessEmployeeImport(data) {
+            if (data.Success == true) {
+                ShowDropDownMessage(data.Message);
+                $("#update-message1").hide();
+                $("#msg").text("Rollback successfull...");
+                $("#info").html('');
+                document.getElementById('submitbtn').style.visibility = 'hidden';
+            }
+            else {
+                $("#update-message1").html(data.ErrorMessage);
+                $("#update-message1").show();
+            }
+        }
+
+    </script>
+    }

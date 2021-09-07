@@ -1,0 +1,142 @@
+﻿
+
+@model DLL.ViewModel.VM_UserInfo
+
+<div id="password_reset"></div>
+
+@using (Ajax.BeginForm("GetUserInfo", "UserManagement",null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccessUI"
+}, new { @id = "DialogForm1" }))
+{
+    
+    <div id="update-message1" class="error "></div>
+    @Html.HiddenFor(m => m.UserId)
+    @Html.HiddenFor(m => m.UserName)
+    @Html.ValidationSummary(true)
+    <table>
+        <tr>
+            <td>@Html.LabelFor(m => m.FullName)</td>
+            <td>
+                @Html.TextBoxFor(m => m.FullName, new { @class = "Next form-control" })
+                @Html.ValidationMessageFor(m => m.FullName)
+            </td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.IsActive)</td>
+            <td>@Html.CheckBoxFor(m => m.IsActive, new { @class = "Next" })@Html.ValidationMessageFor(m => m.IsActive)</td>
+        </tr>
+        <tr><td>@Html.LabelFor(m => m.Email)</td><td>@Html.TextBoxFor(m => m.Email , new { @class = "Next form-control" })@Html.ValidationMessageFor(m => m.Email)</td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("Email notification allowed")
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => m.EmailNotificationActive, new { @class = "Next" })
+                @Html.ValidationMessageFor(m => m.EmailNotificationActive)
+            </td>
+        </tr>
+        @*<tr>
+            <td>
+                @Html.LabelFor(m => m.BranchName)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.BranchID, (SelectList)ViewData["BranchOptions"], string.Empty, new { @class = "Next form-control" })
+                @Html.ValidationMessageFor(m => m.BranchID)
+            </td>
+        </tr>*@
+         <tr>
+            <td>
+                @Html.LabelFor(m => m.Phone)
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Phone, new { @class = "Next form-control" })
+                @Html.ValidationMessageFor(m => m.Phone)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m => m.CompanyName)
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.CompanyID, (SelectList)ViewData["CompanyOptions"], string.Empty, new { @class = "Next form-control" })
+                @Html.ValidationMessageFor(m => m.CompanyID)
+            </td>
+        </tr>
+    </table>
+}
+<br />
+<a class="btn btn-default btn-sm" style="cursor:pointer" onclick="password_change('@Html.ValueFor(m => m.UserId)', '@Html.ValueFor(m =>m.UserName)')">Password Change</a>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#password_reset').dialog({
+            autoOpen: false,
+            width: 'auto',
+            resizable: false,
+            modal: true,
+            show: "Highlight",
+            hide: "Highlight",
+            buttons: [{
+                text: "Save",
+                id: "save_btn",
+                "class":"nxt",
+                click: function () {
+                    $("update-message-pr").html(''); //make sure there is nothing on the message before we continue                         
+                    $("#DialogForm-pr").submit();
+                }
+            },
+            {
+                text: "Close",
+                click: function () {
+                    $(this).dialog("close");
+                }
+            }]
+        })
+    })
+
+    function password_change(userID, userName) {
+
+        $("#password_reset").dialog("option", "title", "Password change");
+        var dialogDiv2 = $("#password_reset");
+
+        var viewUrl = rootPath +"/UserManagement/UserManagement/ResetPassword/?userID=" + userID + "&userName=" + userName;
+        
+        $.get(viewUrl, function (data) {
+            if (data.Success == false) {
+                ShowModalMessage(data.ErrorMessage);
+            }
+            else {
+                dialogDiv2.html(data);
+                $(".ui-dialog-buttonpane").show();
+                var $form = $("#DialogForm-pr");
+
+                $form.unbind();
+                $form.data("validator", null);
+
+                $.validator.unobtrusive.parse(document);
+
+                $form.validate($form.data("unobtrusiveValidation").options);
+
+                dialogDiv2.dialog('open');
+            }
+        });
+    }
+
+    function updateSuccess_pr(data) {
+        $("#update-message-pr").show();
+        if (data.Success == true) {
+            $("#update-message-pr").html(data.Message).removeClass("alert alert-danger").addClass("alert alert-success");
+            //$('#password_reset').dialog('close');
+        }
+        else {
+            $("#update-message-pr").html(data.ErrorMessage).removeClass("alert alert-success").addClass("alert alert-danger");
+            $('.nxt')[0].focus();
+        }
+    }
+</script>

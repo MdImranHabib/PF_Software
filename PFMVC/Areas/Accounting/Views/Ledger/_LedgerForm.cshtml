@@ -1,0 +1,88 @@
+﻿@model DLL.ViewModel.VM_acc_ledger
+
+@{
+    Layout = null;
+}
+
+
+<fieldset>
+    <legend id="addGroupLegend">Add Ledger<button class="btn btn-default btn-xs pull-right" onclick="getChartOfAccount()" id="report">Chart of Account</button> <button class="btn btn-default btn-xs pull-right" onclick="getTreeView()" id="tvw"><span class="glyphicon glyphicon-tree-conifer"></span></button></legend>
+
+@using (Ajax.BeginForm("LedgerForm", "Ledger", null, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccess"
+}, new { @id = "DialogForm1" }))
+    {
+    @Html.AntiForgeryToken()
+        <div id="update-message1"></div>
+        @Html.HiddenFor(model => model.GroupID)
+        @Html.HiddenFor(model => model.LedgerID)
+        
+        <table class="table table-striped">
+               <tr>
+                <td class="a">@Html.Label("*New Ledger Name ")</td>
+                <td>@Html.TextBoxFor(m => m.LedgerName, new { @class = "form-control next", @id="LedgerName", placeholder="New ledger name..." }) @Html.ValidationMessageFor(m => m.LedgerName)</td>
+            </tr>
+             <tr>
+                <td class="a">@Html.Label("Ledger Code")</td>
+                <td>@Html.TextBoxFor(m => m.LedgerCode, new { @class = "form-control next", @id="LedgerCode", placeholder="Ledger Code..." }) @Html.ValidationMessageFor(m => m.LedgerCode)</td>
+            </tr>
+
+            <tr>
+                <td class="a">@Html.Label("Under which Group")</td>
+                <td>
+                    @*<div class="form-inline">*@
+                        @Html.TextBoxFor(m => m.GroupName, new { @class = "form-control next", @id = "underGroup", placeholder = "Use up/down arrow to select appropriate group from right list..." }) @*, @style="width:70%" }*@
+                        @*<button class="btn btn-primary btn-xs pull-right">Add Group</button>*@
+                    @*</div>*@
+                </td>
+            </tr>
+         
+            
+             <tr>
+                <td class="a">@Html.Label("Opening Balance ")</td>
+                <td>
+                    <div class="form-inline"> 
+                    @Html.TextBoxFor(m => m.InitialBalance, new { @class = "form-control next", @id="InitialBalance", placeholder="Initial balance..." }) @Html.ValidationMessageFor(m => m.InitialBalance)
+                    @Html.DropDownListFor(m => m.BalanceType, (SelectList)ViewData["Balance"], string.Empty, new { @class = "form-control next", @id = "drop" })
+                        </div>
+                </td>
+            </tr>
+        </table>
+    <label style="color:lightsteelblue; font-style:italic">Press ENTER to move on NEXT</label>
+        <hr />
+        if (Model != null)
+        {
+            <button class="btn btn-danger" type="button"  onclick="deleteGroup('@Model.LedgerID');">
+                <span class="glyphicon glyphicon-trash"></span>
+            </button>
+        <button class="btn btn-primary" type="button" onclick="NewLedger();" style="padding-left: 10px">
+                <span class="glyphicon glyphicon-plus"></span>
+            </button>
+        }   
+        <button class="btn btn-success pull-right 3 next" type="button" onclick="save();" id="save_btn">
+            <span class="glyphicon glyphicon-saved"></span> Save
+        </button>
+    }
+      @if (Model != null)
+      {
+        <br />
+        <hr />
+        <label class="mini">@ViewBag.User</label>
+    }
+</fieldset>
+
+<style>
+    .a {
+        vertical-align:middle !important;
+        max-width:100px;
+    }
+
+</style>
+<script>
+    $(document).ready(function () {
+        $("#LedgerName").focus();
+    })
+</script>

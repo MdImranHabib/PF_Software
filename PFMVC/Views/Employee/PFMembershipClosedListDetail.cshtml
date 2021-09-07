@@ -1,0 +1,38 @@
+﻿@model List<DLL.ViewModel.VM_Employee>
+
+@{
+    Layout = null;
+}
+
+<div class="col-md-12">
+    <fieldset><legend>Closed PF Member List</legend></fieldset>
+    <div style="color:red" class="alert alert-warning middle">@Html.ActionLink((string)ViewBag.Message, "PFMembers" , "Employee") - @ViewBag.Deactivated 
+        <input type="text" style="font-size:smaller" placeholder="Search by Member Name/ID" class="search pull-right col-md-3" id="filterBox" onkeypress="FilterTable()"/>
+    </div>
+ 
+<table class="table table-striped table-condensed table-bordered" style="text-align:center; font-size:smaller" id="data">
+        <tr id="Header" style="font-weight:bold; text-align:center">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+            <td>Joining Date</td>
+            <td>PF Activate Date</td>
+            @*<td>Retirement Date</td>*@
+            <td>PF Closed Date</td>
+            <td>PF Duration</td>
+            <td></td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].IdentificationNumber)</td>
+                <td>@Html.DisplayFor(m => m[i].EmpName)</td>
+                <td>@String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].JoiningDate.Value)</td>
+                <td>@String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].PFActivationDate.Value)</td>
+                <td>@String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].PFDeactivationDate.Value)</td>
+                <td>@Model[i].PFDuration</td>
+                @*<td>@Html.ActionLink("Close membership", "ClosePFMember", "Employee", new {empId = Model[i].EmpID, closingDate= System.DateTime.MinValue}, new {@class= "btn btn-warning btn-xs"})</td>*@
+                <td><input type="button" onclick="PFClosingReport(@Model[i].EmpID)" value="Voucher" class="btn btn-primary btn-xs" /></td>
+            </tr>
+        }
+    </table>
+    </div>

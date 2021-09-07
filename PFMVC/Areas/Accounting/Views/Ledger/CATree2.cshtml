@@ -1,0 +1,17 @@
+﻿
+
+@model PFMVC.Areas.Accounting.Controllers.ChartAccountTree
+@foreach (var item in Model.CATs)
+{ 
+    <ul>
+    @if (item != null)
+    {        
+        <li><a href="#" onclick="getLedger(@item.GroupID)"  class="usr1">@item.GroupName</a>
+        @if (item.CATs.Count > 0)
+        {         
+            @Html.Partial("CATree2", item.GroupName)       
+        }
+        </li>
+    }
+    </ul>
+}

@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "MonthlyContribution";
+}
+
+<style type="text/css">
+    .ui-datepicker-calendar {
+    display: none;
+    }
+</style>
+
+<div class="row">
+    <div class="col-md-6">
+        <table>
+            <tr>
+                <td><strong>Contribution for the month : </strong> </td>
+                <td><input type="text" id="txtDate" class="input-medium " readonly="readonly"/></td>
+                <td><button type="button" class="btn btn-info" onclick="MonthlyContributionInformation()" >Show</button></td>
+            </tr>
+        </table>
+        </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div id="Partial1"></div>
+    </div>
+</div>
+
+<div id="DialogSpace1" ></div>
+<div id="ModalSpace" title=""><p id="ModalMessage"></p></div>
+<div id="ModalInformation" title=""></div>
+
+@section scripts{
+    <script src="~/Scripts/custom/MonthlyContribution.js"></script>
+    }

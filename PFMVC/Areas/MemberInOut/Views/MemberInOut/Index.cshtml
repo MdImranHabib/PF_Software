@@ -1,0 +1,290 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Member In/Out</h2>
+<div>
+    <input type="radio" name="Member" id="radio1" value="In" onclick="MemberInOut()" />Member In
+    <input type="radio" name="Member" id="radio2" value="Out" checked onclick="MemberInOut()" />Member Out
+</div>
+<div>
+    <table id="OUTtable" class="table table-striped table-bordered" style="font-weight: bold">
+        <tbody>
+            <tr>
+                <td>Employee ID</td>
+                <td>
+                    <input id="searchTerm" class="form-control ui-autocomplete-input" type="text" name="txtEmpID" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" onkeypress="Autocomplete()" />
+                    <input id="SelectedEmpID" type="hidden" name="SelectedEmpID" />
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="EmployeeDetail">
+        <table id="VoucherTables" class="table table-striped table-condensed">
+            <tbody>
+                <tr style="text-align: center; font-weight: bold">
+                    <td style="width: 15%">Emp Id</td>
+                    <td style="width: 30%">Emp Name</td>
+                    <td style="width: 4%">OC</td>
+                    <td style="width: 4%">EC</td>
+                    <td style="width: 4%">Profit</td>
+                    <td style="width: 4%">Loan</td>
+                    <td style="width: 8%">Balance</td>
+                    <td style="width: 15%;">Date</td>
+                </tr>
+                <tr>
+                    <td class="readOnly">
+                        <input id="Id" type="text" style="width: 100%" />
+                    </td>
+                    <td>
+                        <input id="EmpName" type="text" style="width: 100%" />
+                    </td>
+                    <td>
+                        <input id="OC" type="text" onchange="Balance()" />
+                    </td>
+                    <td>
+                        <input id="EC" type="text" onchange="Balance()" />
+                    </td>
+                    <td>
+                        <input id="Profit" type="text" onchange="Balance()" />
+                    </td>
+                    <td>
+                        <input id="Loan" type="text" onchange="Balance()" />
+                    </td>
+                    <td>
+                        <input id="Balamce" type="text" readonly="readonly" />
+                    </td>
+                    <td>
+                        <input id="date" type="text" class="dateTimePicker" style="width: 100%" />
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table id="VoucherTable" class="table table-striped table-condensed">
+            <tbody>
+                <tr>
+                    <td style="width: 0.5%;">
+                        <input id="inputType11" class="btn-xs btn-info next inputType" type="button" name="input_type" value="Dr." />
+                    </td>
+                    <td style="width: 30%">
+                        <input id="DebitLedgerName" class="form-control ui-autocomplete-input" type="text" name="DebitledgerName" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" onkeypress="AutocompleteforDebitLedger()" />
+                        <input id="DebitLedgerID" type="hidden" name="DebitLedgerID" />
+                    </td>
+                    <td style="width: 10%">
+                        <input id="DebitAmount" class="form-control next" type="text" value="" placeholder="" name="CreditAmount" readonly="readonly" />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 0.5%">
+                        <input id="inputType-1" class="btn-xs btn-info next inputType" type="button" name="input_type" value="Cr." />
+                    </td>
+                    <td style="width: 30%">
+                        <input id="CreditLedgerName" class="form-control ui-autocomplete-input" type="text" name="CreditledgerName" autocomplete="off" role="textbox" aria-autocomplete="list" aria-haspopup="true" onkeypress="AutocompleteforCreditLedger()" />
+                        <input id="CreditLedgerID" type="hidden" name="CreditLedgerID" />
+                    </td>
+                    <td style="width: 10%">
+                        <input id="CreditAmount" class="form-control next" type="text" value="" placeholder="" name="CreditAmount" readonly="readonly" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <table id="OUTtable1" class="table table-striped table-bordered" style="font-weight: bold">
+            <tbody>
+                <tr>
+                    <td>Narration</td>
+                    <td>
+                        <input id="Comment" type="text" name="Comment" placeholder="Add some comment..." class="form-control" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <input type="button" style="float: right" value="Save" onclick="Save()" />
+    </div>
+
+
+</div>
+
+@{
+    <link href="~/Content/themes/base/minified/jquery.ui.autocomplete.min.css" rel="stylesheet" />
+    <link href="~/Content/themes/base/jquery.ui.autocomplete.css" rel="stylesheet" />
+    <script src="~/Scripts/2013.2.611/telerik.autocomplete.min.js"></script>
+}
+<script type="text/javascript">
+    function Balance() {
+        var s = $('input:radio[name=Member]:checked').val();
+        if (s == "In") {
+            var balance = 0;
+            var oc = $("#OC").val() == "" ? 0 : parseFloat($("#OC").val());
+            var ec = $("#EC").val() == "" ? 0 : parseFloat($("#EC").val());
+            var profit = $("#Profit").val() == "" ? 0 : parseFloat($("#Profit").val());
+            var loan = $("#Loan").val() == "" ? 0 : parseFloat($("#Loan").val());
+            balance = parseFloat(oc) + parseFloat(ec) + parseFloat(profit) - parseFloat(loan);
+            $("#Balamce").val("");
+            $("#Balamce").val(balance);
+            $("#DebitAmount").val("");
+            $("#DebitAmount").val(balance);
+            $("#CreditAmount").val("");
+            $("#CreditAmount").val(balance);
+        }
+    }
+
+    //Some unknown reason document ready function does't work so I work with alternate Avishek date:Mar-7-2015
+
+
+    function Autocomplete() {
+        var s = $('input:radio[name=Member]:checked').val();
+        if (s == "Out") {
+            $("#searchTerm").autocomplete({
+                source: rootPath + "/MemberInOut/MemberInOut/AutocompleteSuggestions",
+                minLength: 1,
+                select: function (event, ui) {
+                    if (s == "Out") {
+                        $('input[name="txtEmpID"]').val(ui.item.label);
+                        $('input[name="SelectedEmpID"]').val(ui.item.value);
+                        GetEmployeeDetail();
+                        return false;
+                    }
+                }
+            });
+        }
+    }
+
+
+    function GetEmployeeDetail() {
+        var id = $("#SelectedEmpID").val();
+        $.ajax({
+            url: rootPath + '/MemberInOut/MemberInOut/GetEmployee',
+            type: 'post',
+            dataType: 'json',
+            data: { id: id },
+            success: function (data) {
+                $("#Id").val(data.IdentificationNumber);
+                $("#EmpName").val(data.EmpName);
+                $("#OC").val(data.OwnCont);
+                $("#EC").val(data.EmpCont);
+                $("#Profit").val(data.Profit);
+                $("#Loan").val(data.opLoan);
+                $("#Balamce").val(data.SummaryBalance);
+                $("#CreditAmount").val(data.SummaryBalance);
+                $("#DebitAmount").val(data.SummaryBalance);
+            }
+        });
+    }
+
+    function AutocompleteforDebitLedger() {
+        $("#DebitLedgerName").autocomplete({
+            source: rootPath + "/MemberInOut/MemberInOut/AutocompleteLedgerName",
+            minLength: 1,
+            select: function (event, ui) {
+                $('input[name="DebitledgerName"]').val(ui.item.label);
+                $('input[name="DebitLedgerID"]').val(ui.item.value);
+                return false;
+            }
+        });
+    }
+
+    function AutocompleteforCreditLedger() {
+        $("#CreditLedgerName").autocomplete({
+            source: rootPath + "/MemberInOut/MemberInOut/AutocompleteLedgerName",
+            minLength: 1,
+            select: function (event, ui) {
+                $('input[name="CreditledgerName"]').val(ui.item.label);
+                $('input[name="CreditLedgerID"]').val(ui.item.value);
+                return false;
+            }
+        });
+    }
+
+    function Save() {
+        if ($("#DebitLedgerID").val() == $("#CreditLedgerID").val()) {
+            ShowDropDownMessage("Pl's select different 'Ledger");
+            return;
+        }
+        var s = $('input:radio[name=Member]:checked').val();
+        if (s !== "In") {
+            var empId = $("#SelectedEmpID").val();
+            var debitLedgerID = $("#DebitLedgerID").val();
+            var creditLedgerID = $("#CreditLedgerID").val();
+            var debitAmount = $("#DebitAmount").val();
+            var creditAmount = $("#CreditAmount").val();
+            var transactionDate = $("#date").val();
+            var Comment = $("#Comment").val();
+            if ($("#searchTerm").val() !== "" && $("#debit") !== "") {
+                $.ajax({
+                    url: rootPath + '/MemberInOut/MemberInOut/SaveMemberOut',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { empId: empId, debitLedgerID: debitLedgerID, debitAmount: debitAmount, creditLedgerID: creditLedgerID, creditAmount: creditAmount, Comment: Comment, transactionDate: transactionDate },
+                    success: function (data) {
+                        ShowDropDownMessage(data.Message);
+                        window.location.href = rootPath + "/MemberInOut/MemberInOut/Index";
+                    }
+                });
+            } else {
+                ShowDropDownMessage("Pl's select employee & fill profit");
+                return;
+            }
+        } else {
+            var empId = $("#Id").val();
+            var empName = $("#EmpName").val();
+            var total = $("#OC").val() + "/" + $("#EC").val() + "/" + $("#Profit").val() + "/" + $("#Loan").val();
+            var debitLedgerID = $("#DebitLedgerID").val();
+            var creditLedgerID = $("#CreditLedgerID").val();
+            var debitAmount = $("#DebitAmount").val();
+            var creditAmount = $("#CreditAmount").val();
+            var transactionDate = $("#date").val();
+            if ($("#DebitAmount").val() !== "" && $("#CreditAmount") !== "") {
+                $.ajax({
+                    url: rootPath + '/MemberInOut/MemberInOut/SaveMemberIn',
+                    type: 'post',
+                    dataType: 'json',
+                    data: { empId: empId, empName: empName, total: total, debitLedgerID: debitLedgerID, debitAmount: debitAmount, creditLedgerID: creditLedgerID, creditAmount: creditAmount, transactionDate: transactionDate },
+                    success: function (data) {
+                        ShowDropDownMessage(data.Message);
+                    }
+                });
+            } else {
+                ShowDropDownMessage("Pl's select employee & fill profit");
+                return;
+            }
+
+        }
+    }
+
+    function MemberInOut() {
+        var s = $('input:radio[name=Member]:checked').val();
+        if (s == "In") {
+            $("#OUTtable").hide();
+            $("#OUTtable1").hide();
+            //$("#Indate1").show();
+            //$("#Indate2").show();
+            //$( "#OUTDr" ).hide();
+            //$( "#OUTCr" ).hide();
+            //$( "#INCr" ).show();
+            //$( "#INDr" ).show();
+            //$( "#LedgerName" ).val( "Member Funt" );
+        }
+        else {
+            $("#OUTtable").show();
+            $("#OUTtable1").show();
+            //$("#Indate1").hide();
+            //$("#Indate2").hide();
+            //$( "#OUTDr" ).show();
+            //$( "#OUTCr" ).show();
+            //$( "#INCr" ).hide();
+            //$( "#INDr" ).hide();
+            //$( "#LedgerName" ).val( "" );
+        }
+    }
+</script>
+
+
+

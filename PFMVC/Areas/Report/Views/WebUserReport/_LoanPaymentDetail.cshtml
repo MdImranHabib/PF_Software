@@ -1,0 +1,83 @@
+﻿
+@using Telerik.Web.Mvc.UI;
+@{
+    Layout = null;
+}
+
+<script type="text/javascript">
+
+    function PDGOnRowDataBound(e) {
+        if (e.dataItem.Processed == 0) {
+            e.row.cells[6].innerHTML = "Not paid";
+            e.row.cells[6].style["color"] = "red";
+        }
+        else {
+            e.row.cells[6].innerHTML = "Paid";
+            e.row.cells[6].style["color"] = "green";
+        }
+        if (e.dataItem.ProcessNumber == -1) {
+            e.row.cells[9].innerHTML = "Payment source: Salary";
+            e.row.cells[9].style["color"] = "green";
+        }
+        else if (e.dataItem.ProcessNumber > 0) {
+            e.row.cells[9].innerHTML = "Payment source: Excel";
+            e.row.cells[9].style["color"] = "blue";
+        }
+    }
+
+</script>
+
+<fieldset>
+    <legend>Payment Detail : Loan Number - @ViewBag.LoanNumber</legend>
+
+    @(Html.Telerik().Grid<DLL.ViewModel.VM_Amortization>()
+    .Name("PaymentDetailGrid").HtmlAttributes(new { @class="A"})
+        .DataKeys(keys => { keys.Add(s => s.EmpID); })
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectPaymentDetail", "Loan");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.EmpID).Visible(false);
+                    columns.Bound(c => c.PFLoanID).Visible(false);
+                    columns.Bound(c => c.ReScheduleID).Visible(false);
+                    columns.Bound(c => c.InstallmentNumber);
+                    columns.Bound(c => c.MonthYear);
+                    columns.Bound(c => c.Amount);
+                    columns.Bound(c => c.Principal);
+                    columns.Bound(c => c.Interest);
+                    columns.Bound(c => c.Balance);
+                    columns.Bound(c => c.Processed);
+                    columns.Bound(c => c.PaymentDate).Format("{0:dd/MM/yyyy}");
+                    columns.Bound(c => c.TrackingNumber);
+                    columns.Bound(c => c.ProcessNumber);
+                    //columns.Command(commands =>
+                    //    {
+                    //        commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                    //       .ButtonType(GridButtonType.Image)
+                    //       .ImageHtmlAttributes(new { @class = "t-edit" });
+                    //    }
+                    //).Width(40).Title("");
+                    //columns.Command(commands =>
+                    //    {
+                    //commands.Custom("DeleteCommand").HtmlAttributes(new { }).Text("DELETE").Ajax(true)
+                    //       .ButtonType(GridButtonType.Image)
+                    //       .ImageHtmlAttributes(new { @class = "t-delete" });
+                    //                }
+                    //).Width(40).Title("");
+                }
+            )
+            .Sortable()
+            
+            .ClientEvents(events =>
+                { 
+                    events.OnRowDataBound("PDGOnRowDataBound");
+                })
+                .Selectable()
+)
+    <br />
+</fieldset>
+

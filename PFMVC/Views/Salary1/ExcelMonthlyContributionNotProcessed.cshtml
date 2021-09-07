@@ -1,0 +1,172 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_Contribution>
+
+@{
+    ViewBag.Title = "Salary Import";
+}
+
+<div class="row"><div class="col-md-12">
+<div class="alert alert-info"><strong>@ViewBag.Message</strong> </div>
+
+
+    <div class="progress progress-striped active">
+        <div class="progress-bar progress-bar-success tooltip_test" style="width: @ViewBag.Message3_P" data-toggle="tooltip" title="@ViewBag.Message3" data-placement="top">
+            <span class="sr-only">35% Complete (success)</span>
+        </div>
+        <div class="progress-bar progress-bar-warning tooltip_test" style="width: @ViewBag.Message2_P" data-toggle="tooltip" title="@ViewBag.Message2" data-placement="top">
+            <span class="sr-only">20% Complete (warning)</span>
+        </div>
+        <div class="progress-bar progress-bar-danger tooltip_test" style="width: @ViewBag.Message1_P" data-toggle="tooltip" title="@ViewBag.Message1" data-placement="top">
+            <span class="sr-only">10% Complete (danger)</span>
+        </div>
+    </div>
+
+
+
+  @*@using (Ajax.BeginForm("MonthlyContributionSubmit", "Salary", null, new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessSalaryProcess"
+	}, new { @id = "DialogForm1" }))*@
+    @using (Html.BeginForm("MonthlyContributionSubmit", "Salary1",null, FormMethod.Post))
+    {   
+        @Html.AntiForgeryToken()
+    <div id="update-message1" class="error"></div>
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" id="_dtMonth" />
+    <table class="table table-striped smaller table-condensed" id="NotPro">
+        <tr style="font-weight:bold; text-align:center">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+            @*<td>Joining Date</td>
+            <td>PF Activation Date</td>
+            <td>Working Duration</td>*@
+            @*<td>Salary</td>*@
+            <td>Self Contribution</td>
+            <td>Org Contribution</td>
+            <td>Total</td>
+            <td>Error Message</td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++)
+        {
+        
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].IdentificationNumber) @Html.HiddenFor(m => m[i].EmpID)</td>
+                <td>@Html.DisplayFor(m => m[i].EmpName) @Html.HiddenFor(m => m[i].EmpName)</td>
+                @*<td>
+                    @if (Model[i].JoiningDate.Year != 9999)
+                    {
+                        @String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].JoiningDate.Date) @Html.HiddenFor(m => m[i].JoiningDate)
+                    }
+                </td>*@
+                       @*<td>
+                    @if (Model[i].PFActivationDate.Year == 9999 || Model[i].PFActivationDate.Year == 0001)
+                    {   
+                    }
+                    else
+                    {
+                        @String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].PFActivationDate.Date) @Html.HiddenFor(m => m[i].PFActivationDate)
+                    }
+                </td>
+                <td>@Html.DisplayFor(m => m[i].WorkingDuration) @Html.HiddenFor(m => m[i].WorkingDuration)</td>*@
+                @*<td class="salary-@i">@Html.DisplayFor(m => m[i].Salary) @Html.HiddenFor(m => m[i].Salary)</td>*@
+                
+                <td><label style="font-weight:bold">@Html.DisplayFor(m => m[i].SelfContribution)</label> @Html.HiddenFor(m => m[i].SelfContribution)</td>
+                <td><label style="font-weight:bold">@Html.DisplayFor(m => m[i].EmpContribution)</label> @Html.HiddenFor(m => m[i].EmpContribution)</td>
+                
+                <td class="ttotal-@i">@Html.DisplayFor(m => m[i].Total)</td>
+                <td style="color:red">@Html.DisplayFor(m => m[i].Message) @Html.HiddenFor(m => m[i].Message)</td>
+            </tr>
+        }
+             <tr>
+                 <td></td>
+                <td></td>
+                @*<td></td>
+                <td></td>
+                <td></td>*@
+                @*<td id="res_salary" class="green bold"></td>*@
+                <td></td>
+                <td></td>
+                <td id="res_ttotal" class="green bold"></td>
+                <td></td>
+            </tr>
+    </table>
+<hr/>
+  
+        <table class="pull-right" style="border:hidden">
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-success pull-right">Process only valid data</button>
+                </td>
+            </tr>
+        </table>
+     
+        <table>
+            <tr>
+                <td>@Html.ActionLink("Re-Upload", "Import", "Salary", new { @class = "btn btn-info" })  </td>
+                @*<td><button class="btn btn-warning" type="button" onclick="ShowPFRules()" >PF-Rules</button></td>*@
+            </tr>
+        </table>
+    }
+</div></div>
+
+
+<div id="DialogSpace2"></div>
+<div id="ContributionPreviouslyExist"></div>
+
+
+@section scripts{
+        <script type="text/javascript">
+            $(".tooltip_test").tooltip();
+
+            $('#DialogSpace2').dialog({
+                autoOpen: false,
+                width: 'auto',
+                resizable: false,
+                modal: true,
+                show: "Highlight",
+                hide: "Highlight"
+            });
+            
+            $(document).ready(function () {
+                var viewUrl = "../Salary1/ContributionPreviouslyExist/?date=" + $('#_dtMonth').val();
+                $.get(viewUrl, function (data) {
+                    $("#ContributionPreviouslyExist").html("").html(data);
+                })
+                FindTotal();
+            })
+
+
+            function FindTotal() {
+                var table = document.getElementById('NotPro');
+
+                var rowLength = table.rows.length;
+                var temp = 0;
+                var _total = 0;
+                var tempSalary = 0;
+                var totalSalary = 0;
+                for (var i = 0; i < rowLength; i += 1) {
+
+
+                    if (parseFloat($('#NotPro .ttotal-' + i).text())) {
+                        temp = parseFloat($('#NotPro .ttotal-' + i).text());
+                        _total = _total + temp;
+                    }
+                    else {
+                        temp = 0;
+                    }
+                    $("#res_ttotal").text(_total);
+
+                    if (parseFloat($('#NotPro .salary-' + i).text())) {
+                        tempSalary = parseFloat($('#NotPro .salary-' + i).text());
+                        totalSalary = totalSalary + tempSalary;
+                    }
+                    else {
+                        tempSalary = 0;
+                    }
+                    $("#res_salary").text(totalSalary);
+                }
+            }
+
+        </script>
+}

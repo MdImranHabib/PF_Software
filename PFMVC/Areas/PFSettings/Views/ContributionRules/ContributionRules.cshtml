@@ -1,0 +1,81 @@
+﻿@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-8">
+    <fieldset>
+        <legend>Contribution Rules</legend>
+@(Html.Telerik().Grid<DLL.ViewModel.VM_PFRules>()
+    .Name("PFRulesGrid").HtmlAttributes(new { @class = "A" })
+        .DataKeys(keys => { keys.Add(s => s.ROWID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("New Rules").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectPFRules", "ContributionRules");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.ROWID).Visible(false);
+                    columns.Bound(c => c.WorkingDurationInMonth).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EmployeeContribution.ToString("#,###,##0.000")).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EmployerContribution.ToString("#,###,##0.000")).HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(p => p.status).Title("Status").HtmlAttributes(new { style = "text-align:center" });
+                    columns.Bound(c => c.EffectiveFrom).HtmlAttributes(new { style = "text-align:center" }).Format("{0:dd/MM/yyyy}");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                    columns.Command(commands =>
+                    {
+                        commands.Custom("DeleteCommand").Text("Delete").Ajax(true)
+                       .ButtonType(GridButtonType.Image)
+                       .ImageHtmlAttributes(new { @class = "t-delete" });
+                    }
+                  ).Width(40).Title("");
+              
+        
+                }
+            )
+            .Sortable()
+            //.Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                {
+                    events.OnCommand("PFRulesGridOnCommand");
+                })
+                .Selectable()
+)
+        
+
+        </fieldset>
+    </div>
+    <div class="col-md-3 pull-right"> 
+        <fieldset>
+            <legend>Note</legend>
+            <div class="alert alert-warning">
+            Contribution rules are used when deduct PF amount from uploaded contribution sheet.
+            To create a rule we need <em>employee working duration (in month), employee contribution, employer contribution and effective date.</em> 
+            <br /><u>We can disable a rule if it is obsolete.</u> 
+            <br />
+            <strong>Please note, </strong>
+            <br />
+            A rule is not allowed edit or delete if it is used once!
+        </div>
+        </fieldset>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/custom/PFContribution.js"></script>
+}

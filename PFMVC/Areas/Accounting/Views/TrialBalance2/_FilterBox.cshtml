@@ -1,0 +1,12 @@
+﻿
+
+
+<fieldset><legend>Trial Balance
+            <span class="pull-right" style="font-size:x-small">
+        <span>From Date</span> &nbsp<input type="text" value=" " class="dateTimePicker strongBlue clearable" style="width:120px; font-size:x-small" placeholder="@DateTime.Now" readonly="true" id="fromDate" />
+        <span>To Date</span> &nbsp<input type="text" value=" " class="dateTimePicker strongBlue clearable" style="width:120px; font-size:x-small" placeholder="@DateTime.Now" readonly="true" id="toDate" />
+        <input type="button" value="Search" class="btn btn-danger btn-xs " style="font-weight:bold;" onclick='GetData($("#fromDate").val(), $("#toDate").val())' />
+        <input type="button" value="Report" class="btn btn-success btn-xs" style="font-weight:bold;" onclick='GetTrialBalanceReport($("#fromDate").val(), $("#toDate").val())' />
+            </span>
+    </legend>
+</fieldset>

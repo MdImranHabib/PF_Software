@@ -1,0 +1,2800 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="YWCAPF_TestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Ac_Cheque_BankInfo">
+          <Key>
+            <PropertyRef Name="BankInfo_Id" />
+          </Key>
+          <Property Name="BankInfo_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="OCode" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Ac_Cheque_ClientInfo">
+          <Key>
+            <PropertyRef Name="ClientInfo_id" />
+          </Key>
+          <Property Name="ClientInfo_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ClientName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="250" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="OCode" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Ac_Cheque_Print">
+          <Key>
+            <PropertyRef Name="ChequePrint_id" />
+          </Key>
+          <Property Name="ChequePrint_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChequeNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChequeType" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="ClientInfo_id" Type="int" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ChequeDate" Type="datetime" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="BankInfo_Id" Type="int" />
+          <Property Name="LedgerId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="acc_Chart_of_Account_Maping">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MIS_Id" Type="int" Nullable="false" />
+          <Property Name="Ledger_Id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DateOfEntry" Type="datetime" Nullable="false" />
+          <Property Name="EntryBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OCode" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="acc_Group">
+          <Key>
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ParentGroupID" Type="int" />
+          <Property Name="NatureID" Type="int" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="RestrictDelete" Type="bit" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsSystemDefault" Type="bit" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="GroupCode" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="acc_Group_Maping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Group_MIS_Id" Type="int" Nullable="false" />
+          <Property Name="Group_Id" Type="int" Nullable="false" />
+          <Property Name="DateOfEntry" Type="datetime" Nullable="false" />
+          <Property Name="EntryBy" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="OCode" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="acc_Ledger">
+          <Key>
+            <PropertyRef Name="LedgerID" />
+          </Key>
+          <Property Name="LedgerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LedgerName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="GroupID" Type="int" Nullable="false" />
+          <Property Name="InitialBalance" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="BalanceType" Type="int" />
+          <Property Name="RestrictDelete" Type="bit" />
+          <Property Name="ParentLedgerID" Type="uniqueidentifier" />
+          <Property Name="Comment" Type="varchar(max)" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PFMemberID" Type="nvarchar" MaxLength="200" />
+          <Property Name="PFAdditionalInformation" Type="nvarchar" MaxLength="200" />
+          <Property Name="IsSystemDefault" Type="bit" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="LedgerCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="UsedProject" Type="nvarchar" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="acc_Nature">
+          <Key>
+            <PropertyRef Name="NatureID" />
+          </Key>
+          <Property Name="NatureID" Type="int" Nullable="false" />
+          <Property Name="NatureName" Type="nvarchar" MaxLength="50" />
+          <Property Name="NatureType" Type="int" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="acc_tbl_Group_MIS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="MIS_Group_Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="acc_tbl_MIS">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="MIS_Name" Type="nchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="acc_VoucherDetail">
+          <Key>
+            <PropertyRef Name="VoucherDetailID" />
+          </Key>
+          <Property Name="VoucherDetailID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="VoucherID" Type="int" Nullable="false" />
+          <Property Name="LedgerID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Debit" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="Credit" Type="decimal" Precision="19" Scale="2" />
+          <Property Name="ChequeNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="TransactionDate" Type="datetime" />
+          <Property Name="VTypeID" Type="int" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PFMemberID" Type="int" />
+          <Property Name="PFAdditionalInformation" Type="nvarchar" MaxLength="200" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="PFLoanID" Type="nchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="acc_VoucherEntry">
+          <Key>
+            <PropertyRef Name="VoucherID" />
+          </Key>
+          <Property Name="VoucherID" Type="int" Nullable="false" />
+          <Property Name="VoucherName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransactionDate" Type="datetime" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="Narration" Type="nvarchar(max)" />
+          <Property Name="VTypeID" Type="int" />
+          <Property Name="VNumber" Type="nchar" MaxLength="20" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RestrictDelete" Type="bit" />
+          <Property Name="PFMonth" Type="nchar" MaxLength="2" />
+          <Property Name="PFYear" Type="nchar" MaxLength="4" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="ProfitDistributionProcessID" Type="int" />
+          <Property Name="EmpID" Type="int" />
+          <Property Name="ActionName" Type="varchar" MaxLength="50" />
+          <Property Name="EntryForGF" Type="nchar" MaxLength="1" />
+          <Property Name="EntryForPF" Type="nchar" MaxLength="1" />
+          <Property Name="EntryForWPPF" Type="nchar" MaxLength="1" />
+        </EntityType>
+        <EntityType Name="acc_VoucherType">
+          <Key>
+            <PropertyRef Name="VTypeID" />
+          </Key>
+          <Property Name="VTypeID" Type="int" Nullable="false" />
+          <Property Name="VTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Branch">
+          <Key>
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="BranchID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BranchLocation" Type="nvarchar" MaxLength="150" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="LU_tbl_CompanyInformation">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="int" Nullable="false" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="CompanyAddress" Type="nvarchar" MaxLength="500" />
+          <Property Name="SystemImplementationDate" Type="datetime" />
+          <Property Name="AccountingYearBeginningFrom" Type="datetime" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Country">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="nchar" MaxLength="3" Nullable="false" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Designation">
+          <Key>
+            <PropertyRef Name="DesignationID" />
+          </Key>
+          <Property Name="DesignationID" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="DesignationName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="LU_tbl_District">
+          <Key>
+            <PropertyRef Name="DistrictID" />
+          </Key>
+          <Property Name="DistrictID" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="DistrictName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CountryID" Type="nchar" MaxLength="3" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="LU_tbl_LoanRules">
+          <Key>
+            <PropertyRef Name="ROWID" />
+          </Key>
+          <Property Name="ROWID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkingDurationInMonth" Type="int" Nullable="false" />
+          <Property Name="OwnPartPayable" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="EmpPartPayable" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="OwnProfitPartPayable" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="EmpProfitPartPayable" Type="decimal" Precision="5" Scale="2" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="tinyint" Nullable="false" />
+          <Property Name="EffectiveFrom" Type="datetime" />
+          <Property Name="RuleName" Type="varchar" MaxLength="50" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="IntarestRate" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="InstallmentNoumber" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="LU_tbl_MembershipClosingRules">
+          <Key>
+            <PropertyRef Name="ROWID" />
+          </Key>
+          <Property Name="ROWID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PFDurationInMonth" Type="int" Nullable="false" />
+          <Property Name="OwnPartPayable" Type="bigint" Nullable="false" />
+          <Property Name="EmployerPartPayable" Type="bigint" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="tinyint" Nullable="false" />
+          <Property Name="EffectiveFrom" Type="datetime" Nullable="false" />
+          <Property Name="RuleName" Type="varchar" MaxLength="50" />
+          <Property Name="ProfitPartPayable" Type="bit" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="OwnProfitPercent" Type="bigint" />
+          <Property Name="EmpProfitPercent" Type="bigint" />
+        </EntityType>
+        <EntityType Name="LU_tbl_PFRules">
+          <Key>
+            <PropertyRef Name="ROWID" />
+          </Key>
+          <Property Name="ROWID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="WorkingDurationInMonth" Type="int" Nullable="false" />
+          <Property Name="EmployeeContribution" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmployerContribution" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="IsActive" Type="tinyint" Nullable="false" />
+          <Property Name="EffectiveFrom" Type="datetime" />
+          <Property Name="RuleName" Type="varchar" MaxLength="50" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="SA_tbl_Module">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SA_tbl_Page">
+          <Key>
+            <PropertyRef Name="PageID" />
+          </Key>
+          <Property Name="PageID" Type="int" Nullable="false" />
+          <Property Name="ModuleID" Type="int" Nullable="false" />
+          <Property Name="PageName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="SA_tbl_PagePermission">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="PageID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="PageID" Type="int" Nullable="false" />
+          <Property Name="CanVisit" Type="bit" Nullable="false" />
+          <Property Name="CanEdit" Type="bit" Nullable="false" />
+          <Property Name="CanDelete" Type="bit" Nullable="false" />
+          <Property Name="CanExecute" Type="bit" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="EditUserName" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tbl_Contribution">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="ConYear" />
+            <PropertyRef Name="ConMonth" />
+          </Key>
+          <Property Name="EmpID" Type="int" Nullable="false" />
+          <Property Name="ConYear" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="ConMonth" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="SelfContribution" Type="decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="SCInterest" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="EmpContribution" Type="decimal" Precision="19" Scale="2" Nullable="false" />
+          <Property Name="ECInterest" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="ProcessDate" Type="datetime" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="PFRulesID" Type="int" Nullable="false" />
+          <Property Name="Salary" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="SCPercentage" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="ECPercentage" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="InterestRate" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="ProcessID" Type="int" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="ContributionDate" Type="datetime" />
+          <Property Name="ContributionId" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_ContributionMonthRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ConYear" Type="nchar" MaxLength="4" Nullable="false" />
+          <Property Name="ConMonth" Type="nchar" MaxLength="2" Nullable="false" />
+          <Property Name="PassVoucher" Type="bit" Nullable="false" />
+          <Property Name="PassVoucherMessage" Type="varchar" MaxLength="500" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditUserName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalSelfCont" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TotalEmpCont" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="ContributionDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="tbl_Employees">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Designation" Type="nchar" MaxLength="4" />
+          <Property Name="Department" Type="nchar" MaxLength="4" />
+          <Property Name="Branch" Type="int" />
+          <Property Name="Gender" Type="nchar" MaxLength="1" />
+          <Property Name="PresentAddress" Type="nvarchar(max)" />
+          <Property Name="ContactNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="BirthDate" Type="datetime" />
+          <Property Name="NID" Type="nvarchar" MaxLength="50" />
+          <Property Name="JoiningDate" Type="datetime" />
+          <Property Name="PFStatus" Type="int" />
+          <Property Name="EmpImg" Type="nvarchar" MaxLength="50" />
+          <Property Name="SignatureImg" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="IdentificationNumber" Type="nvarchar" MaxLength="24" />
+          <Property Name="opOwnContribution" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="opEmpContribution" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="opProfit" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="opLoan" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="opDesignationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="opDepartmentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PFActivationDate" Type="datetime" Nullable="false" />
+          <Property Name="PFDeactivationDate" Type="datetime" />
+          <Property Name="PFDeactivatedBy" Type="uniqueidentifier" />
+          <Property Name="PFDeactivatedByName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="500" />
+          <Property Name="PFRuleUsedForDeactivation" Type="int" />
+          <Property Name="PassVoucher" Type="bit" Nullable="false" />
+          <Property Name="PassVoucherMessage" Type="varchar(max)" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="PFDeactivationVoucherID" Type="int" />
+          <Property Name="PassVoucherEntryID" Type="int" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tbl_ErrorLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="varchar(max)" />
+          <Property Name="InnerException" Type="varchar(max)" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Terminal" Type="varchar" MaxLength="50" />
+          <Property Name="HostName" Type="varchar" MaxLength="50" />
+          <Property Name="Time" Type="datetime" />
+          <Property Name="Type" Type="nchar" MaxLength="20" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_FinancialAuditLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastAuditDate" Type="datetime" />
+          <Property Name="LogDate" Type="datetime" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="tbl_Instrument">
+          <Key>
+            <PropertyRef Name="InstrumentID" />
+          </Key>
+          <Property Name="InstrumentID" Type="int" Nullable="false" />
+          <Property Name="InstrumentType" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="InstrumentNumber" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Institution" Type="nvarchar" MaxLength="200" />
+          <Property Name="Branch" Type="nvarchar" MaxLength="100" />
+          <Property Name="DepositDate" Type="datetime" Nullable="false" />
+          <Property Name="MaturityPeriod" Type="int" Nullable="false" />
+          <Property Name="MaturityDate" Type="datetime" />
+          <Property Name="Amount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="InterestRate" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="100" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="500" />
+          <Property Name="PassVoucher" Type="bit" Nullable="false" />
+          <Property Name="PassVoucherMessage" Type="varchar(max)" />
+          <Property Name="AccLedgerID" Type="uniqueidentifier" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="AccVoucherEntryID" Type="int" />
+          <Property Name="InstrumentPhoto" Type="varchar" MaxLength="150" />
+          <Property Name="Closed" Type="bit" />
+          <Property Name="AcruadIntarestAmount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
+          <Property Name="EntryForPF" Type="nchar" MaxLength="1" />
+          <Property Name="EntryForGF" Type="nchar" MaxLength="1" />
+          <Property Name="EntryForWPPF" Type="nchar" MaxLength="1" />
+          <Property Name="BankCharge" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TDSonFDR" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="FDRTax" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="LastProcessDate" Type="datetime" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="PreviousInstrumentId" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_Instrument_Accured_Interest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InstrumentID" Type="int" Nullable="false" />
+          <Property Name="AccuredInterestDate" Type="datetime" Nullable="false" />
+          <Property Name="AccuredInterestAmount" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="OCode" Type="int" Nullable="false" />
+          <Property Name="UsedProject" Type="nchar" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Instrument_Interest_Rate">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InstrumentID" Type="int" Nullable="false" />
+          <Property Name="InterestRate" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EndDate" Type="datetime" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="InterestYear" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_LoginHistory">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="UserName" Type="nvarchar" MaxLength="56" Nullable="false" />
+          <Property Name="LoginTime" Type="datetime" Nullable="false" />
+          <Property Name="SignOut" Type="datetime" />
+          <Property Name="rowid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Terminal" Type="varchar" MaxLength="50" />
+          <Property Name="HostName" Type="varchar" MaxLength="50" />
+          <Property Name="OCode" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="tbl_NomineeInformation">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="NomineeID" />
+          </Key>
+          <Property Name="EmpID" Type="int" Nullable="false" />
+          <Property Name="NomineeID" Type="int" Nullable="false" />
+          <Property Name="NomineeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="NomineeAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="Relation" Type="nvarchar" MaxLength="50" />
+          <Property Name="RegistrationDate" Type="datetime" />
+          <Property Name="EditDate" Type="datetime" />
+          <Property Name="NomineeImageFileName" Type="varchar" MaxLength="50" />
+          <Property Name="NomineeNationalID" Type="varchar" MaxLength="50" />
+          <Property Name="Nomineepercentage" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="NomineeSignFileName" Type="nchar" MaxLength="50" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_PFL_Amortization">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="PFLoanID" />
+            <PropertyRef Name="InstallmentNumber" />
+            <PropertyRef Name="ReScheduleID" />
+          </Key>
+          <Property Name="EmpID" Type="int" Nullable="false" />
+          <Property Name="PFLoanID" Type="nchar" MaxLength="6" Nullable="false" />
+          <Property Name="InstallmentNumber" Type="int" Nullable="false" />
+          <Property Name="ReScheduleID" Type="tinyint" Nullable="false" />
+          <Property Name="Amount" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Interest" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Principal" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Balance" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Processed" Type="tinyint" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="PaymentDate" Type="datetime" />
+          <Property Name="TrackingNumber" Type="varchar" MaxLength="50" />
+          <Property Name="ProcessNumber" Type="int" />
+          <Property Name="PaymentAmount" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="ConYear" Type="nchar" MaxLength="4" />
+          <Property Name="ConMonth" Type="nchar" MaxLength="2" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="PaidAmount" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="tbl_PFLoan">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="PFLoanID" />
+          </Key>
+          <Property Name="EmpID" Type="int" Nullable="false" />
+          <Property Name="PFLoanID" Type="nchar" MaxLength="6" Nullable="false" />
+          <Property Name="LoanAmount" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="TermYear" Type="int" />
+          <Property Name="TermMonth" Type="int" Nullable="false" />
+          <Property Name="Interest" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="Installment" Type="decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="IsApproved" Type="tinyint" Nullable="false" />
+          <Property Name="ApprovedBy" Type="uniqueidentifier" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="RuleUsed" Type="int" />
+          <Property Name="PayableAmount" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CashLedgerID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="tbl_ProfitDistributionDetail">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Name="EmpID" Type="int" Nullable="false" />
+          <Property Name="IdentificationNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProcessID" Type="int" Nullable="false" />
+          <Property Name="TransactionDate" Type="datetime" />
+          <Property Name="DistributedAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="SelfContribution" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmpContribution" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="SelfProfit" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="EmpProfit" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_ProfitDistributionSummary">
+          <Key>
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Name="ProcessID" Type="int" Nullable="false" />
+          <Property Name="FromDate" Type="datetime" />
+          <Property Name="ToDate" Type="datetime" />
+          <Property Name="DistributableAmount" Type="decimal" Precision="20" Scale="2" />
+          <Property Name="EditUser" Type="uniqueidentifier" />
+          <Property Name="EditUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EditTime" Type="datetime" />
+          <Property Name="Message" Type="text" />
+          <Property Name="OCode" Type="int" />
+          <Property Name="DistributedAmount" Type="decimal" Precision="20" Scale="2" />
+          <Property Name="SelfTotalProfit" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="EmpTotalProfit" Type="decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="tbl_User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LoginName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserFullName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="BranchID" Type="int" />
+          <Property Name="IsActive" Type="tinyint" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="50" />
+          <Property Name="EmailNotificationActive" Type="tinyint" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+          <Property Name="DepartmentID" Type="nchar" MaxLength="4" />
+          <Property Name="EmpID" Type="int" />
+          <Property Name="OCode" Type="int" />
+        </EntityType>
+        <EntityType Name="tbl_UserPassword">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_UserRedirected">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="SessionID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="LastLoginTime" Type="binary" MaxLength="8" />
+        </EntityType>
+        <EntityType Name="tbl_UserRole">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="int" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="EditUser" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="EditDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_acc_Group_acc_Group">
+          <End Role="acc_Group" Type="Self.acc_Group" Multiplicity="0..1" />
+          <End Role="acc_Group1" Type="Self.acc_Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_Group">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="acc_Group1">
+              <PropertyRef Name="ParentGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_Ledger_acc_Group">
+          <End Role="acc_Group" Type="Self.acc_Group" Multiplicity="1" />
+          <End Role="acc_Ledger" Type="Self.acc_Ledger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_Group">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="acc_Ledger">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_LedgerDetail_acc_Ledger">
+          <End Role="acc_Ledger" Type="Self.acc_Ledger" Multiplicity="1" />
+          <End Role="acc_VoucherDetail" Type="Self.acc_VoucherDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_Ledger">
+              <PropertyRef Name="LedgerID" />
+            </Principal>
+            <Dependent Role="acc_VoucherDetail">
+              <PropertyRef Name="LedgerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_VoucherDetail_acc_VoucherDetail">
+          <End Role="acc_VoucherDetail" Type="Self.acc_VoucherDetail" Multiplicity="1" />
+          <End Role="acc_VoucherDetail1" Type="Self.acc_VoucherDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="acc_VoucherDetail">
+              <PropertyRef Name="VoucherDetailID" />
+            </Principal>
+            <Dependent Role="acc_VoucherDetail1">
+              <PropertyRef Name="VoucherDetailID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_VoucherDetail_acc_VoucherEntry">
+          <End Role="acc_VoucherEntry" Type="Self.acc_VoucherEntry" Multiplicity="1" />
+          <End Role="acc_VoucherDetail" Type="Self.acc_VoucherDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_VoucherEntry">
+              <PropertyRef Name="VoucherID" />
+            </Principal>
+            <Dependent Role="acc_VoucherDetail">
+              <PropertyRef Name="VoucherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_VoucherEntry_acc_VoucherType">
+          <End Role="acc_VoucherType" Type="Self.acc_VoucherType" Multiplicity="0..1" />
+          <End Role="acc_VoucherEntry" Type="Self.acc_VoucherEntry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_VoucherType">
+              <PropertyRef Name="VTypeID" />
+            </Principal>
+            <Dependent Role="acc_VoucherEntry">
+              <PropertyRef Name="VTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_Country_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_Country" Type="Self.LU_tbl_Country" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_Country">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_Department_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_Department" Type="Self.LU_tbl_Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_Department">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_Designation_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_Designation" Type="Self.LU_tbl_Designation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_Designation">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_District_LU_tbl_Country">
+          <End Role="LU_tbl_Country" Type="Self.LU_tbl_Country" Multiplicity="1" />
+          <End Role="LU_tbl_District" Type="Self.LU_tbl_District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="LU_tbl_District">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_District_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_District" Type="Self.LU_tbl_District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_District">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Contribution_tbl_Employees">
+          <End Role="tbl_Employees" Type="Self.tbl_Employees" Multiplicity="1" />
+          <End Role="tbl_Contribution" Type="Self.tbl_Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Employees">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="tbl_Contribution">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Contribution_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="tbl_Contribution" Type="Self.tbl_Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tbl_Contribution">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_LU_tbl_Branch">
+          <End Role="LU_tbl_Branch" Type="Self.LU_tbl_Branch" Multiplicity="0..1" />
+          <End Role="tbl_Employees" Type="Self.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Branch">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="Branch" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_LU_tbl_Department">
+          <End Role="LU_tbl_Department" Type="Self.LU_tbl_Department" Multiplicity="0..1" />
+          <End Role="tbl_Employees" Type="Self.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="Department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_LU_tbl_Designation">
+          <End Role="LU_tbl_Designation" Type="Self.LU_tbl_Designation" Multiplicity="0..1" />
+          <End Role="tbl_Employees" Type="Self.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Designation">
+              <PropertyRef Name="DesignationID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="Designation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="tbl_Employees" Type="Self.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_PFL_Amortization_tbl_Employees">
+          <End Role="tbl_Employees" Type="Self.tbl_Employees" Multiplicity="1" />
+          <End Role="tbl_PFL_Amortization" Type="Self.tbl_PFL_Amortization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Employees">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="tbl_PFL_Amortization">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_PFL_Amortization_tbl_User">
+          <End Role="tbl_User" Type="Self.tbl_User" Multiplicity="1" />
+          <End Role="tbl_PFL_Amortization" Type="Self.tbl_PFL_Amortization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tbl_PFL_Amortization">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="YWCAPF_TestModelStoreContainer">
+          <EntitySet Name="Ac_Cheque_BankInfo" EntityType="Self.Ac_Cheque_BankInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ac_Cheque_ClientInfo" EntityType="Self.Ac_Cheque_ClientInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ac_Cheque_Print" EntityType="Self.Ac_Cheque_Print" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_Chart_of_Account_Maping" EntityType="Self.acc_Chart_of_Account_Maping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_Group" EntityType="Self.acc_Group" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_Group_Maping" EntityType="Self.acc_Group_Maping" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_Ledger" EntityType="Self.acc_Ledger" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_Nature" EntityType="Self.acc_Nature" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_tbl_Group_MIS" EntityType="Self.acc_tbl_Group_MIS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_tbl_MIS" EntityType="Self.acc_tbl_MIS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_VoucherDetail" EntityType="Self.acc_VoucherDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_VoucherEntry" EntityType="Self.acc_VoucherEntry" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="acc_VoucherType" EntityType="Self.acc_VoucherType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_Branch" EntityType="Self.LU_tbl_Branch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_CompanyInformation" EntityType="Self.LU_tbl_CompanyInformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_Country" EntityType="Self.LU_tbl_Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_Department" EntityType="Self.LU_tbl_Department" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_Designation" EntityType="Self.LU_tbl_Designation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_District" EntityType="Self.LU_tbl_District" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_LoanRules" EntityType="Self.LU_tbl_LoanRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_MembershipClosingRules" EntityType="Self.LU_tbl_MembershipClosingRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LU_tbl_PFRules" EntityType="Self.LU_tbl_PFRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SA_tbl_Module" EntityType="Self.SA_tbl_Module" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SA_tbl_Page" EntityType="Self.SA_tbl_Page" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SA_tbl_PagePermission" EntityType="Self.SA_tbl_PagePermission" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Contribution" EntityType="Self.tbl_Contribution" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_ContributionMonthRecord" EntityType="Self.tbl_ContributionMonthRecord" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Employees" EntityType="Self.tbl_Employees" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_ErrorLog" EntityType="Self.tbl_ErrorLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_FinancialAuditLog" EntityType="Self.tbl_FinancialAuditLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Instrument" EntityType="Self.tbl_Instrument" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Instrument_Accured_Interest" EntityType="Self.tbl_Instrument_Accured_Interest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Instrument_Interest_Rate" EntityType="Self.tbl_Instrument_Interest_Rate" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_LoginHistory" EntityType="Self.tbl_LoginHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_NomineeInformation" EntityType="Self.tbl_NomineeInformation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_PFL_Amortization" EntityType="Self.tbl_PFL_Amortization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_PFLoan" EntityType="Self.tbl_PFLoan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_ProfitDistributionDetail" EntityType="Self.tbl_ProfitDistributionDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_ProfitDistributionSummary" EntityType="Self.tbl_ProfitDistributionSummary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_User" EntityType="Self.tbl_User" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_UserPassword" EntityType="Self.tbl_UserPassword" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_UserRedirected" EntityType="Self.tbl_UserRedirected" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_UserRole" EntityType="Self.tbl_UserRole" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_acc_Group_acc_Group" Association="Self.FK_acc_Group_acc_Group">
+            <End Role="acc_Group" EntitySet="acc_Group" />
+            <End Role="acc_Group1" EntitySet="acc_Group" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_Ledger_acc_Group" Association="Self.FK_acc_Ledger_acc_Group">
+            <End Role="acc_Group" EntitySet="acc_Group" />
+            <End Role="acc_Ledger" EntitySet="acc_Ledger" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_LedgerDetail_acc_Ledger" Association="Self.FK_acc_LedgerDetail_acc_Ledger">
+            <End Role="acc_Ledger" EntitySet="acc_Ledger" />
+            <End Role="acc_VoucherDetail" EntitySet="acc_VoucherDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_VoucherDetail_acc_VoucherDetail" Association="Self.FK_acc_VoucherDetail_acc_VoucherDetail">
+            <End Role="acc_VoucherDetail" EntitySet="acc_VoucherDetail" />
+            <End Role="acc_VoucherDetail1" EntitySet="acc_VoucherDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_VoucherDetail_acc_VoucherEntry" Association="Self.FK_acc_VoucherDetail_acc_VoucherEntry">
+            <End Role="acc_VoucherEntry" EntitySet="acc_VoucherEntry" />
+            <End Role="acc_VoucherDetail" EntitySet="acc_VoucherDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_VoucherEntry_acc_VoucherType" Association="Self.FK_acc_VoucherEntry_acc_VoucherType">
+            <End Role="acc_VoucherType" EntitySet="acc_VoucherType" />
+            <End Role="acc_VoucherEntry" EntitySet="acc_VoucherEntry" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_Country_tbl_User" Association="Self.FK_LU_tbl_Country_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_Country" EntitySet="LU_tbl_Country" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_Department_tbl_User" Association="Self.FK_LU_tbl_Department_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_Department" EntitySet="LU_tbl_Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_Designation_tbl_User" Association="Self.FK_LU_tbl_Designation_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_Designation" EntitySet="LU_tbl_Designation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_District_LU_tbl_Country" Association="Self.FK_LU_tbl_District_LU_tbl_Country">
+            <End Role="LU_tbl_Country" EntitySet="LU_tbl_Country" />
+            <End Role="LU_tbl_District" EntitySet="LU_tbl_District" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_District_tbl_User" Association="Self.FK_LU_tbl_District_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_District" EntitySet="LU_tbl_District" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Contribution_tbl_Employees" Association="Self.FK_tbl_Contribution_tbl_Employees">
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+            <End Role="tbl_Contribution" EntitySet="tbl_Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Contribution_tbl_User" Association="Self.FK_tbl_Contribution_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Contribution" EntitySet="tbl_Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_LU_tbl_Branch" Association="Self.FK_tbl_Employees_LU_tbl_Branch">
+            <End Role="LU_tbl_Branch" EntitySet="LU_tbl_Branch" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_LU_tbl_Department" Association="Self.FK_tbl_Employees_LU_tbl_Department">
+            <End Role="LU_tbl_Department" EntitySet="LU_tbl_Department" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_LU_tbl_Designation" Association="Self.FK_tbl_Employees_LU_tbl_Designation">
+            <End Role="LU_tbl_Designation" EntitySet="LU_tbl_Designation" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_tbl_User" Association="Self.FK_tbl_Employees_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_PFL_Amortization_tbl_Employees" Association="Self.FK_tbl_PFL_Amortization_tbl_Employees">
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+            <End Role="tbl_PFL_Amortization" EntitySet="tbl_PFL_Amortization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_PFL_Amortization_tbl_User" Association="Self.FK_tbl_PFL_Amortization_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_PFL_Amortization" EntitySet="tbl_PFL_Amortization" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="YWCAPF_TestModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="PFTMEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Ac_Cheque_BankInfo" EntityType="YWCAPF_TestModel.Ac_Cheque_BankInfo" />
+          <EntitySet Name="Ac_Cheque_ClientInfo" EntityType="YWCAPF_TestModel.Ac_Cheque_ClientInfo" />
+          <EntitySet Name="acc_Chart_of_Account_Maping" EntityType="YWCAPF_TestModel.acc_Chart_of_Account_Maping" />
+          <EntitySet Name="acc_Group" EntityType="YWCAPF_TestModel.acc_Group" />
+          <EntitySet Name="acc_Ledger" EntityType="YWCAPF_TestModel.acc_Ledger" />
+          <EntitySet Name="acc_Nature" EntityType="YWCAPF_TestModel.acc_Nature" />
+          <EntitySet Name="acc_tbl_MIS" EntityType="YWCAPF_TestModel.acc_tbl_MIS" />
+          <EntitySet Name="acc_VoucherDetail" EntityType="YWCAPF_TestModel.acc_VoucherDetail" />
+          <EntitySet Name="acc_VoucherEntry" EntityType="YWCAPF_TestModel.acc_VoucherEntry" />
+          <EntitySet Name="acc_VoucherType" EntityType="YWCAPF_TestModel.acc_VoucherType" />
+          <EntitySet Name="LU_tbl_Branch" EntityType="YWCAPF_TestModel.LU_tbl_Branch" />
+          <EntitySet Name="LU_tbl_CompanyInformation" EntityType="YWCAPF_TestModel.LU_tbl_CompanyInformation" />
+          <EntitySet Name="LU_tbl_Country" EntityType="YWCAPF_TestModel.LU_tbl_Country" />
+          <EntitySet Name="LU_tbl_Department" EntityType="YWCAPF_TestModel.LU_tbl_Department" />
+          <EntitySet Name="LU_tbl_Designation" EntityType="YWCAPF_TestModel.LU_tbl_Designation" />
+          <EntitySet Name="LU_tbl_District" EntityType="YWCAPF_TestModel.LU_tbl_District" />
+          <EntitySet Name="LU_tbl_LoanRules" EntityType="YWCAPF_TestModel.LU_tbl_LoanRules" />
+          <EntitySet Name="LU_tbl_MembershipClosingRules" EntityType="YWCAPF_TestModel.LU_tbl_MembershipClosingRules" />
+          <EntitySet Name="LU_tbl_PFRules" EntityType="YWCAPF_TestModel.LU_tbl_PFRules" />
+          <EntitySet Name="SA_tbl_Module" EntityType="YWCAPF_TestModel.SA_tbl_Module" />
+          <EntitySet Name="SA_tbl_Page" EntityType="YWCAPF_TestModel.SA_tbl_Page" />
+          <EntitySet Name="SA_tbl_PagePermission" EntityType="YWCAPF_TestModel.SA_tbl_PagePermission" />
+          <EntitySet Name="tbl_Contribution" EntityType="YWCAPF_TestModel.tbl_Contribution" />
+          <EntitySet Name="tbl_ContributionMonthRecord" EntityType="YWCAPF_TestModel.tbl_ContributionMonthRecord" />
+          <EntitySet Name="tbl_Employees" EntityType="YWCAPF_TestModel.tbl_Employees" />
+          <EntitySet Name="tbl_ErrorLog" EntityType="YWCAPF_TestModel.tbl_ErrorLog" />
+          <EntitySet Name="tbl_FinancialAuditLog" EntityType="YWCAPF_TestModel.tbl_FinancialAuditLog" />
+          <EntitySet Name="tbl_LoginHistory" EntityType="YWCAPF_TestModel.tbl_LoginHistory" />
+          <EntitySet Name="tbl_NomineeInformation" EntityType="YWCAPF_TestModel.tbl_NomineeInformation" />
+          <EntitySet Name="tbl_PFL_Amortization" EntityType="YWCAPF_TestModel.tbl_PFL_Amortization" />
+          <EntitySet Name="tbl_PFLoan" EntityType="YWCAPF_TestModel.tbl_PFLoan" />
+          <EntitySet Name="tbl_ProfitDistributionSummary" EntityType="YWCAPF_TestModel.tbl_ProfitDistributionSummary" />
+          <EntitySet Name="tbl_User" EntityType="YWCAPF_TestModel.tbl_User" />
+          <EntitySet Name="tbl_UserPassword" EntityType="YWCAPF_TestModel.tbl_UserPassword" />
+          <EntitySet Name="tbl_UserRedirected" EntityType="YWCAPF_TestModel.tbl_UserRedirected" />
+          <EntitySet Name="tbl_UserRole" EntityType="YWCAPF_TestModel.tbl_UserRole" />
+          <AssociationSet Name="FK_acc_Group_acc_Group" Association="YWCAPF_TestModel.FK_acc_Group_acc_Group">
+            <End Role="acc_Group" EntitySet="acc_Group" />
+            <End Role="acc_Group1" EntitySet="acc_Group" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_Ledger_acc_Group" Association="YWCAPF_TestModel.FK_acc_Ledger_acc_Group">
+            <End Role="acc_Group" EntitySet="acc_Group" />
+            <End Role="acc_Ledger" EntitySet="acc_Ledger" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_LedgerDetail_acc_Ledger" Association="YWCAPF_TestModel.FK_acc_LedgerDetail_acc_Ledger">
+            <End Role="acc_Ledger" EntitySet="acc_Ledger" />
+            <End Role="acc_VoucherDetail" EntitySet="acc_VoucherDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_VoucherDetail_acc_VoucherDetail" Association="YWCAPF_TestModel.FK_acc_VoucherDetail_acc_VoucherDetail">
+            <End Role="acc_VoucherDetail" EntitySet="acc_VoucherDetail" />
+            <End Role="acc_VoucherDetail1" EntitySet="acc_VoucherDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_VoucherDetail_acc_VoucherEntry" Association="YWCAPF_TestModel.FK_acc_VoucherDetail_acc_VoucherEntry">
+            <End Role="acc_VoucherEntry" EntitySet="acc_VoucherEntry" />
+            <End Role="acc_VoucherDetail" EntitySet="acc_VoucherDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_acc_VoucherEntry_acc_VoucherType" Association="YWCAPF_TestModel.FK_acc_VoucherEntry_acc_VoucherType">
+            <End Role="acc_VoucherType" EntitySet="acc_VoucherType" />
+            <End Role="acc_VoucherEntry" EntitySet="acc_VoucherEntry" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_LU_tbl_Branch" Association="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Branch">
+            <End Role="LU_tbl_Branch" EntitySet="LU_tbl_Branch" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_Country_tbl_User" Association="YWCAPF_TestModel.FK_LU_tbl_Country_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_Country" EntitySet="LU_tbl_Country" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_District_LU_tbl_Country" Association="YWCAPF_TestModel.FK_LU_tbl_District_LU_tbl_Country">
+            <End Role="LU_tbl_Country" EntitySet="LU_tbl_Country" />
+            <End Role="LU_tbl_District" EntitySet="LU_tbl_District" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_Department_tbl_User" Association="YWCAPF_TestModel.FK_LU_tbl_Department_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_Department" EntitySet="LU_tbl_Department" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_LU_tbl_Department" Association="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Department">
+            <End Role="LU_tbl_Department" EntitySet="LU_tbl_Department" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_Designation_tbl_User" Association="YWCAPF_TestModel.FK_LU_tbl_Designation_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_Designation" EntitySet="LU_tbl_Designation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_LU_tbl_Designation" Association="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Designation">
+            <End Role="LU_tbl_Designation" EntitySet="LU_tbl_Designation" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_LU_tbl_District_tbl_User" Association="YWCAPF_TestModel.FK_LU_tbl_District_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="LU_tbl_District" EntitySet="LU_tbl_District" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Contribution_tbl_Employees" Association="YWCAPF_TestModel.FK_tbl_Contribution_tbl_Employees">
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+            <End Role="tbl_Contribution" EntitySet="tbl_Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Contribution_tbl_User" Association="YWCAPF_TestModel.FK_tbl_Contribution_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Contribution" EntitySet="tbl_Contribution" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_Employees_tbl_User" Association="YWCAPF_TestModel.FK_tbl_Employees_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_PFL_Amortization_tbl_Employees" Association="YWCAPF_TestModel.FK_tbl_PFL_Amortization_tbl_Employees">
+            <End Role="tbl_Employees" EntitySet="tbl_Employees" />
+            <End Role="tbl_PFL_Amortization" EntitySet="tbl_PFL_Amortization" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tbl_PFL_Amortization_tbl_User" Association="YWCAPF_TestModel.FK_tbl_PFL_Amortization_tbl_User">
+            <End Role="tbl_User" EntitySet="tbl_User" />
+            <End Role="tbl_PFL_Amortization" EntitySet="tbl_PFL_Amortization" />
+          </AssociationSet>
+          <EntitySet Name="Ac_Cheque_Print" EntityType="YWCAPF_TestModel.Ac_Cheque_Print" />
+          <EntitySet Name="tbl_ProfitDistributionDetail" EntityType="YWCAPF_TestModel.tbl_ProfitDistributionDetail" />
+          <EntitySet Name="tbl_Instrument" EntityType="YWCAPF_TestModel.tbl_Instrument" />
+          <EntitySet Name="acc_Group_Maping" EntityType="YWCAPF_TestModel.acc_Group_Maping" />
+          <EntitySet Name="acc_tbl_Group_MIS" EntityType="YWCAPF_TestModel.acc_tbl_Group_MIS" />
+          <EntitySet Name="tbl_Instrument_Accured_Interest" EntityType="YWCAPF_TestModel.tbl_Instrument_Accured_Interest" />
+          <EntitySet Name="tbl_Instrument_Interest_Rate" EntityType="YWCAPF_TestModel.tbl_Instrument_Interest_Rate" />
+        </EntityContainer>
+        <EntityType Name="Ac_Cheque_BankInfo">
+          <Key>
+            <PropertyRef Name="BankInfo_Id" />
+          </Key>
+          <Property Name="BankInfo_Id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="BankName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="AccountName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="AccountNo" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="OCode" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Ac_Cheque_ClientInfo">
+          <Key>
+            <PropertyRef Name="ClientInfo_id" />
+          </Key>
+          <Property Name="ClientInfo_id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ContactNumber" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Address" Type="String" MaxLength="250" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="OCode" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="acc_Chart_of_Account_Maping">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="MIS_Id" Type="Int32" Nullable="false" />
+          <Property Name="Ledger_Id" Type="Guid" Nullable="false" />
+          <Property Name="DateOfEntry" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EntryBy" Type="Guid" Nullable="false" />
+          <Property Name="OCode" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="acc_Group">
+          <Key>
+            <PropertyRef Name="GroupID" />
+          </Key>
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <Property Name="GroupName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="ParentGroupID" Type="Int32" />
+          <Property Name="NatureID" Type="Int32" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="RestrictDelete" Type="Boolean" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="IsSystemDefault" Type="Boolean" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="GroupCode" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="acc_Group1" Relationship="YWCAPF_TestModel.FK_acc_Group_acc_Group" FromRole="acc_Group" ToRole="acc_Group1" />
+          <NavigationProperty Name="acc_Group2" Relationship="YWCAPF_TestModel.FK_acc_Group_acc_Group" FromRole="acc_Group1" ToRole="acc_Group" />
+          <NavigationProperty Name="acc_Ledger" Relationship="YWCAPF_TestModel.FK_acc_Ledger_acc_Group" FromRole="acc_Group" ToRole="acc_Ledger" />
+        </EntityType>
+        <EntityType Name="acc_Ledger">
+          <Key>
+            <PropertyRef Name="LedgerID" />
+          </Key>
+          <Property Name="LedgerID" Type="Guid" Nullable="false" />
+          <Property Name="LedgerName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="GroupID" Type="Int32" Nullable="false" />
+          <Property Name="InitialBalance" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="BalanceType" Type="Int32" />
+          <Property Name="RestrictDelete" Type="Boolean" />
+          <Property Name="ParentLedgerID" Type="Guid" />
+          <Property Name="Comment" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="PFMemberID" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="PFAdditionalInformation" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="IsSystemDefault" Type="Boolean" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="LedgerCode" Type="String" MaxLength="10" Unicode="true" FixedLength="false" />
+          <Property Name="UsedProject" Type="String" MaxLength="2" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="acc_Group" Relationship="YWCAPF_TestModel.FK_acc_Ledger_acc_Group" FromRole="acc_Ledger" ToRole="acc_Group" />
+          <NavigationProperty Name="acc_VoucherDetail" Relationship="YWCAPF_TestModel.FK_acc_LedgerDetail_acc_Ledger" FromRole="acc_Ledger" ToRole="acc_VoucherDetail" />
+        </EntityType>
+        <EntityType Name="acc_Nature">
+          <Key>
+            <PropertyRef Name="NatureID" />
+          </Key>
+          <Property Name="NatureID" Type="Int32" Nullable="false" />
+          <Property Name="NatureName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="NatureType" Type="Int32" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+        </EntityType>
+        <EntityType Name="acc_tbl_MIS">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="MIS_Name" Type="String" MaxLength="50" Unicode="true" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="acc_VoucherDetail">
+          <Key>
+            <PropertyRef Name="VoucherDetailID" />
+          </Key>
+          <Property Name="VoucherDetailID" Type="Guid" Nullable="false" />
+          <Property Name="VoucherID" Type="Int32" Nullable="false" />
+          <Property Name="LedgerID" Type="Guid" Nullable="false" />
+          <Property Name="Debit" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="Credit" Type="Decimal" Precision="19" Scale="2" />
+          <Property Name="ChequeNumber" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="TransactionDate" Type="DateTime" Precision="3" />
+          <Property Name="VTypeID" Type="Int32" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="PFMemberID" Type="Int32" />
+          <Property Name="PFAdditionalInformation" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="PFLoanID" Type="String" MaxLength="30" Unicode="true" FixedLength="true" />
+          <NavigationProperty Name="acc_Ledger" Relationship="YWCAPF_TestModel.FK_acc_LedgerDetail_acc_Ledger" FromRole="acc_VoucherDetail" ToRole="acc_Ledger" />
+          <NavigationProperty Name="acc_VoucherDetail1" Relationship="YWCAPF_TestModel.FK_acc_VoucherDetail_acc_VoucherDetail" FromRole="acc_VoucherDetail" ToRole="acc_VoucherDetail1" />
+          <NavigationProperty Name="acc_VoucherDetail2" Relationship="YWCAPF_TestModel.FK_acc_VoucherDetail_acc_VoucherDetail" FromRole="acc_VoucherDetail1" ToRole="acc_VoucherDetail" />
+          <NavigationProperty Name="acc_VoucherEntry" Relationship="YWCAPF_TestModel.FK_acc_VoucherDetail_acc_VoucherEntry" FromRole="acc_VoucherDetail" ToRole="acc_VoucherEntry" />
+        </EntityType>
+        <EntityType Name="acc_VoucherEntry">
+          <Key>
+            <PropertyRef Name="VoucherID" />
+          </Key>
+          <Property Name="VoucherID" Type="Int32" Nullable="false" />
+          <Property Name="VoucherName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="TransactionDate" Type="DateTime" Precision="3" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="Narration" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="VTypeID" Type="Int32" />
+          <Property Name="VNumber" Type="String" MaxLength="20" Unicode="true" FixedLength="true" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="RestrictDelete" Type="Boolean" />
+          <Property Name="PFMonth" Type="String" MaxLength="2" Unicode="true" FixedLength="true" />
+          <Property Name="PFYear" Type="String" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="ProfitDistributionProcessID" Type="Int32" />
+          <Property Name="EmpID" Type="Int32" />
+          <Property Name="ActionName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EntryForGF" Type="String" MaxLength="1" Unicode="true" FixedLength="true" />
+          <Property Name="EntryForPF" Type="String" MaxLength="1" Unicode="true" FixedLength="true" />
+          <Property Name="EntryForWPPF" Type="String" MaxLength="1" Unicode="true" FixedLength="true" />
+          <NavigationProperty Name="acc_VoucherDetail" Relationship="YWCAPF_TestModel.FK_acc_VoucherDetail_acc_VoucherEntry" FromRole="acc_VoucherEntry" ToRole="acc_VoucherDetail" />
+          <NavigationProperty Name="acc_VoucherType" Relationship="YWCAPF_TestModel.FK_acc_VoucherEntry_acc_VoucherType" FromRole="acc_VoucherEntry" ToRole="acc_VoucherType" />
+        </EntityType>
+        <EntityType Name="acc_VoucherType">
+          <Key>
+            <PropertyRef Name="VTypeID" />
+          </Key>
+          <Property Name="VTypeID" Type="Int32" Nullable="false" />
+          <Property Name="VTypeName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+          <NavigationProperty Name="acc_VoucherEntry" Relationship="YWCAPF_TestModel.FK_acc_VoucherEntry_acc_VoucherType" FromRole="acc_VoucherType" ToRole="acc_VoucherEntry" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Branch">
+          <Key>
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="BranchID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="BranchName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="BranchLocation" Type="String" MaxLength="150" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="tbl_Employees" Relationship="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Branch" FromRole="LU_tbl_Branch" ToRole="tbl_Employees" />
+        </EntityType>
+        <EntityType Name="LU_tbl_CompanyInformation">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+          </Key>
+          <Property Name="CompanyID" Type="Int32" Nullable="false" />
+          <Property Name="CompanyName" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="CompanyAddress" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="SystemImplementationDate" Type="DateTime" Precision="3" />
+          <Property Name="AccountingYearBeginningFrom" Type="DateTime" Precision="3" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Country">
+          <Key>
+            <PropertyRef Name="CountryID" />
+          </Key>
+          <Property Name="CountryID" Type="String" Nullable="false" MaxLength="3" Unicode="true" FixedLength="true" />
+          <Property Name="CountryName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+          <NavigationProperty Name="tbl_User" Relationship="YWCAPF_TestModel.FK_LU_tbl_Country_tbl_User" FromRole="LU_tbl_Country" ToRole="tbl_User" />
+          <NavigationProperty Name="LU_tbl_District" Relationship="YWCAPF_TestModel.FK_LU_tbl_District_LU_tbl_Country" FromRole="LU_tbl_Country" ToRole="LU_tbl_District" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Department">
+          <Key>
+            <PropertyRef Name="DepartmentID" />
+          </Key>
+          <Property Name="DepartmentID" Type="String" Nullable="false" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="DepartmentName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+          <NavigationProperty Name="tbl_User" Relationship="YWCAPF_TestModel.FK_LU_tbl_Department_tbl_User" FromRole="LU_tbl_Department" ToRole="tbl_User" />
+          <NavigationProperty Name="tbl_Employees" Relationship="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Department" FromRole="LU_tbl_Department" ToRole="tbl_Employees" />
+        </EntityType>
+        <EntityType Name="LU_tbl_Designation">
+          <Key>
+            <PropertyRef Name="DesignationID" />
+          </Key>
+          <Property Name="DesignationID" Type="String" Nullable="false" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="DesignationName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+          <NavigationProperty Name="tbl_User" Relationship="YWCAPF_TestModel.FK_LU_tbl_Designation_tbl_User" FromRole="LU_tbl_Designation" ToRole="tbl_User" />
+          <NavigationProperty Name="tbl_Employees" Relationship="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Designation" FromRole="LU_tbl_Designation" ToRole="tbl_Employees" />
+        </EntityType>
+        <EntityType Name="LU_tbl_District">
+          <Key>
+            <PropertyRef Name="DistrictID" />
+          </Key>
+          <Property Name="DistrictID" Type="String" Nullable="false" MaxLength="2" Unicode="true" FixedLength="true" />
+          <Property Name="DistrictName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="CountryID" Type="String" Nullable="false" MaxLength="3" Unicode="true" FixedLength="true" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+          <NavigationProperty Name="LU_tbl_Country" Relationship="YWCAPF_TestModel.FK_LU_tbl_District_LU_tbl_Country" FromRole="LU_tbl_District" ToRole="LU_tbl_Country" />
+          <NavigationProperty Name="tbl_User" Relationship="YWCAPF_TestModel.FK_LU_tbl_District_tbl_User" FromRole="LU_tbl_District" ToRole="tbl_User" />
+        </EntityType>
+        <EntityType Name="LU_tbl_LoanRules">
+          <Key>
+            <PropertyRef Name="ROWID" />
+          </Key>
+          <Property Name="ROWID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkingDurationInMonth" Type="Int32" Nullable="false" />
+          <Property Name="OwnPartPayable" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="EmpPartPayable" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="OwnProfitPartPayable" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="EmpProfitPartPayable" Type="Decimal" Nullable="false" Precision="5" Scale="2" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Byte" Nullable="false" />
+          <Property Name="EffectiveFrom" Type="DateTime" Precision="3" />
+          <Property Name="RuleName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="IntarestRate" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="InstallmentNoumber" Type="Decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="LU_tbl_MembershipClosingRules">
+          <Key>
+            <PropertyRef Name="ROWID" />
+          </Key>
+          <Property Name="ROWID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="PFDurationInMonth" Type="Int32" Nullable="false" />
+          <Property Name="OwnPartPayable" Type="Int64" Nullable="false" />
+          <Property Name="EmployerPartPayable" Type="Int64" Nullable="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Byte" Nullable="false" />
+          <Property Name="EffectiveFrom" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="RuleName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ProfitPartPayable" Type="Boolean" Nullable="false" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="OwnProfitPercent" Type="Int64" />
+          <Property Name="EmpProfitPercent" Type="Int64" />
+        </EntityType>
+        <EntityType Name="LU_tbl_PFRules">
+          <Key>
+            <PropertyRef Name="ROWID" />
+          </Key>
+          <Property Name="ROWID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkingDurationInMonth" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeContribution" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="EmployerContribution" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsActive" Type="Byte" Nullable="false" />
+          <Property Name="EffectiveFrom" Type="DateTime" Precision="3" />
+          <Property Name="RuleName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SA_tbl_Module">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="name" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="SA_tbl_Page">
+          <Key>
+            <PropertyRef Name="PageID" />
+          </Key>
+          <Property Name="PageID" Type="Int32" Nullable="false" />
+          <Property Name="ModuleID" Type="Int32" Nullable="false" />
+          <Property Name="PageName" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="FileName" Type="String" MaxLength="200" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="SA_tbl_PagePermission">
+          <Key>
+            <PropertyRef Name="RoleID" />
+            <PropertyRef Name="PageID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="PageID" Type="Int32" Nullable="false" />
+          <Property Name="CanVisit" Type="Boolean" Nullable="false" />
+          <Property Name="CanEdit" Type="Boolean" Nullable="false" />
+          <Property Name="CanDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CanExecute" Type="Boolean" Nullable="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="EditUserName" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="tbl_Contribution">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="ConYear" />
+            <PropertyRef Name="ConMonth" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" />
+          <Property Name="ConYear" Type="String" Nullable="false" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="ConMonth" Type="String" Nullable="false" MaxLength="2" Unicode="true" FixedLength="true" />
+          <Property Name="SelfContribution" Type="Decimal" Nullable="false" Precision="19" Scale="2" />
+          <Property Name="SCInterest" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="EmpContribution" Type="Decimal" Nullable="false" Precision="19" Scale="2" />
+          <Property Name="ECInterest" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ProcessDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PFRulesID" Type="Int32" Nullable="false" />
+          <Property Name="Salary" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="SCPercentage" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ECPercentage" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="InterestRate" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ProcessID" Type="Int32" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="ContributionDate" Type="DateTime" Precision="3" />
+          <Property Name="ContributionId" Type="Int32" />
+          <NavigationProperty Name="tbl_Employees" Relationship="YWCAPF_TestModel.FK_tbl_Contribution_tbl_Employees" FromRole="tbl_Contribution" ToRole="tbl_Employees" />
+          <NavigationProperty Name="tbl_User" Relationship="YWCAPF_TestModel.FK_tbl_Contribution_tbl_User" FromRole="tbl_Contribution" ToRole="tbl_User" />
+        </EntityType>
+        <EntityType Name="tbl_ContributionMonthRecord">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="ConYear" Type="String" Nullable="false" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="ConMonth" Type="String" Nullable="false" MaxLength="2" Unicode="true" FixedLength="true" />
+          <Property Name="PassVoucher" Type="Boolean" Nullable="false" />
+          <Property Name="PassVoucherMessage" Type="String" MaxLength="500" Unicode="false" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditUserName" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalSelfCont" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TotalEmpCont" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="ContributionDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_Employees">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpName" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="Designation" Type="String" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="Department" Type="String" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="Branch" Type="Int32" />
+          <Property Name="Gender" Type="String" MaxLength="1" Unicode="true" FixedLength="true" />
+          <Property Name="PresentAddress" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ContactNumber" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="BirthDate" Type="DateTime" Precision="3" />
+          <Property Name="NID" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="JoiningDate" Type="DateTime" Precision="3" />
+          <Property Name="PFStatus" Type="Int32" />
+          <Property Name="EmpImg" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="SignatureImg" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdentificationNumber" Type="String" MaxLength="24" Unicode="true" FixedLength="false" />
+          <Property Name="opOwnContribution" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="opEmpContribution" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="opProfit" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="opLoan" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="opDesignationName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="opDepartmentName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="PFActivationDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PFDeactivationDate" Type="DateTime" Precision="3" />
+          <Property Name="PFDeactivatedBy" Type="Guid" />
+          <Property Name="PFDeactivatedByName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Comment" Type="String" MaxLength="500" Unicode="true" FixedLength="false" />
+          <Property Name="PFRuleUsedForDeactivation" Type="Int32" />
+          <Property Name="PassVoucher" Type="Boolean" Nullable="false" />
+          <Property Name="PassVoucherMessage" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="PFDeactivationVoucherID" Type="Int32" />
+          <Property Name="PassVoucherEntryID" Type="Int32" />
+          <Property Name="LocationName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="LU_tbl_Branch" Relationship="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Branch" FromRole="tbl_Employees" ToRole="LU_tbl_Branch" />
+          <NavigationProperty Name="LU_tbl_Department" Relationship="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Department" FromRole="tbl_Employees" ToRole="LU_tbl_Department" />
+          <NavigationProperty Name="LU_tbl_Designation" Relationship="YWCAPF_TestModel.FK_tbl_Employees_LU_tbl_Designation" FromRole="tbl_Employees" ToRole="LU_tbl_Designation" />
+          <NavigationProperty Name="tbl_Contribution" Relationship="YWCAPF_TestModel.FK_tbl_Contribution_tbl_Employees" FromRole="tbl_Employees" ToRole="tbl_Contribution" />
+          <NavigationProperty Name="tbl_User" Relationship="YWCAPF_TestModel.FK_tbl_Employees_tbl_User" FromRole="tbl_Employees" ToRole="tbl_User" />
+          <NavigationProperty Name="tbl_PFL_Amortization" Relationship="YWCAPF_TestModel.FK_tbl_PFL_Amortization_tbl_Employees" FromRole="tbl_Employees" ToRole="tbl_PFL_Amortization" />
+        </EntityType>
+        <EntityType Name="tbl_ErrorLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="InnerException" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="UserName" Type="String" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="Terminal" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="HostName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Time" Type="DateTime" Precision="3" />
+          <Property Name="Type" Type="String" MaxLength="20" Unicode="true" FixedLength="true" />
+          <Property Name="OCode" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tbl_FinancialAuditLog">
+          <Key>
+            <PropertyRef Name="LogID" />
+          </Key>
+          <Property Name="LogID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="LastAuditDate" Type="DateTime" Precision="3" />
+          <Property Name="LogDate" Type="DateTime" Precision="3" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="EditUser" Type="Guid" />
+        </EntityType>
+        <EntityType Name="tbl_LoginHistory">
+          <Key>
+            <PropertyRef Name="rowid" />
+          </Key>
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="56" Unicode="true" FixedLength="false" />
+          <Property Name="LoginTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="SignOut" Type="DateTime" Precision="3" />
+          <Property Name="rowid" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Terminal" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="HostName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="OCode" Type="String" MaxLength="10" Unicode="true" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="tbl_NomineeInformation">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="NomineeID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" />
+          <Property Name="NomineeID" Type="Int32" Nullable="false" />
+          <Property Name="NomineeName" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="NomineeAddress" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Relation" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="RegistrationDate" Type="DateTime" Precision="3" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="NomineeImageFileName" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="NomineeNationalID" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Nomineepercentage" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="NomineeSignFileName" Type="String" MaxLength="50" Unicode="true" FixedLength="true" />
+          <Property Name="OCode" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tbl_PFL_Amortization">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="PFLoanID" />
+            <PropertyRef Name="InstallmentNumber" />
+            <PropertyRef Name="ReScheduleID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" />
+          <Property Name="PFLoanID" Type="String" Nullable="false" MaxLength="6" Unicode="true" FixedLength="true" />
+          <Property Name="InstallmentNumber" Type="Int32" Nullable="false" />
+          <Property Name="ReScheduleID" Type="Byte" Nullable="false" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Interest" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Principal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Balance" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Processed" Type="Byte" Nullable="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="TrackingNumber" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="ProcessNumber" Type="Int32" />
+          <Property Name="PaymentAmount" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ConYear" Type="String" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="ConMonth" Type="String" MaxLength="2" Unicode="true" FixedLength="true" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="PaidAmount" Type="Decimal" Precision="18" Scale="2" />
+          <NavigationProperty Name="tbl_Employees" Relationship="YWCAPF_TestModel.FK_tbl_PFL_Amortization_tbl_Employees" FromRole="tbl_PFL_Amortization" ToRole="tbl_Employees" />
+          <NavigationProperty Name="tbl_User" Relationship="YWCAPF_TestModel.FK_tbl_PFL_Amortization_tbl_User" FromRole="tbl_PFL_Amortization" ToRole="tbl_User" />
+        </EntityType>
+        <EntityType Name="tbl_PFLoan">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="PFLoanID" />
+          </Key>
+          <Property Name="EmpID" Type="Int32" Nullable="false" />
+          <Property Name="PFLoanID" Type="String" Nullable="false" MaxLength="6" Unicode="true" FixedLength="true" />
+          <Property Name="LoanAmount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="TermYear" Type="Int32" />
+          <Property Name="TermMonth" Type="Int32" Nullable="false" />
+          <Property Name="Interest" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="Installment" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IsApproved" Type="Byte" Nullable="false" />
+          <Property Name="ApprovedBy" Type="Guid" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="RuleUsed" Type="Int32" />
+          <Property Name="PayableAmount" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CashLedgerID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="tbl_ProfitDistributionSummary">
+          <Key>
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Name="ProcessID" Type="Int32" Nullable="false" />
+          <Property Name="FromDate" Type="DateTime" Precision="3" />
+          <Property Name="ToDate" Type="DateTime" Precision="3" />
+          <Property Name="DistributableAmount" Type="Decimal" Precision="20" Scale="2" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditUserName" Type="String" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditTime" Type="DateTime" Precision="3" />
+          <Property Name="Message" Type="String" MaxLength="Max" Unicode="false" FixedLength="false" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="DistributedAmount" Type="Decimal" Precision="20" Scale="2" />
+          <Property Name="SelfTotalProfit" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="EmpTotalProfit" Type="Decimal" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="tbl_User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="LoginName" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
+          <Property Name="UserFullName" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="BranchID" Type="Int32" />
+          <Property Name="IsActive" Type="Byte" Nullable="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Phone" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="EmailNotificationActive" Type="Byte" />
+          <Property Name="Email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DepartmentID" Type="String" MaxLength="4" Unicode="true" FixedLength="true" />
+          <Property Name="EmpID" Type="Int32" />
+          <Property Name="OCode" Type="Int32" />
+          <NavigationProperty Name="LU_tbl_Country" Relationship="YWCAPF_TestModel.FK_LU_tbl_Country_tbl_User" FromRole="tbl_User" ToRole="LU_tbl_Country" />
+          <NavigationProperty Name="LU_tbl_Department" Relationship="YWCAPF_TestModel.FK_LU_tbl_Department_tbl_User" FromRole="tbl_User" ToRole="LU_tbl_Department" />
+          <NavigationProperty Name="LU_tbl_Designation" Relationship="YWCAPF_TestModel.FK_LU_tbl_Designation_tbl_User" FromRole="tbl_User" ToRole="LU_tbl_Designation" />
+          <NavigationProperty Name="LU_tbl_District" Relationship="YWCAPF_TestModel.FK_LU_tbl_District_tbl_User" FromRole="tbl_User" ToRole="LU_tbl_District" />
+          <NavigationProperty Name="tbl_Contribution" Relationship="YWCAPF_TestModel.FK_tbl_Contribution_tbl_User" FromRole="tbl_User" ToRole="tbl_Contribution" />
+          <NavigationProperty Name="tbl_Employees" Relationship="YWCAPF_TestModel.FK_tbl_Employees_tbl_User" FromRole="tbl_User" ToRole="tbl_Employees" />
+          <NavigationProperty Name="tbl_PFL_Amortization" Relationship="YWCAPF_TestModel.FK_tbl_PFL_Amortization_tbl_User" FromRole="tbl_User" ToRole="tbl_PFL_Amortization" />
+        </EntityType>
+        <EntityType Name="tbl_UserPassword">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Guid" Nullable="false" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="tbl_UserRedirected">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="SessionID" Type="Guid" Nullable="false" />
+          <Property Name="LastLoginTime" Type="Binary" MaxLength="8" FixedLength="true" />
+        </EntityType>
+        <EntityType Name="tbl_UserRole">
+          <Key>
+            <PropertyRef Name="RoleID" />
+          </Key>
+          <Property Name="RoleID" Type="Int32" Nullable="false" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <Association Name="FK_acc_Group_acc_Group">
+          <End Role="acc_Group" Type="YWCAPF_TestModel.acc_Group" Multiplicity="0..1" />
+          <End Role="acc_Group1" Type="YWCAPF_TestModel.acc_Group" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_Group">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="acc_Group1">
+              <PropertyRef Name="ParentGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_Ledger_acc_Group">
+          <End Role="acc_Group" Type="YWCAPF_TestModel.acc_Group" Multiplicity="1" />
+          <End Role="acc_Ledger" Type="YWCAPF_TestModel.acc_Ledger" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_Group">
+              <PropertyRef Name="GroupID" />
+            </Principal>
+            <Dependent Role="acc_Ledger">
+              <PropertyRef Name="GroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_LedgerDetail_acc_Ledger">
+          <End Role="acc_Ledger" Type="YWCAPF_TestModel.acc_Ledger" Multiplicity="1" />
+          <End Role="acc_VoucherDetail" Type="YWCAPF_TestModel.acc_VoucherDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_Ledger">
+              <PropertyRef Name="LedgerID" />
+            </Principal>
+            <Dependent Role="acc_VoucherDetail">
+              <PropertyRef Name="LedgerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_VoucherDetail_acc_VoucherDetail">
+          <End Role="acc_VoucherDetail" Type="YWCAPF_TestModel.acc_VoucherDetail" Multiplicity="1" />
+          <End Role="acc_VoucherDetail1" Type="YWCAPF_TestModel.acc_VoucherDetail" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="acc_VoucherDetail">
+              <PropertyRef Name="VoucherDetailID" />
+            </Principal>
+            <Dependent Role="acc_VoucherDetail1">
+              <PropertyRef Name="VoucherDetailID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_VoucherDetail_acc_VoucherEntry">
+          <End Role="acc_VoucherEntry" Type="YWCAPF_TestModel.acc_VoucherEntry" Multiplicity="1" />
+          <End Role="acc_VoucherDetail" Type="YWCAPF_TestModel.acc_VoucherDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_VoucherEntry">
+              <PropertyRef Name="VoucherID" />
+            </Principal>
+            <Dependent Role="acc_VoucherDetail">
+              <PropertyRef Name="VoucherID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_acc_VoucherEntry_acc_VoucherType">
+          <End Role="acc_VoucherType" Type="YWCAPF_TestModel.acc_VoucherType" Multiplicity="0..1" />
+          <End Role="acc_VoucherEntry" Type="YWCAPF_TestModel.acc_VoucherEntry" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="acc_VoucherType">
+              <PropertyRef Name="VTypeID" />
+            </Principal>
+            <Dependent Role="acc_VoucherEntry">
+              <PropertyRef Name="VTypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_LU_tbl_Branch">
+          <End Role="LU_tbl_Branch" Type="YWCAPF_TestModel.LU_tbl_Branch" Multiplicity="0..1" />
+          <End Role="tbl_Employees" Type="YWCAPF_TestModel.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Branch">
+              <PropertyRef Name="BranchID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="Branch" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_Country_tbl_User">
+          <End Role="tbl_User" Type="YWCAPF_TestModel.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_Country" Type="YWCAPF_TestModel.LU_tbl_Country" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_Country">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_District_LU_tbl_Country">
+          <End Role="LU_tbl_Country" Type="YWCAPF_TestModel.LU_tbl_Country" Multiplicity="1" />
+          <End Role="LU_tbl_District" Type="YWCAPF_TestModel.LU_tbl_District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Country">
+              <PropertyRef Name="CountryID" />
+            </Principal>
+            <Dependent Role="LU_tbl_District">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_Department_tbl_User">
+          <End Role="tbl_User" Type="YWCAPF_TestModel.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_Department" Type="YWCAPF_TestModel.LU_tbl_Department" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_Department">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_LU_tbl_Department">
+          <End Role="LU_tbl_Department" Type="YWCAPF_TestModel.LU_tbl_Department" Multiplicity="0..1" />
+          <End Role="tbl_Employees" Type="YWCAPF_TestModel.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Department">
+              <PropertyRef Name="DepartmentID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="Department" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_Designation_tbl_User">
+          <End Role="tbl_User" Type="YWCAPF_TestModel.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_Designation" Type="YWCAPF_TestModel.LU_tbl_Designation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_Designation">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_LU_tbl_Designation">
+          <End Role="LU_tbl_Designation" Type="YWCAPF_TestModel.LU_tbl_Designation" Multiplicity="0..1" />
+          <End Role="tbl_Employees" Type="YWCAPF_TestModel.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LU_tbl_Designation">
+              <PropertyRef Name="DesignationID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="Designation" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_LU_tbl_District_tbl_User">
+          <End Role="tbl_User" Type="YWCAPF_TestModel.tbl_User" Multiplicity="1" />
+          <End Role="LU_tbl_District" Type="YWCAPF_TestModel.LU_tbl_District" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="LU_tbl_District">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Contribution_tbl_Employees">
+          <End Role="tbl_Employees" Type="YWCAPF_TestModel.tbl_Employees" Multiplicity="1" />
+          <End Role="tbl_Contribution" Type="YWCAPF_TestModel.tbl_Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Employees">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="tbl_Contribution">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Contribution_tbl_User">
+          <End Role="tbl_User" Type="YWCAPF_TestModel.tbl_User" Multiplicity="1" />
+          <End Role="tbl_Contribution" Type="YWCAPF_TestModel.tbl_Contribution" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tbl_Contribution">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_Employees_tbl_User">
+          <End Role="tbl_User" Type="YWCAPF_TestModel.tbl_User" Multiplicity="1" />
+          <End Role="tbl_Employees" Type="YWCAPF_TestModel.tbl_Employees" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tbl_Employees">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_PFL_Amortization_tbl_Employees">
+          <End Role="tbl_Employees" Type="YWCAPF_TestModel.tbl_Employees" Multiplicity="1" />
+          <End Role="tbl_PFL_Amortization" Type="YWCAPF_TestModel.tbl_PFL_Amortization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Employees">
+              <PropertyRef Name="EmpID" />
+            </Principal>
+            <Dependent Role="tbl_PFL_Amortization">
+              <PropertyRef Name="EmpID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tbl_PFL_Amortization_tbl_User">
+          <End Role="tbl_User" Type="YWCAPF_TestModel.tbl_User" Multiplicity="1" />
+          <End Role="tbl_PFL_Amortization" Type="YWCAPF_TestModel.tbl_PFL_Amortization" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="tbl_PFL_Amortization">
+              <PropertyRef Name="EditUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Ac_Cheque_Print">
+          <Key>
+            <PropertyRef Name="ChequePrint_id" />
+          </Key>
+          <Property Type="Int32" Name="ChequePrint_id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="ChequeNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ChequeType" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="AccountNo" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ClientInfo_id" />
+          <Property Type="Decimal" Name="Amount" Precision="18" Scale="2" />
+          <Property Type="DateTime" Name="ChequeDate" Precision="3" />
+          <Property Type="Guid" Name="EditUser" />
+          <Property Type="DateTime" Name="EditDate" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="BankInfo_Id" />
+          <Property Type="Guid" Name="LedgerId" Nullable="false" />
+          <Property Type="Int32" Name="OCode" />
+        </EntityType>
+        <EntityType Name="tbl_ProfitDistributionDetail">
+          <Key>
+            <PropertyRef Name="EmpID" />
+            <PropertyRef Name="ProcessID" />
+          </Key>
+          <Property Type="Int32" Name="EmpID" Nullable="false" />
+          <Property Type="String" Name="IdentificationNumber" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ProcessID" Nullable="false" />
+          <Property Type="DateTime" Name="TransactionDate" Precision="3" />
+          <Property Type="Decimal" Name="DistributedAmount" Precision="18" Scale="2" />
+          <Property Type="Int32" Name="OCode" />
+          <Property Type="Decimal" Name="SelfContribution" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="EmpContribution" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="SelfProfit" Nullable="false" Precision="18" Scale="2" />
+          <Property Type="Decimal" Name="EmpProfit" Nullable="false" Precision="18" Scale="2" />
+        </EntityType>
+        <EntityType Name="tbl_Instrument">
+          <Key>
+            <PropertyRef Name="InstrumentID" />
+          </Key>
+          <Property Name="InstrumentID" Type="Int32" Nullable="false" />
+          <Property Name="InstrumentType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="InstrumentNumber" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Institution" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Branch" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="DepositDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MaturityPeriod" Type="Int32" Nullable="false" />
+          <Property Name="MaturityDate" Type="DateTime" Precision="3" />
+          <Property Name="Amount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="InterestRate" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="EditUser" Type="Guid" />
+          <Property Name="EditUserName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="EditDate" Type="DateTime" Precision="3" />
+          <Property Name="Comment" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="PassVoucher" Type="Boolean" Nullable="false" />
+          <Property Name="PassVoucherMessage" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="AccLedgerID" Type="Guid" />
+          <Property Name="OCode" Type="Int32" />
+          <Property Name="AccVoucherEntryID" Type="Int32" />
+          <Property Name="InstrumentPhoto" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Closed" Type="Boolean" />
+          <Property Name="AcruadIntarestAmount" Type="Decimal" Nullable="false" Precision="18" Scale="0" />
+          <Property Name="EntryForPF" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="EntryForGF" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="EntryForWPPF" Type="String" MaxLength="1" FixedLength="true" Unicode="true" />
+          <Property Name="BankCharge" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TDSonFDR" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="FDRTax" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="LastProcessDate" Type="DateTime" Precision="3" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="PreviousInstrumentId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="acc_Group_Maping">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Group_MIS_Id" Type="Int32" Nullable="false" />
+          <Property Name="Group_Id" Type="Int32" Nullable="false" />
+          <Property Name="DateOfEntry" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EntryBy" Type="Guid" Nullable="false" />
+          <Property Name="OCode" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="acc_tbl_Group_MIS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="MIS_Group_Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tbl_Instrument_Accured_Interest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstrumentID" Type="Int32" Nullable="false" />
+          <Property Name="AccuredInterestDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AccuredInterestAmount" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="OCode" Type="Int32" Nullable="false" />
+          <Property Name="UsedProject" Type="String" Nullable="false" MaxLength="2" FixedLength="true" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tbl_Instrument_Interest_Rate">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InstrumentID" Type="Int32" Nullable="false" />
+          <Property Name="InterestRate" Type="Decimal" Nullable="false" Precision="18" Scale="2" />
+          <Property Name="StartDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EndDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="EditUser" Type="Guid" Nullable="false" />
+          <Property Name="EditDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="InterestYear" Type="Int32" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="YWCAPF_TestModelStoreContainer" CdmEntityContainer="PFTMEntities">
+          <EntitySetMapping Name="Ac_Cheque_BankInfo">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.Ac_Cheque_BankInfo">
+              <MappingFragment StoreEntitySet="Ac_Cheque_BankInfo">
+                <ScalarProperty Name="BankInfo_Id" ColumnName="BankInfo_Id" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ac_Cheque_ClientInfo">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.Ac_Cheque_ClientInfo">
+              <MappingFragment StoreEntitySet="Ac_Cheque_ClientInfo">
+                <ScalarProperty Name="ClientInfo_id" ColumnName="ClientInfo_id" />
+                <ScalarProperty Name="ClientName" ColumnName="ClientName" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_Chart_of_Account_Maping">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_Chart_of_Account_Maping">
+              <MappingFragment StoreEntitySet="acc_Chart_of_Account_Maping">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="MIS_Id" ColumnName="MIS_Id" />
+                <ScalarProperty Name="Ledger_Id" ColumnName="Ledger_Id" />
+                <ScalarProperty Name="DateOfEntry" ColumnName="DateOfEntry" />
+                <ScalarProperty Name="EntryBy" ColumnName="EntryBy" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_Group">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_Group">
+              <MappingFragment StoreEntitySet="acc_Group">
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="ParentGroupID" ColumnName="ParentGroupID" />
+                <ScalarProperty Name="NatureID" ColumnName="NatureID" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="RestrictDelete" ColumnName="RestrictDelete" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="IsSystemDefault" ColumnName="IsSystemDefault" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_Ledger">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_Ledger">
+              <MappingFragment StoreEntitySet="acc_Ledger">
+                <ScalarProperty Name="LedgerID" ColumnName="LedgerID" />
+                <ScalarProperty Name="LedgerName" ColumnName="LedgerName" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+                <ScalarProperty Name="InitialBalance" ColumnName="InitialBalance" />
+                <ScalarProperty Name="BalanceType" ColumnName="BalanceType" />
+                <ScalarProperty Name="RestrictDelete" ColumnName="RestrictDelete" />
+                <ScalarProperty Name="ParentLedgerID" ColumnName="ParentLedgerID" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="PFMemberID" ColumnName="PFMemberID" />
+                <ScalarProperty Name="PFAdditionalInformation" ColumnName="PFAdditionalInformation" />
+                <ScalarProperty Name="IsSystemDefault" ColumnName="IsSystemDefault" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="LedgerCode" ColumnName="LedgerCode" />
+                <ScalarProperty Name="UsedProject" ColumnName="UsedProject" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_Nature">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_Nature">
+              <MappingFragment StoreEntitySet="acc_Nature">
+                <ScalarProperty Name="NatureID" ColumnName="NatureID" />
+                <ScalarProperty Name="NatureName" ColumnName="NatureName" />
+                <ScalarProperty Name="NatureType" ColumnName="NatureType" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_tbl_MIS">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_tbl_MIS">
+              <MappingFragment StoreEntitySet="acc_tbl_MIS">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="MIS_Name" ColumnName="MIS_Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_VoucherDetail">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_VoucherDetail">
+              <MappingFragment StoreEntitySet="acc_VoucherDetail">
+                <ScalarProperty Name="VoucherDetailID" ColumnName="VoucherDetailID" />
+                <ScalarProperty Name="VoucherID" ColumnName="VoucherID" />
+                <ScalarProperty Name="LedgerID" ColumnName="LedgerID" />
+                <ScalarProperty Name="Debit" ColumnName="Debit" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="ChequeNumber" ColumnName="ChequeNumber" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="VTypeID" ColumnName="VTypeID" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="PFMemberID" ColumnName="PFMemberID" />
+                <ScalarProperty Name="PFAdditionalInformation" ColumnName="PFAdditionalInformation" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="PFLoanID" ColumnName="PFLoanID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_VoucherEntry">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_VoucherEntry">
+              <MappingFragment StoreEntitySet="acc_VoucherEntry">
+                <ScalarProperty Name="VoucherID" ColumnName="VoucherID" />
+                <ScalarProperty Name="VoucherName" ColumnName="VoucherName" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="Narration" ColumnName="Narration" />
+                <ScalarProperty Name="VTypeID" ColumnName="VTypeID" />
+                <ScalarProperty Name="VNumber" ColumnName="VNumber" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="RestrictDelete" ColumnName="RestrictDelete" />
+                <ScalarProperty Name="PFMonth" ColumnName="PFMonth" />
+                <ScalarProperty Name="PFYear" ColumnName="PFYear" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="ProfitDistributionProcessID" ColumnName="ProfitDistributionProcessID" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="EntryForGF" ColumnName="EntryForGF" />
+                <ScalarProperty Name="EntryForPF" ColumnName="EntryForPF" />
+                <ScalarProperty Name="EntryForWPPF" ColumnName="EntryForWPPF" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_VoucherType">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_VoucherType">
+              <MappingFragment StoreEntitySet="acc_VoucherType">
+                <ScalarProperty Name="VTypeID" ColumnName="VTypeID" />
+                <ScalarProperty Name="VTypeName" ColumnName="VTypeName" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_Branch">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_Branch">
+              <MappingFragment StoreEntitySet="LU_tbl_Branch">
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="BranchLocation" ColumnName="BranchLocation" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_CompanyInformation">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_CompanyInformation">
+              <MappingFragment StoreEntitySet="LU_tbl_CompanyInformation">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="CompanyAddress" ColumnName="CompanyAddress" />
+                <ScalarProperty Name="SystemImplementationDate" ColumnName="SystemImplementationDate" />
+                <ScalarProperty Name="AccountingYearBeginningFrom" ColumnName="AccountingYearBeginningFrom" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_Country">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_Country">
+              <MappingFragment StoreEntitySet="LU_tbl_Country">
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_Department">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_Department">
+              <MappingFragment StoreEntitySet="LU_tbl_Department">
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_Designation">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_Designation">
+              <MappingFragment StoreEntitySet="LU_tbl_Designation">
+                <ScalarProperty Name="DesignationID" ColumnName="DesignationID" />
+                <ScalarProperty Name="DesignationName" ColumnName="DesignationName" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_District">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_District">
+              <MappingFragment StoreEntitySet="LU_tbl_District">
+                <ScalarProperty Name="DistrictID" ColumnName="DistrictID" />
+                <ScalarProperty Name="DistrictName" ColumnName="DistrictName" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_LoanRules">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_LoanRules">
+              <MappingFragment StoreEntitySet="LU_tbl_LoanRules">
+                <ScalarProperty Name="ROWID" ColumnName="ROWID" />
+                <ScalarProperty Name="WorkingDurationInMonth" ColumnName="WorkingDurationInMonth" />
+                <ScalarProperty Name="OwnPartPayable" ColumnName="OwnPartPayable" />
+                <ScalarProperty Name="EmpPartPayable" ColumnName="EmpPartPayable" />
+                <ScalarProperty Name="OwnProfitPartPayable" ColumnName="OwnProfitPartPayable" />
+                <ScalarProperty Name="EmpProfitPartPayable" ColumnName="EmpProfitPartPayable" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EffectiveFrom" ColumnName="EffectiveFrom" />
+                <ScalarProperty Name="RuleName" ColumnName="RuleName" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="IntarestRate" ColumnName="IntarestRate" />
+                <ScalarProperty Name="InstallmentNoumber" ColumnName="InstallmentNoumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_MembershipClosingRules">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_MembershipClosingRules">
+              <MappingFragment StoreEntitySet="LU_tbl_MembershipClosingRules">
+                <ScalarProperty Name="ROWID" ColumnName="ROWID" />
+                <ScalarProperty Name="PFDurationInMonth" ColumnName="PFDurationInMonth" />
+                <ScalarProperty Name="OwnPartPayable" ColumnName="OwnPartPayable" />
+                <ScalarProperty Name="EmployerPartPayable" ColumnName="EmployerPartPayable" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EffectiveFrom" ColumnName="EffectiveFrom" />
+                <ScalarProperty Name="RuleName" ColumnName="RuleName" />
+                <ScalarProperty Name="ProfitPartPayable" ColumnName="ProfitPartPayable" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="OwnProfitPercent" ColumnName="OwnProfitPercent" />
+                <ScalarProperty Name="EmpProfitPercent" ColumnName="EmpProfitPercent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LU_tbl_PFRules">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.LU_tbl_PFRules">
+              <MappingFragment StoreEntitySet="LU_tbl_PFRules">
+                <ScalarProperty Name="ROWID" ColumnName="ROWID" />
+                <ScalarProperty Name="WorkingDurationInMonth" ColumnName="WorkingDurationInMonth" />
+                <ScalarProperty Name="EmployeeContribution" ColumnName="EmployeeContribution" />
+                <ScalarProperty Name="EmployerContribution" ColumnName="EmployerContribution" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EffectiveFrom" ColumnName="EffectiveFrom" />
+                <ScalarProperty Name="RuleName" ColumnName="RuleName" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SA_tbl_Module">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.SA_tbl_Module">
+              <MappingFragment StoreEntitySet="SA_tbl_Module">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SA_tbl_Page">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.SA_tbl_Page">
+              <MappingFragment StoreEntitySet="SA_tbl_Page">
+                <ScalarProperty Name="PageID" ColumnName="PageID" />
+                <ScalarProperty Name="ModuleID" ColumnName="ModuleID" />
+                <ScalarProperty Name="PageName" ColumnName="PageName" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SA_tbl_PagePermission">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.SA_tbl_PagePermission">
+              <MappingFragment StoreEntitySet="SA_tbl_PagePermission">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="PageID" ColumnName="PageID" />
+                <ScalarProperty Name="CanVisit" ColumnName="CanVisit" />
+                <ScalarProperty Name="CanEdit" ColumnName="CanEdit" />
+                <ScalarProperty Name="CanDelete" ColumnName="CanDelete" />
+                <ScalarProperty Name="CanExecute" ColumnName="CanExecute" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Contribution">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_Contribution">
+              <MappingFragment StoreEntitySet="tbl_Contribution">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="ConYear" ColumnName="ConYear" />
+                <ScalarProperty Name="ConMonth" ColumnName="ConMonth" />
+                <ScalarProperty Name="SelfContribution" ColumnName="SelfContribution" />
+                <ScalarProperty Name="SCInterest" ColumnName="SCInterest" />
+                <ScalarProperty Name="EmpContribution" ColumnName="EmpContribution" />
+                <ScalarProperty Name="ECInterest" ColumnName="ECInterest" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="PFRulesID" ColumnName="PFRulesID" />
+                <ScalarProperty Name="Salary" ColumnName="Salary" />
+                <ScalarProperty Name="SCPercentage" ColumnName="SCPercentage" />
+                <ScalarProperty Name="ECPercentage" ColumnName="ECPercentage" />
+                <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="ContributionDate" ColumnName="ContributionDate" />
+                <ScalarProperty Name="ContributionId" ColumnName="ContributionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_ContributionMonthRecord">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_ContributionMonthRecord">
+              <MappingFragment StoreEntitySet="tbl_ContributionMonthRecord">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ConYear" ColumnName="ConYear" />
+                <ScalarProperty Name="ConMonth" ColumnName="ConMonth" />
+                <ScalarProperty Name="PassVoucher" ColumnName="PassVoucher" />
+                <ScalarProperty Name="PassVoucherMessage" ColumnName="PassVoucherMessage" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="TotalSelfCont" ColumnName="TotalSelfCont" />
+                <ScalarProperty Name="TotalEmpCont" ColumnName="TotalEmpCont" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="ContributionDate" ColumnName="ContributionDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Employees">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_Employees">
+              <MappingFragment StoreEntitySet="tbl_Employees">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="EmpName" ColumnName="EmpName" />
+                <ScalarProperty Name="Designation" ColumnName="Designation" />
+                <ScalarProperty Name="Department" ColumnName="Department" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="PresentAddress" ColumnName="PresentAddress" />
+                <ScalarProperty Name="ContactNumber" ColumnName="ContactNumber" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
+                <ScalarProperty Name="NID" ColumnName="NID" />
+                <ScalarProperty Name="JoiningDate" ColumnName="JoiningDate" />
+                <ScalarProperty Name="PFStatus" ColumnName="PFStatus" />
+                <ScalarProperty Name="EmpImg" ColumnName="EmpImg" />
+                <ScalarProperty Name="SignatureImg" ColumnName="SignatureImg" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="IdentificationNumber" ColumnName="IdentificationNumber" />
+                <ScalarProperty Name="opOwnContribution" ColumnName="opOwnContribution" />
+                <ScalarProperty Name="opEmpContribution" ColumnName="opEmpContribution" />
+                <ScalarProperty Name="opProfit" ColumnName="opProfit" />
+                <ScalarProperty Name="opLoan" ColumnName="opLoan" />
+                <ScalarProperty Name="opDesignationName" ColumnName="opDesignationName" />
+                <ScalarProperty Name="opDepartmentName" ColumnName="opDepartmentName" />
+                <ScalarProperty Name="PFActivationDate" ColumnName="PFActivationDate" />
+                <ScalarProperty Name="PFDeactivationDate" ColumnName="PFDeactivationDate" />
+                <ScalarProperty Name="PFDeactivatedBy" ColumnName="PFDeactivatedBy" />
+                <ScalarProperty Name="PFDeactivatedByName" ColumnName="PFDeactivatedByName" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="PFRuleUsedForDeactivation" ColumnName="PFRuleUsedForDeactivation" />
+                <ScalarProperty Name="PassVoucher" ColumnName="PassVoucher" />
+                <ScalarProperty Name="PassVoucherMessage" ColumnName="PassVoucherMessage" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="PFDeactivationVoucherID" ColumnName="PFDeactivationVoucherID" />
+                <ScalarProperty Name="PassVoucherEntryID" ColumnName="PassVoucherEntryID" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_ErrorLog">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_ErrorLog">
+              <MappingFragment StoreEntitySet="tbl_ErrorLog">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="InnerException" ColumnName="InnerException" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Terminal" ColumnName="Terminal" />
+                <ScalarProperty Name="HostName" ColumnName="HostName" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_FinancialAuditLog">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_FinancialAuditLog">
+              <MappingFragment StoreEntitySet="tbl_FinancialAuditLog">
+                <ScalarProperty Name="LogID" ColumnName="LogID" />
+                <ScalarProperty Name="LastAuditDate" ColumnName="LastAuditDate" />
+                <ScalarProperty Name="LogDate" ColumnName="LogDate" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_LoginHistory">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_LoginHistory">
+              <MappingFragment StoreEntitySet="tbl_LoginHistory">
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+                <ScalarProperty Name="SignOut" ColumnName="SignOut" />
+                <ScalarProperty Name="rowid" ColumnName="rowid" />
+                <ScalarProperty Name="Terminal" ColumnName="Terminal" />
+                <ScalarProperty Name="HostName" ColumnName="HostName" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_NomineeInformation">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_NomineeInformation">
+              <MappingFragment StoreEntitySet="tbl_NomineeInformation">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="NomineeID" ColumnName="NomineeID" />
+                <ScalarProperty Name="NomineeName" ColumnName="NomineeName" />
+                <ScalarProperty Name="NomineeAddress" ColumnName="NomineeAddress" />
+                <ScalarProperty Name="Relation" ColumnName="Relation" />
+                <ScalarProperty Name="RegistrationDate" ColumnName="RegistrationDate" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="NomineeImageFileName" ColumnName="NomineeImageFileName" />
+                <ScalarProperty Name="NomineeNationalID" ColumnName="NomineeNationalID" />
+                <ScalarProperty Name="Nomineepercentage" ColumnName="Nomineepercentage" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="NomineeSignFileName" ColumnName="NomineeSignFileName" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_PFL_Amortization">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_PFL_Amortization">
+              <MappingFragment StoreEntitySet="tbl_PFL_Amortization">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="PFLoanID" ColumnName="PFLoanID" />
+                <ScalarProperty Name="InstallmentNumber" ColumnName="InstallmentNumber" />
+                <ScalarProperty Name="ReScheduleID" ColumnName="ReScheduleID" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Interest" ColumnName="Interest" />
+                <ScalarProperty Name="Principal" ColumnName="Principal" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Processed" ColumnName="Processed" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
+                <ScalarProperty Name="ProcessNumber" ColumnName="ProcessNumber" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="ConYear" ColumnName="ConYear" />
+                <ScalarProperty Name="ConMonth" ColumnName="ConMonth" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_PFLoan">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_PFLoan">
+              <MappingFragment StoreEntitySet="tbl_PFLoan">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="PFLoanID" ColumnName="PFLoanID" />
+                <ScalarProperty Name="LoanAmount" ColumnName="LoanAmount" />
+                <ScalarProperty Name="TermYear" ColumnName="TermYear" />
+                <ScalarProperty Name="TermMonth" ColumnName="TermMonth" />
+                <ScalarProperty Name="Interest" ColumnName="Interest" />
+                <ScalarProperty Name="Installment" ColumnName="Installment" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="IsApproved" ColumnName="IsApproved" />
+                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="RuleUsed" ColumnName="RuleUsed" />
+                <ScalarProperty Name="PayableAmount" ColumnName="PayableAmount" />
+                <ScalarProperty Name="CashLedgerID" ColumnName="CashLedgerID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_ProfitDistributionSummary">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_ProfitDistributionSummary">
+              <MappingFragment StoreEntitySet="tbl_ProfitDistributionSummary">
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+                <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+                <ScalarProperty Name="DistributableAmount" ColumnName="DistributableAmount" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="EditTime" ColumnName="EditTime" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="DistributedAmount" ColumnName="DistributedAmount" />
+                <ScalarProperty Name="SelfTotalProfit" ColumnName="SelfTotalProfit" />
+                <ScalarProperty Name="EmpTotalProfit" ColumnName="EmpTotalProfit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_User">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_User">
+              <MappingFragment StoreEntitySet="tbl_User">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="LoginName" ColumnName="LoginName" />
+                <ScalarProperty Name="UserFullName" ColumnName="UserFullName" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="EmailNotificationActive" ColumnName="EmailNotificationActive" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_UserPassword">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_UserPassword">
+              <MappingFragment StoreEntitySet="tbl_UserPassword">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_UserRedirected">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_UserRedirected">
+              <MappingFragment StoreEntitySet="tbl_UserRedirected">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="SessionID" ColumnName="SessionID" />
+                <ScalarProperty Name="LastLoginTime" ColumnName="LastLoginTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_UserRole">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_UserRole">
+              <MappingFragment StoreEntitySet="tbl_UserRole">
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ac_Cheque_Print">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.Ac_Cheque_Print">
+              <MappingFragment StoreEntitySet="Ac_Cheque_Print">
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="LedgerId" ColumnName="LedgerId" />
+                <ScalarProperty Name="BankInfo_Id" ColumnName="BankInfo_Id" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="ChequeDate" ColumnName="ChequeDate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ClientInfo_id" ColumnName="ClientInfo_id" />
+                <ScalarProperty Name="AccountNo" ColumnName="AccountNo" />
+                <ScalarProperty Name="ChequeType" ColumnName="ChequeType" />
+                <ScalarProperty Name="ChequeNo" ColumnName="ChequeNo" />
+                <ScalarProperty Name="ChequePrint_id" ColumnName="ChequePrint_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_ProfitDistributionDetail">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_ProfitDistributionDetail">
+              <MappingFragment StoreEntitySet="tbl_ProfitDistributionDetail">
+                <ScalarProperty Name="EmpProfit" ColumnName="EmpProfit" />
+                <ScalarProperty Name="SelfProfit" ColumnName="SelfProfit" />
+                <ScalarProperty Name="EmpContribution" ColumnName="EmpContribution" />
+                <ScalarProperty Name="SelfContribution" ColumnName="SelfContribution" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="DistributedAmount" ColumnName="DistributedAmount" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="IdentificationNumber" ColumnName="IdentificationNumber" />
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Instrument">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_Instrument">
+              <MappingFragment StoreEntitySet="tbl_Instrument">
+                <ScalarProperty Name="PreviousInstrumentId" ColumnName="PreviousInstrumentId" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="LastProcessDate" ColumnName="LastProcessDate" />
+                <ScalarProperty Name="FDRTax" ColumnName="FDRTax" />
+                <ScalarProperty Name="TDSonFDR" ColumnName="TDSonFDR" />
+                <ScalarProperty Name="BankCharge" ColumnName="BankCharge" />
+                <ScalarProperty Name="EntryForWPPF" ColumnName="EntryForWPPF" />
+                <ScalarProperty Name="EntryForGF" ColumnName="EntryForGF" />
+                <ScalarProperty Name="EntryForPF" ColumnName="EntryForPF" />
+                <ScalarProperty Name="AcruadIntarestAmount" ColumnName="AcruadIntarestAmount" />
+                <ScalarProperty Name="Closed" ColumnName="Closed" />
+                <ScalarProperty Name="InstrumentPhoto" ColumnName="InstrumentPhoto" />
+                <ScalarProperty Name="AccVoucherEntryID" ColumnName="AccVoucherEntryID" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="AccLedgerID" ColumnName="AccLedgerID" />
+                <ScalarProperty Name="PassVoucherMessage" ColumnName="PassVoucherMessage" />
+                <ScalarProperty Name="PassVoucher" ColumnName="PassVoucher" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="EditUserName" ColumnName="EditUserName" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="MaturityDate" ColumnName="MaturityDate" />
+                <ScalarProperty Name="MaturityPeriod" ColumnName="MaturityPeriod" />
+                <ScalarProperty Name="DepositDate" ColumnName="DepositDate" />
+                <ScalarProperty Name="Branch" ColumnName="Branch" />
+                <ScalarProperty Name="Institution" ColumnName="Institution" />
+                <ScalarProperty Name="InstrumentNumber" ColumnName="InstrumentNumber" />
+                <ScalarProperty Name="InstrumentType" ColumnName="InstrumentType" />
+                <ScalarProperty Name="InstrumentID" ColumnName="InstrumentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_Group_Maping">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_Group_Maping">
+              <MappingFragment StoreEntitySet="acc_Group_Maping">
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="EntryBy" ColumnName="EntryBy" />
+                <ScalarProperty Name="DateOfEntry" ColumnName="DateOfEntry" />
+                <ScalarProperty Name="Group_Id" ColumnName="Group_Id" />
+                <ScalarProperty Name="Group_MIS_Id" ColumnName="Group_MIS_Id" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="acc_tbl_Group_MIS">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.acc_tbl_Group_MIS">
+              <MappingFragment StoreEntitySet="acc_tbl_Group_MIS">
+                <ScalarProperty Name="MIS_Group_Name" ColumnName="MIS_Group_Name" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Instrument_Accured_Interest">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_Instrument_Accured_Interest">
+              <MappingFragment StoreEntitySet="tbl_Instrument_Accured_Interest">
+                <ScalarProperty Name="UsedProject" ColumnName="UsedProject" />
+                <ScalarProperty Name="OCode" ColumnName="OCode" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="AccuredInterestAmount" ColumnName="AccuredInterestAmount" />
+                <ScalarProperty Name="AccuredInterestDate" ColumnName="AccuredInterestDate" />
+                <ScalarProperty Name="InstrumentID" ColumnName="InstrumentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Instrument_Interest_Rate">
+            <EntityTypeMapping TypeName="YWCAPF_TestModel.tbl_Instrument_Interest_Rate">
+              <MappingFragment StoreEntitySet="tbl_Instrument_Interest_Rate">
+                <ScalarProperty Name="InterestYear" ColumnName="InterestYear" />
+                <ScalarProperty Name="EditDate" ColumnName="EditDate" />
+                <ScalarProperty Name="EditUser" ColumnName="EditUser" />
+                <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="InterestRate" ColumnName="InterestRate" />
+                <ScalarProperty Name="InstrumentID" ColumnName="InstrumentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

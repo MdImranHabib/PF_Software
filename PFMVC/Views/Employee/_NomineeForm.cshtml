@@ -1,0 +1,30 @@
+﻿@model DLL.tbl_NomineeInformation
+
+
+
+@using (Ajax.BeginForm("NomineeForm", "Employee",null, new AjaxOptions
+{
+	InsertionMode = InsertionMode.Replace,
+	HttpMethod = "POST",
+    OnSuccess = "updateSuccessNomineeForm"
+}, new { @id = "DialogForm1" }))
+{
+    @Html.AntiForgeryToken()
+<div id="update-message1" class="error"></div>
+    @Html.HiddenFor(model => model.EmpID)
+    @Html.HiddenFor(model => model.NomineeID)
+    <table>
+        <tr><td>@Html.Label("Nominee Name")</td><td>@Html.TextBoxFor(m => m.NomineeName, new { @class= "form-control"}) @Html.ValidationMessageFor(m => m.NomineeName)</td></tr>
+        <tr><td>@Html.Label("Nominee Address")</td><td>@Html.TextBoxFor(m => m.NomineeAddress, new { @class= "form-control"}) @Html.ValidationMessageFor(m => m.NomineeAddress)</td></tr>
+        <tr><td>@Html.Label("National ID")</td><td>@Html.TextBoxFor(m => m.NomineeNationalID, new { @class= "form-control"}) @Html.ValidationMessageFor(m => m.NomineeAddress)</td></tr>
+        <tr><td>@Html.Label("Payable Percentage")</td><td>@Html.TextBoxFor(m => m.Nomineepercentage, new { @class= "form-control"}) @Html.ValidationMessageFor(m => m.Nomineepercentage)</td></tr>
+        <tr><td>@Html.Label("Relation with Employee")</td><td>@Html.TextBoxFor(m => m.Relation, new { @class= "form-control"}) @Html.ValidationMessageFor(m => m.Relation)</td></tr>
+    </table>
+}
+
+
+<script>
+    $(function () {
+        $('.dateTimePicker').datepicker({ dateFormat: "dd/M/yy", changeYear: true, changeMonth: true });
+    });
+</script>

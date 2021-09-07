@@ -1,0 +1,69 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_Employee>
+
+@{
+    ViewBag.Title = "Employee Information";
+}
+
+<div class="alert alert-danger"><strong>@ViewBag.Message</strong> </div>
+
+  @using (Ajax.BeginForm("", "", null, new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessSalaryProcess"
+	}, new { @id = "DialogForm1" }))
+    {
+    
+    @*<div id="update-message1" class="error alert alert-danger"></div>*@
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" />
+    <table class="table table-striped table-condensed smaller">
+        <tr style="font-weight:bold; text-align:center">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+            <td>Email</td>
+            <td>Joining Date</td>
+            <td>PF Activation Date</td>
+            <td>OWN CONT</td>
+            <td>EMP CONT</td>
+               
+            <td>Loan</td>
+            <td>Profit</td>
+            <td>Designation Name</td>
+            <td>Department Name</td>
+            <td>Error</td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].IdentificationNumber) @Html.HiddenFor(m => m[i].IdentificationNumber)</td>
+                <td>@Html.DisplayFor(m => m[i].EmpName) @Html.HiddenFor(m => m[i].EmpName)</td>
+                <td>@Html.DisplayFor(m => m[i].Email) @Html.HiddenFor(m => m[i].Email)</td>
+                <td>
+                    @if (Model[i].JoiningDate.HasValue)
+                    {
+                        @Model[i].JoiningDate.Value.ToString("dd/MMM/yyyy") @Html.HiddenFor(m => m[i].JoiningDate) 
+                    }
+                </td>
+                <td>
+                    @if(Model[i].PFActivationDate.HasValue)
+                    {
+                        @Model[i].PFActivationDate.Value.ToString("dd/MMM/yyyy") @Html.HiddenFor(m => m[i].PFActivationDate)
+                    }
+                </td>
+                <td>@Html.DisplayFor(m => m[i].opOwnContribution.ToString("#,###,##0.00")) @Html.HiddenFor(m => m[i].opOwnContribution)</td>
+                <td>@Html.DisplayFor(m => m[i].opEmpContribution.ToString("#,###,##0.00")) @Html.HiddenFor(m => m[i].opEmpContribution)</td>
+                
+                <td>@Html.DisplayFor(m => m[i].opLoan.ToString("#,###,##0.00")) @Html.HiddenFor(m => m[i].opLoan)</td>
+                <td>@Html.DisplayFor(m => m[i].opProfit.ToString("#,###,##0.00")) @Html.HiddenFor(m => m[i].opProfit)</td>
+                <td>@Html.DisplayFor(m => m[i].opDesignationName) @Html.HiddenFor(m => m[i].opDesignationName)</td>
+                <td>@Html.DisplayFor(m => m[i].opDepartmentName) @Html.HiddenFor(m => m[i].opDepartmentName)</td>
+                <td style="color:red">@Html.DisplayFor(m => m[i].PreImportMessage)</td>
+            </tr>
+        }
+    </table>
+<hr />
+        @*@Html.ActionLink("Process Data", "MonthlyContributionSubmit", "Salary", new{ _dtMonth = ViewBag.Month }, new { @class="btn btn-danger"})*@
+        @Html.ActionLink("Re-Upload", "Import", "Employee", new { @class="btn btn-danger"})
+        @Html.ActionLink("Employee List", "Index", "Employee",null, new { @class="btn btn-link"})
+  }

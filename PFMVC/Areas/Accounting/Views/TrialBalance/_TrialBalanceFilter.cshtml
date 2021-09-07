@@ -1,0 +1,51 @@
+﻿
+@{
+    Layout = null;
+}
+
+<fieldset>
+    <legend>Trial Balance</legend>
+        
+    <div class="pull-left form-inline clear">
+        @Html.DropDownList("NatureID", (SelectList)ViewData["Nature"], "-All Nature-", new { @class = "form-control next", @id = "natureDrop" })
+        @Html.DropDownList("GroupID", (SelectList)ViewData["Group"], "-All Group-", new { @class = "form-control next", @id = "groupDrop" })
+        @Html.DropDownList("LedgerID", (SelectList)ViewData["Ledger"], "-All Ledger-", new { @class = "form-control next", @id = "ledgerDrop" })
+        <input type="text" value="" class="form-control input-xs dateTimePickerNoFuture strongBlue" placeholder="@DateTime.Now" readonly="true" id="toDate"/>
+        <button class="btn btn-info btn-sm" onclick="Filter()" id="filter">Filter</button>
+        </div>
+    
+        <div class="pull-right">
+        <button class="btn btn-success btn-sm" onclick="getreport()" id="report">Report</button>    
+        </div>
+    <br />
+    <hr />
+    <div id="TrialBalanceModel"></div>
+</fieldset>
+<script>
+
+    function Filter()
+    {
+        var l = $('#ledgerDrop').val();
+        var n = $('#natureDrop').val();
+        var g = $('#groupDrop').val();
+
+        var viewUrl = "/Accounting/TrialBalance/GetTrialBalance/?ledgerID="+l+"&natureID="+n+"&groupID="+g+"&toDate="+$('#toDate').val();
+        $.get(viewUrl, function (data) {
+            $("#TrialBalanceModel").html('');
+            $('#TrialBalanceModel').css('display', 'none');
+            $('#TrialBalanceModel').fadeIn(1000).html(data);
+            
+        })
+    }
+
+    function getreport() {
+        //var d = new Date();
+        //var x = document.querySelector('input[name="ReportOption"]:checked').value;
+        //var fromDate = $('#txtFromDate').val();
+        var toDate = $('#toDate').val();
+        var viewURL = '../../Accounting/TrialBalance/Report/?toDate=' + toDate;
+        //window.open(viewURL, 'window name', 'window settings')
+        FancyBox(viewURL);
+    }
+
+</script>

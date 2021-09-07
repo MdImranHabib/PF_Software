@@ -1,0 +1,7 @@
+﻿ 09 sep
+ --------
+ member closing rules change
+ EmployeeContribution
+ EmployerContribution
+ Profit 
+ these datatype change to bit

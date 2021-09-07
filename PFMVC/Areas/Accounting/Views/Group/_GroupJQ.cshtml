@@ -1,0 +1,183 @@
+﻿
+<script>
+var filter;
+var name;
+var groupPartName;
+
+
+function updateSuccess(data) {
+
+    if (data.Success == true) {
+        ShowDropDownMessage(data.Message);
+        $("#update-message1").html("").removeClass("alert alert-danger");
+        SuccessNotify(data.Message);
+        GetGroupList($('#drop').val(), $("#drop option:selected").text());
+        //now clearing all necessary field in the form
+        $("#ParentGroupID").val('');
+        $("#GroupName").val('');
+        $("#underGroup").val('');
+        $("#GroupID").val('0');
+        $("#drop").focus();
+    }
+    else {
+        $("#update-message1").html(data.ErrorMessage).addClass("alert alert-danger");
+        $("#update-message1").show();
+    }
+}
+
+$("#drop").unbind("change");
+$("#drop").live("change", (function () {
+    filter = $('#drop').val();
+    name = $("#drop option:selected").text();
+    GetGroupList(filter, name);
+}));
+
+function GetGroupList(fltr, nme) {
+    var viewUrl = rootPath + "/Accounting/Group/GetGroupName/?filter=" + fltr + "&name=" + nme;
+    $.get(viewUrl, function (data) {
+        $("#optionDiv").html(data);
+    })
+}
+
+
+$(document).ready(function () {
+    $(document).unbind("keyup");
+    $('.next').unbind("keyup");
+    $('.next').live("keyup", function (e) {
+        var n = $(".next").length;
+
+        if (e.which == 13) { //Enter key
+            e.preventDefault(); //to skip default behavior of the enter key
+            var nextIndex = $('.next').index(this) + 1;
+            if (nextIndex < n)
+                $('.next')[nextIndex].focus();
+            else {
+                $('.next')[nextIndex - 1].blur();
+
+            }
+        }
+    });
+    $("#drop").focus();
+})
+
+
+function save() {
+    $("#DialogForm1").submit();
+}
+
+   
+
+function deleteGroup(id) {
+    var viewUrl = rootPath + "/Accounting/Group/DeleteGroupPossible/?GroupID=" + id;
+
+    $.get(viewUrl, function (data) {
+
+        if (data.Success == true) {
+            $("#ModalSpace").html(data.Message),
+            $("#ModalSpace").dialog({
+                width: 'auto',
+                resizable: false,
+                modal: true,
+                show: "blind",
+                hide: "blind",
+
+                title: "Delete",
+                buttons: [{
+                    text: "Yes", click: function () {
+                        viewUrl = rootPath + "/Accounting/Group/DeleteGroupConfirm/?GroupID=" + id;
+                        $.post(viewUrl, function (data) {
+
+                            if (data.Success == true) {
+                                $("#ModalSpace").dialog('close');
+                                $("#ModalSpace").html('');
+                                ShowDropDownMessage(data.Message);
+                                SuccessNotify(data.Message);
+
+                                var viewUrl = rootPath + "/Accounting/Group/GroupForm/?GroupID=0";
+                                $.get(viewUrl, function (data) {
+                                    $("#mainDiv").html("");
+                                    $("#mainDiv").html(data);
+                                })
+                                GetGroupList(0, "All");
+                            }
+                            else {
+                                $("#ModalSpace").html("Something Problem while deleting!!!");
+                            }
+
+                        })
+                    }
+                }, {
+                    text: "Cancel",
+                    click: function () {
+                        $(this).dialog("close");
+                    }
+                }]
+            });
+        }
+        else {
+            ShowModalMessage(data.ErrorMessage);
+        }
+    });
+    return false;
+}
+
+
+$('#underGroup').live('blur', function () {
+    $('#GNL td.can_be_selected').removeClass('selectedRow');
+    $('.editBtn').removeClass("hidden");
+}).live('focus', function () {
+    FilterAccountHeadTable();
+    $('.editBtn').addClass("hidden");
+});
+
+//searching ledgername and should change the index to -1 again!
+$('#underGroup').live('keyup', function (e) {
+    if ((e.keyCode >= 97 && e.keyCode <= 122) || (e.keyCode >= 65 && e.keyCode <= 90) || (e.keyCode >= 48 && e.keyCode <= 57) || e.keyCode == 8) {
+        FilterAccountHeadTable();
+        $('#underGroup').css({ "background-color": "pink" });
+        $('#ParentGroupID').val("");
+    }
+});
+
+function FilterAccountHeadTable() {
+    //InfoNotify("Key Press");
+    index = -1;
+    inp = $('#underGroup').val();
+
+    //InfoNotify(inp);
+    //This should ignore first row with th inside
+    $("#GNL tr:not(:has(>th))").each(function () {
+        if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+            // Show the row (in case it was previously hidden)
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
+    });
+}
+
+function NewGroup() {
+    var viewUrl = rootPath + "/Accounting/Group/GroupForm/?GroupID=0";
+
+    $.get(viewUrl, function (data) {
+        $("#mainDiv").html("");
+        $("#mainDiv").html(data);
+    });
+}
+
+function getGroupTree() {
+    var viewURL = '../../Accounting/Group/ReportGroupTree/';
+    alert(viewURL);
+    FancyBox(viewURL);
+}
+
+function getTreeView() {
+    var viewUrl = rootPath + "/Accounting/Group/LedgerTreeView";
+    $.get(viewUrl, function (data) {
+        ShowModalMessage(data);
+    });
+
+    return false;
+}
+
+</script>

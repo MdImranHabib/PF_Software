@@ -1,0 +1,356 @@
+﻿@{
+    ViewBag.Title = "ClosePFMember";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <fieldset>
+            <legend>Member Information</legend>
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+            }
+            @using (@Html.BeginForm("ClosePFMember", "Employee", FormMethod.Get))
+            {
+                <input type="hidden" value="@ViewBag.EmpID" name="empId" />
+                <table class="table table-striped table-condensed" style="text-align: right; font-size: smaller">
+                    <tr>
+                        <td style="font-weight: bold">Member ID</td>
+                        <td style="text-align: right">@ViewBag.IdentificationNumber</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Member Name</td>
+                        <td style="text-align: right">@ViewBag.EmpName</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">PF Activation Date</td>
+                        <td style="text-align: right">@ViewBag.PFActivationDate</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; vertical-align: middle">Closing Date</td>
+                        <td>
+                            <input type="text" id="closingDate" class="dateTimePicker blueFont bold" readonly="readonly" name="closingDate" placeholder="Closing Date" style="float:right; text-align:right;" value="@ViewBag.ClosingDate"/></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; vertical-align: middle">Profit Adjustment Rate</td>
+                        <td>
+                            <input type="text" id="profitRate" class="blueFont bold" name="profitRate" placeholder="Profit Rate" style="float:right; text-align:right;" value="@ViewBag.ProfitRate" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Membership Duration</td>
+                        <td style="text-align: right">@ViewBag.MembershipDuration</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Initial Balance</td>
+                        <td style="text-align: right">@ViewBag.InitialBalance</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Payable (Self Con.)</td>
+                        <td style="text-align: right" id="SeflContribution">@ViewBag.Payable_selfContribution</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Payable (Employer Con.)</td>
+                        <td style="text-align: right" id="EmpContribution">@ViewBag.Payable_empContribution</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Payable (Self Profit)</td>
+                        <td style="text-align: right" id="SeflProfit">@ViewBag.Payable_OwnProfit</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Payable (Emp. Profit)</td>
+                        <td style="text-align: right" id="EmpProfit">@ViewBag.Payable_EmpProfit</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Loan Adjustment</td>
+                        <td style="text-align: right">@ViewBag.UnpaidLoan </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Loan Interest</td>
+                        <td style="text-align: right">@ViewBag.UnpaidLoanInterest </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Forfeiture Amount</td>
+                        <td style="text-align: right">@ViewBag.ForfeitureAmount</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold">Total Payable</td>
+                        <td style="text-align: right; color: blue; font-weight: bold">@ViewBag.TotalPayable</td>
+                    </tr>
+                    <tr style="font-weight: bold">
+                        <td>Membership Status</td>
+                        <td style="text-align: right" id="membershipStatus">@ViewBag.MembershipStatus</td>
+                    </tr>
+                </table>
+                <button type="submit" class="btn btn-primary btn-xs btn-block">Submit closing date</button>      
+            }
+        </fieldset>
+    </div>
+    <div class="col-md-3">
+        <fieldset><legend>Contribution Detail</legend></fieldset>
+        @if (ViewBag.ContributionDetail != null)
+        {
+        
+            <table class="table table-condensed table-striped smaller">
+                <thead style="font-weight: bold">
+                    <tr>
+                        <td>Month</td>
+                        <td>Self Cont.</td>
+                        <td>Emp. Cont.</td>
+                    </tr>
+                </thead>
+
+                @foreach (var item in ViewBag.ContributionDetail)
+                {
+                    <tr>
+                        <td>@item.ContrebutionDate.ToString("MMM/yyyy")</td>
+                        <td>@item.SelfContribution.ToString("##,##,##0.00")</td>
+                        <td>@item.EmpContribution.ToString("##,##,##0.00")</td>
+
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+    <div class="col-md-3">
+        <fieldset><legend>Loan Detail</legend></fieldset>
+        @if (ViewBag.UnpaidDetail != null)
+        {
+            <table class="table table-condensed table-striped smaller">
+                <thead style="font-weight: bold">
+                    <tr>
+                        <td>Loan No</td>
+                        <td>Ins. No</td>
+                        <td>Ins. Amount</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+                @foreach (var item in ViewBag.UnpaidDetail)
+                {
+                    <tr>
+                        <td>@item.PFLoanID</td>
+                        <td>@item.InstallmentNumber</td>
+                        <td>@item.Amount.ToString("##,##,##0.00")</td>
+                        <td>@item.PaymentStatus</td>
+                    </tr>
+                }
+            </table>
+        }
+    </div>
+    <div class="col-md-3">
+        <fieldset><legend>Final Settlement Voucher</legend></fieldset>
+        @using (Ajax.BeginForm("Settlement", "Employee", null, new AjaxOptions
+        {
+            InsertionMode = InsertionMode.Replace,
+            HttpMethod = "POST",
+            OnSuccess = "updateSuccessSettlement"
+        }, new { @id = "DialogFormSettlement" }))
+        {
+            @Html.AntiForgeryToken()
+            <div id="update-message-settlement"></div>
+            @Html.Hidden("EmpID", (int)ViewBag.EmpID);
+            @Html.Hidden("IdentificationNumber", (string)ViewBag.IdentificationNumber);
+            @Html.Hidden("EmpName", (string)ViewBag.EmpName)
+            <input id="SelfCon" type="hidden" value="@ViewBag.Self" name="SelfCon"/>
+            <input id="SelfPro" type="hidden" value="@ViewBag.Profit" name="SelfPro"/>
+             
+                                                                                      //@Html.Hidden("SelfCon", (decimal)ViewBag.Payable_selfContribution )
+                                                                                      //@Html.Hidden("EmpCon", (decimal)ViewBag.Payable_empContribution + (decimal)ViewBag.Payable_EmpProfit)
+
+            if (!string.IsNullOrEmpty(ViewBag.ClosingDate))
+            {
+            @Html.Hidden("PFClosingDate", (string)ViewBag.ClosingDate)
+            }
+            <table class="table table-condensed table-striped smaller">
+                <tr style="font-weight: bold">
+                    <td style="max-width: 50px">Head of Account</td>
+                    <td>Dr.</td>
+                    <td>Cr.</td>
+                </tr>
+                <tr>
+                    <td>Members Fund</td>
+                    <td>
+                        <input id="MemberFund" type="hidden" value="@ViewBag.TotalPayables" name="MembersFund" />
+                        @ViewBag.TotalPayables</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Loan Adjustment</td>
+                    <td></td>
+                    <td>
+                        <input id="UnpaidLoan" type="hidden" value="@ViewBag.UnpaidLoan" name="UnpaidLoan" />
+                        @ViewBag.UnpaidLoan</td>
+                </tr>
+                <tr>
+                    <td>Loan Adjustment Interest</td>
+                    <td></td>
+                    <td>
+                        <input id="UnpaidLoanInterest" type="hidden" value="@ViewBag.UnpaidLoanInterest" name="UnpaidLoanInterest" />
+                        @ViewBag.UnpaidLoanInterest</td>
+                </tr>
+                <tr>
+                    <td>Profit Adjustment </td>
+
+                    <td>
+                        <input id="AdjustedProfit" type="hidden" value="@ViewBag.AdjustedProfit" name="AdjustedProfit" />
+                        @ViewBag.AdjustedProfit
+                    </td>
+                    <td></td>
+                </tr>
+
+                <tr>
+                    <td>Forfeiture</td>
+                    <td></td>
+                    <td>
+                        <input id="ForfitureAmount"  value="@ViewBag.ForfeitureAmount" name="ForfeitureAmount" readonly/>
+                        @* @ViewBag.ForfeitureAmount*@</td>
+                </tr>
+                <tr style="vertical-align: central !important">
+
+                    <td>
+                        @Html.TextBox("LedgerName", null, new { id = "txtLedger", style = "max-width: 100px;", @class = "blueFont" })
+                       @* @Html.DropDownList("LedgerName", (SelectList)ViewData["LedgerOptions"], string.Empty, new { @class = "blueFont", style = "max-width:100px" })*@
+                    </td>
+                    <td></td>
+                    <td>
+                        <input id="Balance" value="@ViewBag.Balance" name="Balance" onchange="CalculateForfiture()"/>
+                        @*@ViewBag.Balance*@</td>
+                </tr>
+                <tr style="font-weight: bold">
+                    <td>Total</td>
+                    <td>@ViewBag.TotalDebit</td>
+                    @if (@ViewBag.TotalDebit != @ViewBag.TotalCredit)
+                    { 
+                        <td>@ViewBag.TotalDebit</td>
+                    }
+                    else
+                    {
+                        <td>@ViewBag.TotalCredit</td>
+                    }
+                </tr>
+            </table>
+            <div class="alert alert-warning smaller">Voucher will be passed</div>
+            <input type="text" name="Comment" placeholder="Add some comment..." class="form-control" />
+            <br />
+            <input type="submit" class="btn btn-danger btn-xs btn-block" value="Confirm Settlement" />
+        }
+    </div>
+</div>
+<br />
+<br />
+<br />
+<div class="row">
+    <div class="col-md-12">
+        <div style="text-align: center">
+            @Html.ActionLink("PF Member List", "PFMembers", "Employee", null, new { @class = "btn btn-default btn-xs btn-block", @style = "float:left" })
+        </div>
+    </div>
+</div>
+<div id="DialogSpace1"></div>
+<div id="ModalSpace" title="">
+    <p id="ModalMessage"></p>
+</div>
+<div id="ModalInformation" title=""></div> 
+<script src="~/Scripts/jquery-1.8.2.min.js"></script>
+<script type="text/javascript">
+    //Added by Md. Masud
+
+
+    $(document).ready(function () {
+
+        $("#ui-datepicker-div").hide();
+
+        $("#txtLedger").autocomplete({
+            source: rootPath + "/Employee/AutocompleteByLedgerOptions",
+            minLength: 1,
+            select: function (event, ui) {
+                event.preventDefault();
+                $('input[name="txtLedger"]').val(ui.item.label);
+                $("LedgerName").val(ui.item.value);
+                // alert(list);
+                return false;
+            },
+            focus: function (event, ui) {
+                event.preventDefault();
+                $("#txtLedger").val(ui.item.label);
+            },
+        });
+    });
+
+    function CalculateForfiture() {
+        var balance = $("#MemberFund").val().replace(/,/g, "");
+        var loanAdjustment = $("#UnpaidLoan").val() == "" ? 0 : $("#UnpaidLoan").val().replace(/,/g, "");
+        var payable = $("#Balance").val().replace(/,/g, "");;
+        var forfiture = parseFloat(balance) - (parseFloat(payable) + parseFloat(loanAdjustment));
+        if (forfiture < 0) {
+            ShowModalMessage("You can not settled more than contribution amount");
+            return;
+        }
+        $("#ForfitureAmount").val(forfiture);
+    }
+
+    function MembershipClose(empID) {
+        var closingDate = $("#closingDate").val();
+
+        //$(document).ready(function () {
+        //    $('#ui-datepicker-div').hide();
+        //});
+
+        if (closingDate) {
+            $("#ModalSpace").html("Are you sure you want to close member?"),
+                    $("#ModalSpace").dialog({
+                        width: 'auto',
+                        resizable: false,
+                        modal: true,
+                        show: "blind",
+                        hide: "blind",
+
+                        title: "Close membership " + empID + "?",
+                        buttons: [{
+                            text: "Yes", click: function () {
+                                viewUrl = rootPath + "/Employee/ClosePFMember/?empId=" + empID + "&closingDate=" + closingDate;
+                                $.post(viewUrl, function (data) {
+
+                                    if (data.Success == true) {
+                                        $("#membershipStatus").text("Closed").css("color", "red").css("font-weight", "bold");
+                                        $("#ModalSpace").dialog('close');
+                                        $("#ModalSpace").html('');
+                                        ShowDropDownMessage(data.Message);
+                                    }
+                                    else {
+
+                                        $("#ModalSpace").html(data.ErrorMessage);
+                                    }
+                                })
+                            }
+                        }, {
+                            text: "Cancel",
+                            "class": "btn red",
+                            click: function () {
+                                $(this).dialog("close");
+                            }
+                        }]
+                    });
+        }
+        else {
+            alert("please select closing date...");
+        }
+    }
+
+    function save() {
+        debugger;
+        $("#DialogFormSettlement").submit();
+    }
+
+    function updateSuccessSettlement(data) {
+        if (data.Success == false) {
+            $("#update-message-settlement").removeClass("alert alert-success").html(data.ErrorMessage).addClass("alert alert-danger");
+        }
+        else {
+            $("#update-message-settlement").removeClass("alert alert-danger").html(data.Message).addClass("alert alert-success");
+        }
+    }
+
+
+</script>
+

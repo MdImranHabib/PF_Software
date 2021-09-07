@@ -1,0 +1,205 @@
+﻿@{
+    ViewBag.Title = "Loan Payment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-5">
+<fieldset>
+    <legend>Loan payment from excel</legend>
+    <div >
+    <strong class="error">@ViewBag.ErrorMessage</strong>
+     @using (Html.BeginForm("ImportExcel", "Import", FormMethod.Post, new { enctype = "multipart/form-data" }))
+     {
+         <table class="table table-striped">
+             <tr>
+                 <td><input  type="file"  id="FileUpload1" name="FileUpload1" class="btn btn-info"/></td>
+             </tr>
+             <tr><td><input  type="submit" id="Submit" name="Submit" value="Submit" class="btn btn-success"/></td></tr>
+         </table>
+     }
+        <br />
+        <div class="alert alert-danger">
+            Recently uploaded...
+        </div>
+        
+        <table class="table">
+            <tr>
+                <th>File Name</th>
+                
+            </tr>
+            @foreach(var item in ViewBag.RecentUploaded)
+            {
+                <tr>
+                    <td>@item
+                    @Html.ActionLink("Rollback Process!", "RollbackProcess", "Import", new{Area ="Loan", FileName=item}, new{ @class="btn btn-primary btn-xs", @style="float:right"})</td>
+                </tr>
+            }
+        </table>
+
+
+        </div>
+    </fieldset>
+    </div>
+@*    <div class="col-md-4">
+        <fieldset>
+            <legend>Loan payment from PF savings</legend>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    @using(@Html.BeginForm("LoanPaymentFromSalary", "Import",new {Area = "Loan"}, FormMethod.Post))
+                    {
+                        <table class="table">
+                            <tr>
+                                <td>
+                                    <input type="text" name="paymentMonth" class="dateTimePicker form-control " readonly="readonly" placeholder="Select month" style=" width: 200px" /></td>
+                                <td>
+                                    <button type="submit" class="btn btn-success">Process</button>
+                                </td>
+                            </tr>
+                        </table>
+                    }
+                </div>
+            </div>
+        </fieldset>
+    </div>*@
+     <div class="col-md-4">
+        <fieldset>
+            <legend>Loan payment</legend>
+            <div class="row">
+                <div class="col-md-12">
+                        <table class="table col-md-12">
+                            <tr>
+                                <td class="table col-md-3">
+                                    Employee ID
+                                </td>
+                                <td class="table col-md-8">
+                                    <input type="text" class="form-control" id="EmployeeId"  name="EmployeeId" placeholder="Select Employee ID"/>
+                                     <input  type="hidden" id="Employee"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Loan Id
+                                </td>
+                                <td>
+                                    <input type="text" id="LoanId" name="LoanId" placeholder="Select Loan ID" />
+                                    <input type="hidden" id="Loan"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Installment Amount
+                                </td>
+                                <td>
+                                    <input type="text" class="target form-control Next" id="InstallmentAmount" name="InstallmentAmount" readonly="readonly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Installment No.
+                                </td>
+                                <td>
+                                    <input type="text" class="target form-control Next" id="InstallmentNo" name="InstallmentNo" readonly="readonly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Balance
+                                </td>
+                                <td>
+                                    <input type="text" class="target form-control Next" id="Balance" name="Balance" readonly="readonly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Interest of this Month
+                                </td>
+                                <td>
+                                    <input type="text" class="target form-control Next" id="Interest" name="Interest" readonly="readonly"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   Loan Settlement<input type="radio" style="margin-left:1%" id="Radio" name="Radio" value="Yes"/> 
+                                </td>
+                                <td>
+                                    Mounthly Payment<input type="radio" style="margin-left:1%" id="Radio_1" name="Radio" value="No"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                   Payment Date
+                                </td>
+                                <td>
+                                    <input type="text" id="PaymentMonth" name="paymentMonth" class="dateTimePicker form-control col-md-12" placeholder="Select Date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <button class="btn btn-success" onclick="Save()">Process</button>
+                                </td>
+                            </tr>
+                        </table>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="col-md-2 pull-right" style="font-size:smaller">
+        <fieldset><legend>Instruction</legend>
+        <p class="alert alert-warning">
+            <label style="color:green; font-weight:bold">Excel file should contain the following header with correct spelling...</label><br /><br />
+        </p>
+        <table class="table table-condensed table-striped">
+            <thead style="font-weight: bold">
+                <tr>
+                    <td>Header</td>
+                    <td>Cell Type</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tr>
+                <td>Name</td>
+                <td>Text</td>
+                <td>*</td>
+            </tr>
+            <tr>
+                <td>ID</td>
+                <td>Text</td>
+                <td>*</td>
+            </tr>
+            <tr>
+                <td>Installment Amount</td>
+                <td>Number</td>
+                <td>*</td>
+            </tr>
+        </table>
+        
+            @Html.ActionLink("Download sample excel", "SampleLoanPaymentSheet", "Download", new { Area = "" }, new { @class = "link" })
+            </fieldset>
+    </div>
+    <div class="clearfix"></div>
+    <br />
+    <br />
+    <div class="alert alert-info">
+        You will upload the salary excel file with required file format. After that you will be redirected to a validation page to 
+        inform you if any error exist in your excel file. Iff everything correct loan installment information will be processed!
+        <strong><em>This time, we will store your uploaded salary file to our server!</em></strong>
+        <br />IFF
+        <ul>
+            <li>Necessary installment not found for that loan ID it's an error and process will not be executed.</li>
+            <li>Currently, if uploaded amount more than required amount we are not process that further! will be implemented on stakeholder business logic.</li>
+
+        </ul>
+    </div>
+</div>
+
+<div id="dvPreImport" ></div>
+
+
+@section scripts{
+    <script src="~/Scripts/custom/ImportEmployee.js"></script>
+    }

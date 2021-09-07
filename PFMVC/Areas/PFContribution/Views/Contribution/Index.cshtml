@@ -1,0 +1,107 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-10">
+        <div class="col-md-3">
+            Contribution Month
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="conMonth" name="conMonth" />
+        </div>
+    </div>
+    <div class="col-md-10">
+        <br />
+        <div class="col-md-3">
+            Contribution Year
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="conYear" name="conYear" />
+        </div>
+    </div>
+    <div class="col-md-10">
+        <br />
+        <div class="col-md-3">
+            Contribution Start Date
+        </div>
+        <div class="col-md-3">
+            <input type="text" id="date" name="date" class="dateTimePickerNoFuture form-control" readonly="readonly" @*style="width: 120px;"*@ />
+        </div>
+    </div>
+    <div class="col-md-10">
+        <br />
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3" style="float: left;">
+            <input type="button" class="btn btn-info" value="Save" onclick="SaveContribution()" id="btnSave" />
+        </div>
+    </div>
+    <br />
+</div>
+<br />
+<div style="clear: both"></div>
+<div class="col-md-12">
+    <div class="col-md-12 alert alert-info">
+        <div>
+            After adding contribution for the month, Pass the contribution Voucher with Mapped Account
+        </div>
+    </div>
+</div>
+<div class="col-md-12" id="SalaryMonthRecord">
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        function SaveContribution() {
+            $('#btnSave').attr("disabled", true);
+            var conMonth = $("#conMonth").val();
+            var conYear = $("#conYear").val();
+            var date = $("#date").val();
+            if (conMonth !== "" && conYear !== "" && date !== "") {
+                $.ajax({
+                    url: rootPath + "/PFContribution/Contribution/MonthlyContributionSave",
+                    type: 'post',
+                    dataType: 'json',
+                    data: { conMonth: conMonth, conYear: conYear, date: date },
+                    success: function (result) {
+                        if (result.Success == true) {
+                            $('#btnSave').attr("disabled", false);
+                            alert(result.Message);
+                            ShowDropDownMessage(result.Message);
+                            setTimeout(function () { location.reload(); }, 4500);
+
+                        }
+                        else {
+                            ShowDropDownMessage(result.ErrorMessage);
+                            $('#btnSave').attr("disabled", false);
+                        }
+                    }
+
+
+                });
+
+            }
+            else {
+                ShowDropDownMessage("Pl's select Contributioon & Date");
+            }
+            var viewURL = rootPath + "/PFContribution/Contribution/SalaryMonthRecord/";
+            $.get(viewURL, function (data) {
+                $("#SalaryMonthRecord").html("").html(data);
+            });
+        }
+
+        var viewURL = rootPath + "/PFContribution/Contribution/SalaryMonthRecord/";
+        $.get(viewURL, function (data) {
+            $("#SalaryMonthRecord").html("").html(data);
+        });
+
+
+
+    </script>
+
+}
+

@@ -1,0 +1,55 @@
+﻿@{
+    Layout = null;
+    }
+
+<fieldset>
+    <legend>Receipt & Payment</legend>
+        
+    <div class="pull-left form-inline">
+            <input type="text" value="" class="form-control input-sm dateTimePickerNoFuture strongBlue" placeholder="From Date" readonly="readonly" id="fromDate"/> - 
+        <input type="text" value="" class="form-control input-sm dateTimePickerNoFuture strongBlue" placeholder="To Date" readonly="true" id="toDate"/>
+        <button class="btn btn-info btn-xs" onclick="Filter()" id="filter">Filter</button>
+        
+        </div>
+    
+        <div class="pull-right">
+            <button class="btn btn-success btn-xs pull-right" onclick='GetRPReport($("#fromDate").val(), $("#toDate").val())' id="report">Report</button>   
+        </div>
+</fieldset>
+<br />
+    <div id="RPModel"></div>
+<script>
+
+    function Filter()
+    {
+        var f = $('#fromDate').val();
+        var t = $('#toDate').val();
+
+        var viewUrl =rootPath + "/Accounting/RP/GetRP/?fromDate=" + f + "&toDate=" + t;
+        $.get(viewUrl, function (data) {
+            $("#RPModel").html('');
+            $('#RPModel').css('display', 'none');
+            $('#RPModel').fadeIn(1000).html(data);
+        })
+    }
+
+    function getreport() {
+        //var d = new Date();
+        //var x = document.querySelector('input[name="ReportOption"]:checked').value;
+        //var fromDate = $('#txtFromDate').val();
+        //var toDate = $('#toDate').val();
+        //var viewURL = rootPath + '../../Accounting/TrialBalance/Report/?toDate=' + toDate;
+        //window.open(viewURL, 'window name', 'window settings')
+    }
+
+    $(document).ready(function () {
+
+        if ($.cookie("ckFromDate")) {
+            $("#fromDate").val($.cookie("ckFromDate"));
+        }
+        if ($.cookie("ckToDate")) {
+            $("#toDate").val($.cookie("ckToDate"));
+        }
+    })
+
+</script>

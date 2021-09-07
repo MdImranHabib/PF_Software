@@ -1,0 +1,38 @@
+﻿@model DLL.ViewModel.VM_MembershipClosingRules
+
+@{
+    Layout = null;
+}
+
+
+
+
+@using (Ajax.BeginForm("MembershipClosingRulesForm", "MembershipClosed", new { Area = "PFSettings" }, new AjaxOptions
+{
+    InsertionMode = InsertionMode.Replace,
+    HttpMethod = "POST",
+    OnSuccess = "updateSuccessPFMCRulesForm"
+}, new { @id = "DialogForm1" }))
+{
+    
+<div id="update-message1" class="error"></div>
+    @Html.HiddenFor(model => model.ROWID)
+    <table>
+        <tr><td>@Html.LabelFor(m => m.PFDurationInMonth)</td><td>@Html.TextBoxFor(m => m.PFDurationInMonth, new { @class="form-control", @style="text-align:center"}) @Html.ValidationMessageFor(m => m.PFDurationInMonth)</td></tr>
+        <tr><td>Own Part</td><td>@Html.TextBoxFor(m => m.OwnPartPercent, new { @class = "form-control", @style = "text-align:center" })</td><td>%</td></tr>
+        <tr><td>Employer Part</td><td>@Html.TextBoxFor(m => m.EmployerPartPercent, new { @class = "form-control", @style = "text-align:center" })</td><td>%</td></tr>
+        <tr><td>Own Profit</td><td>@Html.TextBoxFor(m => m.OwnProfitPercent, new { @class = "form-control", @style = "text-align:center" })</td><td>%</td></tr>
+        <tr><td>Emp. Profit</td><td>@Html.TextBoxFor(m => m.EmpProfitPercent, new { @class = "form-control", @style = "text-align:center" })</td><td>%</td></tr>
+        @if (Model.EffectiveFrom != null)
+        {
+            <tr><td>@Html.LabelFor(m => m.EffectiveFrom)</td><td>@Html.TextBoxFor(m => m.EffectiveFrom, "{0:dd'/'MMM'/'yyyy}", new { @class = "dateTimePicker form-control", @readonly = "readonly" }) @Html.ValidationMessageFor(m => m.EffectiveFrom)</td></tr>
+        }
+        else
+        {
+             
+            <tr><td>@Html.LabelFor(m => m.EffectiveFrom)</td><td>@Html.TextBoxFor(model => model.EffectiveFrom, new { @class = "dateTimePicker form-control", @readonly = "readonly" })  @Html.ValidationMessageFor(m => m.EffectiveFrom)</td></tr>
+        }
+    </table>
+    <label style="font-size:smaller; color:red;">Deactivated rule cannot be Re-activate again.</label><br />
+    
+}

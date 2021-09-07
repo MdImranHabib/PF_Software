@@ -1,0 +1,100 @@
+﻿@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-4">
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanList" checked="checked" onclick="HideShow()"/><strong>Loan List</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="LoanClosed" onclick="HideShow()"/><strong>Loan Closed</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="UnpaidLoanWithDate" onclick="HideShow()"/><strong>Unpaid Loan Till Today</strong>
+                <br />
+            </label>
+            <label class="radio">
+                <input type="radio" name="ReportOptionLoan" value="PaymentDetail" onclick="HideShow()"/><strong>Loan Payment Detail</strong>
+                <br />
+            </label>
+        </div>
+        <div class="pull-right">
+            <table class="table table-striped" style="font-weight: bold">
+                <tr id="Loantr" style="display:none">
+                    <td>Loan ID</td>
+                    <td>
+                        <input type="text" class="form-control" id="txtLoanID" /></td>
+                </tr>
+                <tr>
+                    <td>From Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtFromDateLoan" /></td>
+                </tr>
+                <tr>
+                    <td>To Month</td>
+                    <td>
+                        <input type="text" class="dateTimePicker form-control" id="txtToDateLoan" /></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-12">
+
+        <table class="pull-left">
+            <tr>
+                <td>
+                    <input type="button" value="Report" onclick="GenerateLoanReport('PDF')" class="btn btn-warning" /></td>
+                <td>
+                    <input type="button" value="Excel" onclick="GenerateLoanReport('Excel')" class="btn btn-success" /></td>
+                <td>
+                    <input type="button" value="Word" onclick="GenerateLoanReport('Word')" class="btn btn-info" /></td>
+            </tr>
+        </table>
+        <input type="button" value="Remove Filter" id="RemoveFilterLoan" class="btn btn-danger pull-right" />
+    </div>
+
+</div>
+
+
+<script>
+    function HideShow() {
+        var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+        if (x == "PaymentDetail") {
+            $("#Loantr").show();
+        } else {
+            $("#Loantr").hide();
+        }
+    }
+
+    function GenerateLoanReport(fileType) {
+        debugger;
+        var d = new Date();
+        var x = document.querySelector('input[name="ReportOptionLoan"]:checked').value;
+        var fromDate = $('#txtFromDateLoan').val();
+        var toDate = $('#txtToDateLoan').val();
+        var empID = $('#SelectedEmpID').val();
+        var loanID = $('#txtLoanID').val();
+        if (fromDate > toDate) {
+            ShowModalMessage("To Date must be Greater than From Date");
+            return false;
+        }
+        if ((fromDate == "" || toDate == "")) {
+            ShowModalMessage("Pl's Fill To Date & From Date");
+            return false;
+        }
+        if (x == "PaymentDetail") {
+            var viewURL = '../../Report/ReportLoan/Report/?id=' + fileType + '&reportOptions=' + x + "&empId=" + empID + "&fromDate=" + fromDate + "&toDate=" + toDate + "&loanID=" + loanID;
+        } else {
+            var viewURL = '../../Report/ReportLoan/Report/?id=' + fileType + '&reportOptions=' + x + "&empId=" + empID + "&fromDate=" + fromDate + "&toDate=" + toDate;
+        }
+        FancyBox(viewURL);
+        return false;
+    }
+</script>

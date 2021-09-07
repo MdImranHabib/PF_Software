@@ -1,0 +1,128 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h2>Loan Receiving Process</h2>
+<hr />
+<div class="row">
+    <div class="col-md-10">
+        <div class="col-md-3">
+            processing Month
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="PF_Month" name="PF_Year" />
+        </div>
+    </div>
+    <div class="col-md-10">
+        <br />
+        <div class="col-md-3">
+            Processing Year
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="PF_Year" name="PF_Year" />
+        </div>
+    </div>
+<div class="col-md-10">
+        <br />
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-3" style="float: left;">
+            <input type="button" class="btn btn-info" value=" View process" onclick="ShowResult()" id="btnView" /> 
+            <input type="button" class="btn btn-info" value="process Loan" onclick="SaveProcessing()" id="btnProcess" /> 
+               
+        </div>
+        
+    </div>
+    
+    </div>
+<br />
+<div style="clear: both"></div>
+<div class="col-md-12">
+    <div class="col-md-12 alert alert-info">
+        <div>
+            After loan receivable processing for the month and the year, Pass the Processing Voucher with Mapped Account
+        </div>
+    </div>
+</div>
+<div class="col-md-12" id="LoanReceivaleProcessingRecord">
+</div>
+
+
+   
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        function ShowResult() {
+            $('#btnView').attr("disabled", true);
+            var PF_Month = $("#PF_Month").val();
+            var PF_Year = $("#PF_Year").val();
+            
+            if (PF_Month !== "" && PF_Year !== "") {
+
+                
+                var viewURL = rootPath + "/Loan/LoanReceivable/LoanReceivableProcessingView?conMonth=" + PF_Month + "&conYear=" + PF_Year;
+                $.get(viewURL, function (data) {
+
+                    $('#btnView').attr("disabled", false);
+                    $("#LoanReceivaleProcessingRecord").html("").html(data);
+                });
+
+            }
+            else {
+                $('#btnView').attr("disabled", false);
+                ShowDropDownMessage("Please select Processing Month & Year");
+            }
+        }
+        //  - - - - - - - saving process - - - - - -//
+        //-----------------------------------------//
+
+        function SaveProcessing() {
+            $('#btnProcess').attr("disabled", true);
+            var conMonth = $("#PF_Month").val();
+            var conYear = $("#PF_Year").val();
+            
+            if (conMonth !== "" && conYear !== "") {
+                $.ajax({
+                    url: rootPath + "/LoanReceivable/LoanReceivableprocessingSave",
+                    type: 'post',
+                    dataType: 'json',
+                    data: { conMonth: conMonth, conYear: conYear },
+                    success: function (result) {
+                        if (result.Success == true) {
+                            $('#btnProcess').attr("disabled", false);
+                            //alert(result.Message);
+                            ShowDropDownMessage(result.Message);
+                            setTimeout(function () { location.reload(); }, 4500);
+
+                        }
+                        else {
+                            ShowDropDownMessage(result.ErrorMessage);
+                            $('#btnProcess').attr("disabled", false);
+                        }
+                    }
+
+
+                });
+
+            }
+            else {
+                ShowDropDownMessage("Pl's select Process & Date");
+            }
+            
+        }
+
+        //var viewURL = rootPath + "/PFContribution/Contribution/SalaryMonthRecord/";
+        //$.get(viewURL, function (data) {
+        //    $("#SalaryMonthRecord").html("").html(data);
+        //});
+
+
+
+    </script>
+
+}

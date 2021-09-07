@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <fieldset><legend>Member PF Status</legend>
+    <table>
+        <tr>
+            <td>
+                 <input id="searchTerm" name="searchTerm" type="text" placeholder="Select Employee ID" class="form-control" /><input type="hidden" id="SelectedEmpID" name="SelectedEmpID" />
+            </td>
+            <td>
+                <input type="button" class="btn btn-info btn-sm" value="Find" onclick="GetEmployee()" />
+            </td>
+        </tr>
+    </table>
+    <div id="dvMessage"></div>
+            </fieldset>
+    </div>
+
+
+    <div class="col-md-3">
+        <div id="dvEmpDetail"></div>
+    </div>
+    <div class="col-md-4">
+        <div id="dvEmpSalary"></div>
+    </div>
+ 
+        
+    
+    </div>
+@section scripts{
+    <script src="~/Scripts/custom/Salary.js"></script>
+
+       <script type="text/javascript">
+           $(function () {
+               $("#searchTerm").autocomplete({
+                   source: rootPath + "/PFSettings/MemberPFStatus/AutocompleteSuggestions",
+                   minLength: 1,
+                   select: function (event, ui) {
+                       $('input[name="searchTerm"]').val(ui.item.label);
+                       $('input[name="SelectedEmpID"]').val(ui.item.value);
+                       return false;
+                   }
+               });
+           });
+</script>
+}

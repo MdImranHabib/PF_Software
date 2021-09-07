@@ -1,0 +1,95 @@
+﻿@model IEnumerable<DLL.tbl_PFLoan>
+@using Telerik.Web.Mvc.UI;
+@{
+    Layout = null;
+}
+
+
+<script type="text/javascript">
+
+
+    function LoanHistoryGridOnRowSelect(e) {
+        var dialogDiv;
+        var viewUrl;
+        var row = e.row;
+        var grid = $(this).data("tGrid");
+        var dataItem = grid.dataItem(row);
+        _curLoanID = dataItem.PFLoanID;
+        $("#dvLoanDetail").html('');
+        //alert(_curEmpID + " >> " + _curLoanID);
+        var URL = rootPath + "/Loan/Loan/LoanPaymentDetail/?empId=" + _curEmpID + "&pfLoanID=" + _curLoanID;
+        $.get(URL, function (data) {
+            $("#dvLoanPaymentDetail").html('');
+            $("#dvLoanPaymentDetail").html(data);
+        });
+    }
+
+
+    function LoanHistoryOnRowDataBound(e) {
+
+        if (e.dataItem.ApprovedByName) {
+
+        }
+        else {
+            e.row.cells[0].innerHTML += "*";
+            e.row.style["color"] = "red";
+        }
+    }
+
+</script>
+
+<fieldset>
+    <legend>Employee Loan History</legend>
+
+    @(Html.Telerik().Grid<DLL.ViewModel.VM_PFLoan>()
+    .Name("LoanHistoryGrid").HtmlAttributes(new { @class="A"})
+        .DataKeys(keys => { keys.Add(s => s.EmpID); })
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectLoanHistory", "WebUserReport");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.EmpID).Visible(false);
+                    columns.Bound(c => c.PFLoanID).Title("Loan ID");
+                    columns.Bound(c => c.LoanAmount);
+                    columns.Bound(c => c.TermMonth).Title("Tenor");
+                    columns.Bound(c => c.Interest).Title("Intrst (%)");
+                    columns.Bound(c => c.Installment).Title("Monthly Pay");
+                    columns.Bound(c => c.StartDate).HtmlAttributes(new { style = "text-align:center" }).Format("{0:dd/MMM/yyyy}"); ;
+                    columns.Bound(c => c.ApprovedByName).Title("Approved By");
+                    //columns.Command(commands =>
+                    //    {
+                    //        commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                    //       .ButtonType(GridButtonType.Image)
+                    //       .ImageHtmlAttributes(new { @class = "t-edit" });
+                    //    }
+                    //).Width(40).Title("");
+                    //columns.Command(commands =>
+                    //    {
+                    //commands.Custom("DeleteCommand").HtmlAttributes(new { }).Text("DELETE").Ajax(true)
+                    //       .ButtonType(GridButtonType.Image)
+                    //       .ImageHtmlAttributes(new { @class = "t-delete" });
+                    //                }
+                    //).Width(40).Title("");
+                }
+            )
+            .Sortable()
+            .Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                { 
+                    events.OnRowSelect("LoanHistoryGridOnRowSelect");
+                    events.OnRowDataBound("LoanHistoryOnRowDataBound");
+                })
+                .Selectable()
+)
+    <br />
+ <input type="button" class="btn btn-success btn-sm loanButton" value="Add New Loan" onclick="AddLoan()"/>
+    <input type="button" class="btn btn-info btn-sm loanButton" value="Edit Loan" onclick="EditLoan()"/>
+    <button type="button" class="btn btn-danger pull-right btn-sm loanButton" onclick="DeleteLoan()">Delete</button>
+
+</fieldset>
+
+

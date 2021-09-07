@@ -1,0 +1,20 @@
+USE [PFTM]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_GroupTree]    Script Date: 08/12/2014 18:43:27 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+create proc [dbo].[sp_GroupTree]
+
+AS
+Begin
+SET NOCOUNT ON;
+select g.GroupID, g.ParentGroupID, g1.GroupName as ParentGroupName, g.GroupName, UserFullName as EditUserName, g.EditDate from acc_Group g left join acc_Group g1 on g.ParentGroupID = g1.GroupID, tbl_User u where g.EditUser = u.UserID
+End
+
+
+
+
+

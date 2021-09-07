@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Send Mails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <fieldset>
+            <legend>@ViewBag.PageName</legend>
+            @(Html.Telerik().Grid<DLL.ViewModel.VM_Employee>()
+    .Name("EmployeeGrid").HtmlAttributes(new { @class = "A" })
+
+        .DataKeys(keys => { keys.Add(s => s.EmpID); })
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_MailingEmployees", "Employee");
+            }
+        )
+        .TableHtmlAttributes(new { @id = "empTable" })
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.isSelected).ClientTemplate("<input type='checkbox' class='cc' />")
+                                                .HeaderTemplate("<input type='checkbox' id='selectAll' onclick='selectAll();' />")
+                                                .Width(30)
+                                                .Sortable(false)
+                                                .Filterable(false);
+                    columns.Bound(c => c.EmpID).Visible(false);
+                    columns.Bound(c => c.IdentificationNumber).Title("ID");
+                    columns.Bound(c => c.EmpName);
+                    columns.Bound(c => c.opDepartmentName);
+                    columns.Bound(c => c.opDesignationName);
+                    columns.Bound(c => c.Email);
+                }
+            )
+              .Sortable()
+              .Filterable()
+            .Pageable(s => s.PageSize(50))
+
+ )
+            <br />
+
+            @*@Html.ActionLink("Send Mails To All", "SendMail", "Employee", null, new { @class = "btn btn-success btn-sm" })*@
+            @*@Html.ActionLink("Send Mails To Selected Employees", "Import", "Employee", null, new { @class = "btn btn-primary btn-sm" })*@
+            <input type="submit" onclick="MailToSelected();" class="btn btn-primary btn-sm" />
+           @* <div class="col-md-6 col-md-offset-3">
+                <h4 style="color: red">@TempData["msg"]</h4>
+            </div>*@
+        </fieldset>
+
+    </div>
+    <div class="col-md-3">
+        <h2 style="color:#f00;" class="alert alert-default">@TempData["msg"]</h2>
+    </div>
+    <br />
+
+</div>
+<script>
+
+    function selectAll() {
+
+        if ($('#selectAll').is(':checked')) {
+            $('.cc').attr('checked', 'checked');
+        }
+        else {
+            $('.cc').removeAttr('checked');
+        }
+    }
+
+
+
+    function MailToSelected() {
+
+        var employees = [];
+        
+        $('#empTable tbody tr').each(function () {
+            var currentRow = $(this);
+
+            var col1 = currentRow.find("input:checkbox");
+            var EmpId = currentRow.find("td:eq(1)").text();
+            var EmpName = currentRow.find("td:eq(2)").text();
+            var Email = currentRow.find("td:eq(5)").text(); 
+            var isSelected = col1[0].checked;
+            
+            
+            if (isSelected) {
+                var employee = {};
+                employee.EmpId = EmpId;
+                employee.EmpName = EmpName;
+                employee.Email = Email;
+
+                employees.push(employee);
+            }
+            
+        });
+        var result = {};
+        result.list = employees;
+        var empList = JSON.stringify(result);
+
+        $.ajax({
+            type: 'POST',
+            url: rootPath + "/Employee/SendMailToSelectedEmployee",
+            data: { 'empList': empList },
+            dataType: "application/json",
+            success: function (data) {
+                alert(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                //alert(XMLHttpRequest + ": " + textStatus + ": " + errorThrown, 'Error!!!');
+            }
+        });
+
+        location.reload();
+    }
+
+</script>

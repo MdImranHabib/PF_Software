@@ -1,0 +1,26 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_Contribution>
+
+<div class="alert alert-success"><strong>@ViewBag.Message</strong> </div>
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" />
+    <table class="table table-striped">
+        <tr style="font-weight:bold; text-align:center">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+       
+            <td>Self Contribution</td>
+            <td>Org Contribution</td>
+            <td>Total</td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].EmpID) @Html.HiddenFor(m => m[i].EmpID)</td>
+                <td>@Html.DisplayFor(m => m[i].EmpName) @Html.HiddenFor(m => m[i].EmpName)</td>
+                <td><label style="font-weight:bold">@Html.DisplayFor(m => m[i].SelfContribution)</label> @Html.HiddenFor(m => m[i].SelfContribution) <label style="color:lightgrey">@Html.DisplayFor(m => m[i].SCInterest)% @Html.HiddenFor(m => m[i].SCInterest)</label></td>
+                <td><label style="font-weight:bold">@Html.DisplayFor(m => m[i].EmployerContribution)</label> @Html.HiddenFor(m => m[i].EmployerContribution) <label style="color:lightgrey">@Html.DisplayFor(m => m[i].ECInterest)% @Html.HiddenFor(m => m[i].ECInterest)</label></td>
+                
+                <td>@Html.DisplayFor(m => m[i].Total)</td>
+            </tr>
+        }
+    </table>

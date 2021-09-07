@@ -1,0 +1,142 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="row">
+    <div class="col-md-4" id="listDiv">
+
+    </div>
+
+    <div class="col-md-6">
+        <div id="mainDiv"></div>
+    </div>
+</div>
+@{
+    ViewBag.Title = "CompanyInformation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+  
+}
+
+
+@section scripts{
+    <script>
+    
+
+
+
+        $(document).ready(function () {
+            GetCompanyList();
+            GetCompanyForm(0);
+
+        })
+
+
+        function GetCompanyForm(id) {
+            var viewUrl = rootPath + "/CompanyInformation/Company/CompanyInformation/?companyID=" + id;
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html('');
+                $('#mainDiv').css('display', 'none');
+                $("#mainDiv").html("").fadeIn(1500).html(data);
+            })
+        }
+
+        function GetCompanyList() {
+            var viewUrl = rootPath + "/CompanyInformation/Company/CompanyList/";
+            $.get(viewUrl, function (data) {
+                $("#listDiv").html("");
+                $("#listDiv").html(data);
+            })
+        }
+
+
+        function CompanyDetail(companyID) {
+            GetCompanyForm(companyID);
+        }
+
+        function updateSuccessCompanyInformation(data) {
+
+            if (data.Success == true) {
+                $("#CompanyID").val(data.CompanyID);
+                $("#update-message-company-info").html(data.Message).removeClass("alert alert-danger").addClass("alert alert-success");
+                ShowDropDownMessage(data.Message);
+                GetCompanyList();
+            }
+            else {
+
+                $("#update-message-company-info").html("").html(data.ErrorMessage).removeClass("alert alert-success").addClass("alert alert-danger");
+            }
+        }
+
+        function addNew() {
+
+            $(".Next").val("");
+            $("#CompanyID").val(0);
+            $(".editUser").html("").removeClass("alert alert-danger");
+            $("#update-message-company-info").html("Add new company...").removeClass("alert alert-danger").addClass("alert alert-success");
+        }
+
+
+        function save() {
+
+            $("#DialogForm").submit();
+        }
+
+        function CompanyDelete(id) {
+            
+            if (id < 1) {
+                ShowModalMessage("Please select instrument to delete it...");
+                return;
+            }
+            //========
+            var viewUrl = rootPath + "/CompanyInformation/Company/CompanyDeletePossible/?id=" + id;
+
+            $.get(viewUrl, function (data) {
+
+                if (data.Success == true) {
+                    $("#ModalSpace").html(data.Message),
+                       $("#ModalSpace").dialog({
+                           width: 'auto',
+                           resizable: false,
+                           modal: true,
+                           show: "slide",
+                           hide: "slide",
+
+                           title: "Alert",
+                           buttons: [{
+                               text: "Yes", click: function () {
+                                   var viewURL = rootPath + "/CompanyInformation/Company/CompanyDeleteConfirm/?id=" + id;
+                                   $.post(viewURL, function (data) {
+                                       if (data.Success == true) {
+                                           $("#update-message").removeClass("alert alert-danger").addClass("alert alert-success").html("").html(data.Message);
+                                           ShowDropDownMessage(data.Message);
+                                           GetCompanyList();
+                                           addNew();
+                                           $("#ModalSpace").dialog("close");
+                                       }
+                                       else {
+                                           $("#update-message").removeClass("alert alert-success").addClass("alert alert-danger").html("").html(data.ErrorMessage);
+                                           ErrorNotify(data.ErrorMessage);
+
+                                       }
+                                   });
+                               }
+                           }, {
+                               text: "Close",
+                               click: function () {
+                                   $(this).dialog("close");
+                                   //ErrorNotify("You cancelled the operation!");
+                               }
+                           }]
+                       });
+                    //========
+                }
+                else {
+                    ShowModalMessage(data.ErrorMessage);
+                }
+            });
+        }
+
+
+    </script>
+}

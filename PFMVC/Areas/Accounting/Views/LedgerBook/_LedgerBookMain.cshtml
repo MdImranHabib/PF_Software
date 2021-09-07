@@ -1,0 +1,102 @@
+﻿@model List<DLL.ViewModel.VM_acc_VoucherDetail>
+@{
+     Layout = null;
+}
+
+<fieldset id="fieldsetLedgerDetail">
+    <legend>Ledger Book <button class="btn btn-success btn-xs pull-right" onclick="getreport()" id="report">Report</button></legend>
+            @Html.Hidden("ledgerID", (Guid)ViewBag.LedgerID, new {@id="ledgerID"})
+            @Html.Hidden("fDate", (DateTime)ViewBag.FromDate, new {@id="fDate"})
+            @Html.Hidden("tDate", (DateTime)ViewBag.ToDate, new {@id="tDate"})
+        <div>
+    <div class="pull-left">
+        <table class="table table-condensed" style="font-size:smaller">
+            <tr><td>Ledger Name </td><td id="ledgerName"> @Html.Label("", (string)ViewBag.LedgerName)</td></tr>
+            <tr><td>Ledger Under</td><td>@Html.Label("", (string)ViewBag.GroupName)</td></tr>
+        </table>
+    </div>
+    <div class="pull-right">
+        <table class="table table-condensed" style="font-size:smaller">
+            <tr><td>Initial Balance</td><td>@Html.Label("", ViewBag.InitialBalance as string, new { @id = "initBalance"})</td></tr>
+            <tr><td>Opening Balance</td><td>@Html.Label("", ViewBag.BalanceBeforeDate as string, new { @id = "balanceBeforeDate"})</td></tr>
+        </table>
+    </div>
+            </div>
+    <table class="table table-striped table-condensed" style="text-align:center; font-size:smaller" id="LBook">
+        <tr style="font-weight:bold;">
+            <td>Tran. Date</td>
+            <td>Voucher Number</td>
+            <td>Particulars</td>
+            <td>Debit</td>
+            <td>Credit</td>
+            <td style="text-align:right">Balance</td>
+        </tr>
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <tr>
+                <td>@Model[i].TransactionDate.Value.ToString("dd MMM yyy hh:mm")</td>
+                <td>
+                    @Ajax.ActionLink(Model[i].VNumber, "VoucherDetailMini", "Base", new { Area = "Accounting", voucherID = Model[i].VoucherID }, new AjaxOptions { HttpMethod = "GET", OnSuccess = "ShowVoucherDetail" })
+                </td>
+                        
+                <td>
+                    @Model[i].Particulars <br />
+                    @if (!string.IsNullOrEmpty(@Model[i].Narration))
+                    {
+                        <label class="mini">NRR: @Model[i].Narration</label><br />
+                    }
+                    @if (!string.IsNullOrEmpty(@Model[i].ChequeNumber))
+                    {
+                        <label class="mini">CHQ: @Model[i].ChequeNumber</label>
+                    }
+                </td>
+@*                <td id="debit-@i">@if (@Model[i].Debit != 0)
+                                  { @Model[i].Debit }</td>
+                <td id="credit-@i">@if (@Model[i].Credit != 0)
+                                   { @Model[i].Credit }</td>*@
+                <td id="debit-@i">@if (@Model[i].aDebit != "")
+                                  { @Model[i].aDebit }</td>
+                <td id="credit-@i">@if (@Model[i].aCredit != "")
+                                   { @Model[i].aCredit }</td>
+                <td id="balance-@i" style="text-align:right">@Model[i].strCBalance</td>
+            </tr>
+        }
+        <tr style=" font-weight:bold">
+            <td colspan="3"></td>
+              <td id="c_debit"></td>
+            <td id="c_credit"></td>
+            <td id="c_balance" style="text-align:right"></td>
+        </tr>
+    </table>
+    
+</fieldset>
+
+<script>
+
+
+
+    function ShowVoucherDetail(data) {
+        if (data.Success == false) {
+            ShowModalMessage(data.ErrorMessage);
+        }
+        else {
+            ShowModalMessage(data);
+        }
+    }
+
+    function getreport() {
+        
+        //var d = new Date();
+        //var x = document.querySelector('input[name="ReportOption"]:checked').value;
+        
+        var ledgerID = $('#ledgerID').val();
+        var fDate = $('#fromDate').val();
+        var tDate = $('#toDate').val();
+        var ledgerName = $('#ledgerName').text();
+        var viewURL = '../../Accounting/LedgerBook/Report/?LedgerID=' + ledgerID + "&fromDate=" + fDate + "&toDate=" + tDate + "&LedgerName=" + ledgerName;
+        
+        //window.open(viewURL, 'window name', 'window settings')
+        FancyBox(viewURL);
+    }
+
+</script>

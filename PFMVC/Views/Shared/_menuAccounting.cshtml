@@ -1,0 +1,75 @@
+﻿
+
+<div class="row">
+    <div class="col-md-12">
+        
+@{ Html.Telerik().Menu()
+        .Name("MainMenu")
+        .Items(menu =>
+        {
+            //menu.Add().Text("Subra ERP")
+            //.Items(item =>
+            //{
+            //    item.Add().Text("Homepage").Url("http://114.31.10.20:8081/Home.aspx?UserName=admin");
+            //});
+            
+            menu.Add().Text("First time implemetation")
+            .Items(item =>
+            {
+                item.Add().Text("Step 1: Basic Info").Url("~/CompanyInformation/Company/Index");
+                //item.Add().Text("Step 2: Members' Info").Url("~/Employee/Index");
+                item.Add().Text("Step 3: Deposit/Instrument Info").Url("~/Instrument/Instrument/Index");
+                item.Add().Text("Step 4: Create Forfeiture Account & Rules").Url("~/CompanyInformation/Company/CreateForfeitureAccount");
+                item.Add().Text("Step 5: Incorporating Other Heads of Initial Balance Sheet").Url("~/Accounting/Ledger/LedgerIndex");
+                item.Add().Text("Step 6: Incorporating the Initial Balance Sheet").Url("~/Accounting/BalanceSheet/BalanceSheetIndex");
+                
+            });
+            
+            menu.Add().Text("Accounting")
+            .Items(item =>
+            {
+                item.Add().Text("Gateway").Url("~/Accounting/Base/Index");
+            });
+            
+
+
+            menu.Add().Text("Instrument")
+           .Items(item =>
+           {
+               item.Add().Text("Create Instrument").Url("~/Instrument/Instrument/Index");
+               item.Add().Text("Encashment Entry").Url("~/Instrument/Encashment/EncashmentEntry");
+           });
+          
+            
+        
+
+      
+
+            menu.Add().Text("System")
+            .Items(item =>
+            {
+                item.Add().Text("Error Log").Url("~/Error/ErrorList");
+            });
+            
+            
+            menu.Add()
+                .Text("User Management")
+
+                .Items(item =>
+                {
+                    item.Add().Text("System User").Url("~/UserManagement/UserManagement/Index");
+                    item.Add().Text("System User Login history").Url("~/UserManagement/UserManagement/UserLoginHistory");
+                    item.Add().Text("Employee Web User").Url("~/UserManagement/EmployeeWebUser/Index");
+                    //item.Add().Text("Web User Login history").Url("~/UserManagement/WebUserManagement/UserLoginHistory");
+                });
+            menu.Add()
+                .Text("Member In/Out")
+
+                .Items(item => {
+                    item.Add().Text("In/Out").Url("~/MemberInOut/MemberInOut/Index");
+                });
+        })
+        .Render();
+}
+        </div>
+</div>

@@ -1,0 +1,184 @@
+﻿
+
+
+<script>
+
+    function updateSuccess(data) {
+
+        if (data.Success == true) {
+            ShowDropDownMessage(data.Message);
+            $("#update-message1").html("");
+            SuccessNotify(data.Message);
+            $("#update-message1").removeClass("alert alert-danger alert-dismissable");
+
+
+            $('#VoucherNo').val(data.VoucherNumber);
+            $('#voucherId').val(data.VoucherID);
+            $("#VoucherNo").notify("This is your voucher number!", "info");
+
+            $('.not-new').removeClass('hidden');
+            var viewUrl = rootPath + "/Accounting/ReceiptVoucher/GetVoucherNameList/?voucherType=" + 2; // here 2 for receipt voucher.
+            $.get(viewUrl, function (data) {
+                $("#optionDiv2").addClass("hidden").html(data);
+                SwitchOptionDiv();
+            })
+            
+        }
+
+        else {
+            ErrorNotify(data.ErrorMessage);
+            $("#update-message1").html(data.ErrorMessage);
+            $("#update-message1").show();
+            $("#update-message1").addClass("alert alert-danger");
+        }
+    }
+    
+    function deleteGroup(id) {
+        var viewUrl = rootPath + "/Accounting/ReceiptVoucher/DeleteVoucherPossible/?voucherID=" + id;
+        $.get(viewUrl, function (data) {
+            if (data.Success == true) {
+                $("#ModalSpace").html(data.Message),
+                $("#ModalSpace").dialog({
+                    width: 'auto',
+                    resizable: false,
+                    modal: true,
+                    show: "blind",
+                    hide: "blind",
+                    title: "Delete",
+                    buttons: [{
+                        text: "Yes", click: function () {
+                            viewUrl =rootPath + "/Accounting/ReceiptVoucher/DeleteVoucherConfirm/?voucherID=" + id;
+                            $.post(viewUrl, function (data) {
+                                if (data.Success == true) {
+                                    $("#ModalSpace").dialog('close');
+                                    $("#ModalSpace").html('');
+
+                                    
+                                    $("#mainDiv").html("<fieldset><legend>Confirmation</legend><div class=\"alert alert-warning\">Voucher successfully deleted!</div> <button class=\"btn btn-success\" onclick=\"NewVoucher()\">Add Receipt Voucher</button></fieldset>");
+                                    $('#ve-' + id).remove();
+                                }
+                                else {
+                                    $("#ModalSpace").html("Something Problem while deleting!!!");
+                                }
+                            })
+                        }
+                    }, {
+                        text: "Cancel",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }]
+                });
+            }
+            else {
+                ShowModalMessage(data.ErrorMessage);
+            }
+        });
+        return false;
+    }
+
+    function NewVoucher() {
+        var viewUrl = rootPath + "/Accounting/ReceiptVoucher/ReceiptVoucher/";
+        $.get(viewUrl, function (data) {
+            $("#mainDiv").html('');
+            $("#mainDiv").html(data);
+        })
+    }
+
+    function addRow(tableID) {
+
+        var table = document.getElementById(tableID);
+
+        var rowCount = table.rows.length;
+        var row = table.insertRow(rowCount);
+        var j = rowCount - 1;
+
+        var cell0 = row.insertCell(0);
+        //inputType
+        var element0 = document.createElement("input");
+        element0.type = "button";
+        element0.name = "inputType";
+        element0.id = "inputType-" + j;
+        element0.className = "btn-xs btn-danger next inputType";
+        element0.value = "Cr."
+        cell0.appendChild(element0);
+
+        var cell1 = row.insertCell(1);
+        //ledger name
+        var element1 = document.createElement("input");
+        element1.type = "text";
+        element1.name = "LedgerName";
+        element1.id = "LedgerName" + j;
+        element1.className = "form-control next accountHead";
+        element1.placeholder = "Use up/down arrow and select from list at right...";
+        cell1.appendChild(element1);
+        //ledger id
+        var element11 = document.createElement("input");
+        element11.type = "hidden";
+        element11.name = "LedgerID";
+        element11.id = "LedgerID" + j;
+        cell1.appendChild(element11);
+
+        var cell4 = row.insertCell(2);
+        //chequeNumner
+        var element4 = document.createElement("input");
+        element4.type = "text";
+        element4.name = "ChequeNumber";
+        element4.id = "ChequeNumber" + j;
+        element4.className = "form-control next";
+        cell4.appendChild(element4);
+
+        var cell2 = row.insertCell(3);
+        //debit
+        var element2 = document.createElement("input");
+        element2.type = "text";
+        element2.name = "Debit";
+        element2.id = "Debit" + j;
+        element2.className = "form-control NumOnly debit hidden";
+        cell2.appendChild(element2);
+
+        var cell3 = row.insertCell(4);
+        //credit
+        var element3 = document.createElement("input");
+        element3.type = "text";
+        element3.name = "Credit";
+        element3.id = "Credit" + j;
+        element3.className = "form-control next NumOnly credit lastcell ";
+        cell3.appendChild(element3);
+
+    }
+
+
+    
+    function ProcessGrid() {
+        var table = document.getElementById('VoucherTable');
+
+        var rowLength = table.rows.length;
+
+        for (var i = 0; i < rowLength; i += 1) {
+            if ($('#Debit' + i).val() > "") {
+                $('#inputType-' + i).addClass('btn-warning').removeClass('btn-danger').val('Dr.');
+                $('#Credit' + i).val('');
+                $('#Credit' + i).attr('readonly', 'readonly');
+                $('#Credit' + i).addClass('hidden').removeClass('next lastcell');
+                $('#Debit' + i).addClass('lastcell');
+            }
+            else if ($('#Credit' + i).val() > "") {
+                //InfoNotify($('#Credit' + i).val() + "<< see");
+                $('#inputType-' + i).addClass('btn-danger').removeClass('btn-warning').val('Cr.');
+                $('#Debit' + i).val('');
+                $('#Debit' + i).attr('readonly', 'readonly');
+                $('#Debit' + i).addClass('hidden').removeClass('next lastcell');
+                $('#Credit' + i).addClass('lastcell');
+            }
+            else {
+                $('#inputType-' + i).addClass('btn-danger').removeClass('btn-warning').val('Cr.');
+                $('#Debit' + i).val('');
+                $('#Debit' + i).attr('readonly', 'readonly');
+                $('#Debit' + i).addClass('hidden').removeClass('next');
+                $('#Credit' + i).addClass('lastcell');
+            }
+        }
+    }
+
+    </script>

@@ -1,0 +1,190 @@
+﻿@model List<DLL.ViewModel.VM_Employee>
+
+@{
+    Layout = null;
+}
+
+<fieldset>
+    @if (DLL.Utility.ApplicationSetting.Branch == true)
+    {
+    <div class="col-md-3" style="margin-bottom : 10px;">
+
+                <select name="branch_name" class="form-control" id="branch_name">
+                    <option value="">All Branch</option>
+                    @foreach (var item in ViewBag.branchList)
+                    {
+                        if (item.BranchID != null)
+                        {
+                            <option value="@item.BranchID">@item.BranchName</option>
+                        }
+
+                    }
+                </select>
+
+            </div>
+    }
+    <legend>All Members Register
+        <input type="text" style="font-size: small; border: none; background-color: lightyellow" class="pull-right col-md-3" placeholder="Search By Name/ID/Designation" id="filterBox" onkeyup="FilterTable()" />
+        &nbsp<input type="button" value="Export to Excel" onclick="ExportToExcel('data')" class="btn btn-xs btn-link pull-right" />&nbsp
+    </legend>
+    <table class="table table-condensed table-striped smaller" id="data">
+        <tr id="Hedding" class="bold blueFont">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+            @if (DLL.Utility.ApplicationSetting.Branch == true)
+             {
+                <td>Branch</td>
+            }
+            <td>Designation</td>
+            <td>Department</td>
+             <td>PF Deactivation Date</td>
+            <td>Opening Balance</td>
+            @*<td>Transfer Amount</td>*@
+            <td>Own Cont.</td>
+            <td>Emp Cont.</td>
+            <td>Own Profit</td>
+            <td>Emp Profit</td>
+            <td>Profit Adjustment</td>
+            <td>Withdrawal</td>
+            <td>Forfeiture</td>
+            
+            <td>Loan Adjustment</td>
+            <td>Balance</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.IdentificationNumber
+                </td>
+                <td>
+                    @item.EmpName
+                </td>
+                 @if (DLL.Utility.ApplicationSetting.Branch == true) {
+                 <td>
+                    @item.BranchName
+                </td>
+                 }
+                <td>
+                    @item.opDesignationName
+                </td>
+                <td>
+                    @item.opDepartmentName
+                </td>
+                <td>
+                    @{
+            string PFDeactivationDate = @item.PFDeactivationDate.HasValue ? @item.PFDeactivationDate.Value.ToString("dd/MMM/yyyy") : "";
+                            }
+                    @PFDeactivationDate
+                </td>
+
+                <td>
+                    @item.OpeningBalance.ToString("#,##,##,##0.00") 
+                </td>
+
+                @*<td>
+                    @item.TransferAmount.ToString("#,##,##,##0.00")
+                </td>*@
+                <td>
+                    @item.OwnCont.ToString("#,##,##,##0.00")
+                </td>
+                <td>
+                    @item.EmpCont.ToString("#,##,##,##0.00")
+                </td>
+                <td>
+                    @item.OwnProfit.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.EmpProfit.ToString("#,###,##0.00")
+                </td>
+                <td>
+                    @item.distributedInterestIncomeProfit.ToString("#,##,##,##0.00")
+                </td>
+                <td>
+                    @item.Withdrawal.ToString("#,##,##,##0.00")
+                </td>
+                <td>
+                    @item.Forfeiture.ToString("#,##,##,##0.00")
+                </td>
+                
+                <td>
+                    @item.LoanAdjustment.ToString("#,##,##,##0.00")
+                </td>
+                <td>
+                    @item.ShowSummaryBalance.ToString("#,##,##,##0.00")
+                </td>
+            </tr>
+        }
+        <tr>
+             @if (DLL.Utility.ApplicationSetting.Branch == true) 
+             {
+            <td colspan="3"></td>
+             }
+             else
+            {
+            <td colspan="2"></td>
+             }
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>@ViewBag.OpeningBalance.ToString("#,##,##,##0.00") </td>
+            @*<td>@ViewBag.TransferAmount.ToString("#,##,##,##0.00") </td>*@
+            <td>@ViewBag.OwnCont.ToString("#,##,##,##0.00")</td>
+            <td>@ViewBag.EmpCont.ToString("#,##,##,##0.00")</td>
+            <td>@ViewBag.OwnProfit.ToString("#,##,##,##0.0000")</td>
+            <td>@ViewBag.EmpProfit.ToString("#,##,##,##0.0000")</td>
+            <td>@ViewBag.distributedInterestIncomeProfit.ToString("#,##,##,##0.00")</td>
+            <td>@ViewBag.Withdrawal.ToString("#,##,##,##0.00")</td>
+            <td>@ViewBag.Forfeiture.ToString("#,##,##,##0.00")</td>
+            <td>@ViewBag.LoanAdjustment.ToString("#,##,##,##0.00")</td>
+            <td>@ViewBag.ShowSummaryBalance.ToString("#,##,##,##0.00")</td>
+        </tr>
+
+    </table>
+</fieldset>
+<script src="~/Scripts/jquery-1.11.0.min.js"></script>
+
+<script>
+    function FilterTable() {
+        index = -1;
+        inp = $('#filterBox').val();
+        $("#data:visible tr:not(:has(>th))").each(function () {
+            if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('#Hedding').show();
+    }
+    $(document).ready(function () {
+        inp = $("#branch_name option:selected").text();
+        if (inp == "All Branch") {
+            $("#branch_name").attr('disabled', false);
+        }
+        else $("#branch_name").attr('disabled', true);
+
+        FilterTable2();
+        $("#branch_name").change(function () {
+            // var selectedBranch = $("#branch_name option:selected").text();
+            FilterTable2();
+
+        });
+    });
+
+    function FilterTable2() {
+        index = -1;
+        inp = $("#branch_name option:selected").text();
+        if (inp == "All Branch") {
+            inp = "";
+        }
+        $("#data:visible tr:not(:has(>th))").each(function () {
+            if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('#Header').show();
+    };
+</script>

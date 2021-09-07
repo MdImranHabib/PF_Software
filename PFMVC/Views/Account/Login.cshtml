@@ -1,0 +1,120 @@
+﻿@model PFMVC.Models.LoginModel
+
+@{
+    Layout = null;
+}
+<hgroup class="title">
+    @{
+        ViewBag.Title = "Please Login";
+    }
+</hgroup>
+
+<html>
+@*<link href="~/Content/signin.css" rel="stylesheet" />*@
+<head>
+    <meta charset="utf-8">
+    <title>PF - @ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="~/BootstrapTheme/css/bootswatch.min.css" rel="stylesheet" />
+
+    @*Later add*@
+
+    <link href="~/Content/themes/base/jquery.ui.all.css" rel="stylesheet" />
+    <link href="~/BootstrapTheme/justified-nav.css" rel="stylesheet" />
+    <link href="~/Content/sticky-footer-navbar.css" rel="stylesheet" />
+@*    <link href="~/FancyBox/jquery.fancybox.css" rel="stylesheet" />*@
+    <link href="~/TreeViewAsset/default/style.css" rel="stylesheet" />
+
+
+    @*Later add*@
+
+    @{ Html.RenderPartial("_theme"); }
+    @(Html.Telerik().StyleSheetRegistrar().DefaultGroup(group => group.Add("telerik.common.css").Add("telerik.vista.css")))
+
+    <link href="~/Content/custom_site.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container form-signin" style="width:30%;padding-top:5%;height:60%;background-color:#8fe0f6"; >
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { }))
+            {
+            @Html.AntiForgeryToken()
+                <h2 style="color:#0d0202;text-align:center;text-emphasis:triangle">(PF)</h2>
+                <h3 style="color:#0026ff;text-align:center">Welcome to Providend Fund</h3>
+                <h3></h3>
+                <h5 style="text-align:center">Please Login to Continue....</h5>        
+            if (!string.IsNullOrEmpty(ViewBag.Message))
+            {
+                <div class="alert alert-danger">
+                    <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @ViewBag.Message
+                </div>
+            }
+
+            if (ViewData.ModelState.Keys.Any(k => ViewData.ModelState[k].Errors.Count() > 0))
+            {
+                <div class="alert alert-danger">
+                    <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    @Html.ValidationSummary(false)
+                </div>
+            }
+            
+            <h2 class="form-signin-heading"></h2>
+              @*@Html.TextBoxFor(m => m.Company, new { @class = "form-control", @placeholder = "Company Name", @Value = "British Council Bangladesh", @autocomplete = "off", @ReadOnly = "readonly", @style = "text-align:center;" })*@
+              @Html.TextBoxFor(m => m.Company, new { @class = "form-control", @placeholder = "Company Name", @Value = ViewBag.CompanyName, @autocomplete = "off", @ReadOnly = "readonly", @style = "text-align:center;" })
+                
+            <div id="CompanyValidation">
+                @Html.ValidationMessageFor(m => m.Company)
+            </div>
+
+            <br />
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @placeholder = "User Name", @autocomplete = "off" })
+            <div id="UserNameValidation">
+                @Html.ValidationMessageFor(m => m.UserName)
+            </div>
+
+            <br />
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", @placeholder = "Password", @autocomplete = "off" })
+            <div id="PasswordValidation">
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+
+            <br />
+            <div>
+                 <button class="btn btn-lg btn-primary" type="submit" style="width:100%">Sign In</button>
+            </div>
+        }
+    </div>
+
+    <div style="text-align:center;padding-top:18%">
+        <a href="www.subrasystems.com">
+            <iframe id="5dfc9bc945ab23151b9538fe4fc0895d0c999dcf8d" src="/Banner/Bottom/5dfc9bc945ab23151b9538fe4fc0895d0c999dcf8d/5dfc9bc945ab23151b9538fe4fc0895d0c999dcf8d.html" width="100%" height="30" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+        </a>
+    </div>
+
+    <img src="~/Images/159.gif" id="loading-indicator" style="display:none" />
+
+    <script src="~/Scripts/jquery-1.8.2.min.js"></script>
+    <script src="~/BootstrapTheme/js/bootstrap.min.js"></script>
+    <script src="~/BootstrapTheme/js/bootswatch.js"></script>
+    <script src="~/Scripts/jquery-ui-1.8.24.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/BootstrapTheme/js/bootstrap-tooltip.js"></script>
+    <script src="~/Scripts/notify.min.js"></script>
+@*    <script src="~/Scripts/accounting.min.js"></script>*@
+   @* <script src="~/FancyBox/jquery.fancybox.js"></script>*@
+  @*  <script src="~/Scripts/custom/Init.js"></script>*@
+    @*<script src="~/TreeViewAsset/jquery.jstree.js"></script>*@
+    <script src="~/Scripts/jquery.cookie.js"></script>
+   @* <script src="~/Scripts/date.js"></script>*@
+</body>
+</html>
+
+
+
+
+
+
+

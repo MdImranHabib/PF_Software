@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+        
+                var viewUrl =rootPath + "/Accounting/SystemVoucher/GetJQFile/";
+                $.get(viewUrl, function (data) {
+                    $("#JQ").html(data);
+                    var viewUrl =rootPath + "/Accounting/SystemVoucher/SystemVoucher/";
+                    $.get(viewUrl, function (data) {
+                        $("#mainDiv").html('');
+                        $("#mainDiv").html(data);
+                        //this line only for system voucher, because we don't need account head list.
+                        $("#optionDiv2").removeClass("hidden");
+                })
+            })
+            var viewUrl =rootPath + "/Accounting/SystemVoucher/GetVoucherNameList/?voucherType=" + 5; // here 5 for system voucher.
+            $.get(viewUrl, function (data) {
+                $("#optionDiv2").html(data);//.removeClass("hidden");
+            })
+        })
+
+        function editVoucherEntry(id) {
+            var viewUrl =rootPath + "/Accounting/SystemVoucher/SystemVoucher/?voucherId=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").empty();
+                $("#mainDiv").html(data);
+                //$("#switchOptionDiv").click();
+                //$("#save_btn").focus();
+                $('.not-new').removeClass('hidden');
+                //this line only for system voucher, because we don't need account head list.
+                $("#optionDiv2").removeClass("hidden");
+            })
+        }
+
+    </script>
+    <script src="~/Scripts/custom/AccVoucherCommon.js"></script>
+}

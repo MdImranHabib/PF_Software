@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+
+
+
+            var viewUrl = rootPath + "/Accounting/LedgerBook/LedgerListFilterTable/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv").empty();
+                $("#optionDiv").html(data);
+            })
+
+
+        })
+    </script>
+}

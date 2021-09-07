@@ -1,0 +1,39 @@
+﻿@model DLL.ViewModel.VM_PFLoan
+
+@{
+    Layout = null;
+}
+
+    <table class="table table-striped table-condensed">
+        <tr>
+            <td>@Html.LabelFor(m => m.LoanAmount)</td>
+            <td>@Html.TextBoxFor(m => m.LoanAmount, new { @class = "target form-control Next" }) @Html.ValidationMessageFor(m => m.LoanAmount)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.TermMonth)</td>
+            <td>@Html.TextBoxFor(m => m.TermMonth, new { @class = "target form-control Next" }) @Html.ValidationMessageFor(m => m.TermMonth)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.Interest)</td>
+            <td>@Html.TextBoxFor(m => m.Interest, new { @class = "target form-control Next" }) @Html.ValidationMessageFor(m => m.Interest)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.Installment)</td>
+            <td>@Html.TextBoxFor(m => m.Installment, new { @style = "color:blue;", @class = "form-control Next" }) @Html.ValidationMessageFor(m => m.Installment)</td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(m => m.StartDate)</td>
+            <td>@Html.TextBoxFor(m => m.StartDate, new { @class = "dateTimePicker form-control Next", @readonly = "readonly" })</td>
+        </tr>
+         <tr>
+             <td></td>
+            <td><button type="submit" onclick="SaveLoan()">Save</button></td>
+        </tr>
+    </table>
+
+@*<div class="alert alert-success" id="Success" style="display: none">
+    <strong id="SuccessMessege">Password successfully altered! next time you have to login with your new password.</strong>
+</div>
+<div class="alert alert-danger" id="Error" style="display: none">
+    <strong id="ErrorMessage">Currently one user cannot change other user password except ADMIN.</strong>
+</div>*@

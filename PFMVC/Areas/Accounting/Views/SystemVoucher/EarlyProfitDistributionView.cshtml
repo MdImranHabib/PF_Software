@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "EarlyProfitDistributionView";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="PV" class="hidden" ></div>
+
+@section scripts{
+    <script>
+        $( document ).ready( function ()
+        {
+
+            var viewUrl = rootPath + "/Accounting/SystemVoucher/GetPVFile/";
+            $.get( viewUrl, function ( data )
+            {
+
+                    $( "#mainDiv" ).html( '' );
+                    $( "#mainDiv" ).html( data );
+                    $( "#optionDiv2" ).removeClass( "hidden" );
+            } )
+        } )
+
+
+    </script>
+    <script src="~/Scripts/custom/AccVoucherCommon.js"></script>
+}

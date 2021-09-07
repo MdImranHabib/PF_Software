@@ -1,0 +1,177 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-5">
+        <table>
+            <tr>
+                <td class="col-md-3">Employee ID</td>
+                <td>
+                    <input type="text" class="form-control" id="txtEmpID" name="txtEmpID" placeholder="Type Employee ID" />
+                    <input type="hidden" id="SelectedID" name="SelectedID" /></td>
+
+                <td>
+                    <input type="button" class="btn btn-info" value="Find" onclick="GetEmployeeInfo()" id="GetEmployee" />
+                </td>
+            </tr>
+        </table>
+        <br />
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-9">
+        <div class="col-md-2">
+          Employe Name
+        </div>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="txtEmpName" name="txtEmpName" />
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-2">
+            Designation
+        </div>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="txtEmpDesignation" name="txtEmpDesignation" />
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-2">
+            Department
+        </div>
+        <div class="col-md-7">
+            <input type="text" class="form-control" id="txtEmpDepartment" name="txtEmpDepartment" />
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-2">
+            Own Contribution
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="txtWonCon" name="txtWonCon" />
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-2">
+            Emp. Contribution
+        </div>
+        <div class="col-md-3">
+            <input type="text" class="form-control" id="txtWonEmp" name="txtWonEmp" />
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-2">
+            Contribution Month
+        </div>
+        <div class="col-md-7">
+            <input type="text" id="date" name="date" class="dateTimePickerNoFuture form-control", readonly = "readonly" style="width:120px;"/>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="col-md-2" style="float:right;margin-right:21%">
+            <br />
+            <input type="button" class="btn btn-info" value="Save" onclick="SaveContribution()" id="btnSave" />
+        </div>
+    </div>
+</div>
+    <div style="clear:both"></div>
+    <div class="col-md-9">
+        <div class="col-md-7 alert alert-info">
+            After enter all contribution of same month then Pass the contribution Voucher
+        </div>
+    </div>
+
+
+@section scripts{
+
+    <script type="text/javascript">
+        $( document ).ready( function ()
+        {
+            $( "#error" ).val( "After enter all contribution of same month then Pss the contribution Voucher" );
+            $( "#ui-datepicker-div" ).hide();
+            $( "#txtEmpName" ).show();
+        } );
+
+        $( function ()
+        {
+            $( "#txtEmpID" ).autocomplete( {
+                source: rootPath + "/Salary1/AutocompleteSuggestions",
+                minLength: 1,
+                select: function ( event, ui )
+                {
+                    event.preventDefault();
+                    $( 'input[name="txtEmpID"]' ).val( ui.item.label );
+                    $( 'input[name="SelectedID"]' ).val( ui.item.value );
+                    return false;
+                },
+                focus: function ( event, ui )
+                {
+                    event.preventDefault();
+                    $( "#txtEmpID" ).val( ui.item.label );
+                },
+
+            } );
+        } );
+
+
+
+        function GetEmployeeInfo()
+        {
+
+            var empId = $( "#SelectedID" ).val();
+            $.ajax( {
+                url: rootPath + "/Salary1/GetEmployee",
+                type: 'post',
+                dataType: 'json',
+                data: { empId: empId },
+                success: function ( result )
+                {
+                    $( "#txtEmpName" ).val( result.EmpName );
+                    $( "#txtEmpDesignation" ).val( result.Designation );
+                    $( "#txtEmpDepartment" ).val( result.Department );
+                },
+                error: function ( result )
+                {
+                    alert( "Error Ocured" );
+                }
+            } );
+        }
+
+        function SaveContribution()
+        {
+            var empId = $( "#txtEmpID" ).val();
+            var wonCon = $( "#txtWonCon" ).val();
+            var empCon = $( "#txtWonEmp" ).val();
+            var date = $( "#date" ).val();
+
+            if ( empId != "" && wonCon != "" && empCon != "" && date != "" )
+            {
+                $.ajax( {
+                    url: rootPath + "/Salary1/MonthlyContributionSave",
+                    type: 'post',
+                    dataType: 'json',
+                    data: { empIdentification: empId, wonCon: wonCon, empCon: empCon, date: date },
+                    success: function ( result )
+                    {
+                        debugger;
+                        //if (data.Success == true)
+                        //{
+                            ShowDropDownMessage(result);
+                        //}
+                        $( "#error" ).val( result );
+                        $( "#error" ).show();
+                    }
+                } );
+            }
+            else
+            {
+                $( "#error" ).show( "Pl's select Contributioon & Date" );
+            }
+
+        }
+    </script>
+
+}

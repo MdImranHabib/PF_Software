@@ -1,0 +1,37 @@
+﻿
+@{
+    ViewBag.Title = "Receipt & Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var viewUrl = rootPath + "/Accounting/RP/RPFilter/";
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").html('');
+                $('#mainDiv').css('display', 'none');
+                $('#mainDiv').fadeIn(1000).html(data);
+                $("#mainDiv").removeClass("col-md-8").addClass("col-md-10");
+            })
+        })
+
+
+        function GetRPReport(fromDate, toDate) {
+
+            if (fromDate.length < 2 || toDate.length < 2) {
+                ErrorNotify("Please select date range!");
+            }
+            else {
+                var viewURL = '../../Accounting/RP/GetRPReport/?fromDate=' + fromDate + "&toDate=" + toDate;
+                //window.open(viewURL, 'window name', 'window settings')
+                FancyBox(viewURL);
+            }
+        }
+    </script>
+}
+
+

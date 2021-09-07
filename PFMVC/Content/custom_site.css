@@ -1,0 +1,376 @@
+﻿html, body
+{
+    height: 100%;
+}
+
+#wrap
+{
+    min-height: 100%;
+}
+
+#main
+{
+    overflow: auto;
+    padding-bottom: 50px; /* this needs to be bigger than footer height*/
+}
+
+.footer
+{
+    position: relative;
+    margin-top: -150px; /* negative value of footer height */
+    height: 150px;
+    clear: both;
+    padding-top: 20px;
+}
+
+#commonMessage
+{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    font-size: 28px;
+    line-height: 50px;
+    text-align: center;
+    color: #000;
+    background: #fff;
+    background-color: #FFCC66;
+    border-bottom: 1px solid #ddd;
+    filter: alpha(opacity=92);
+    -moz-opacity: 0.92;
+    opacity: 0.92;
+    display: none; /* LEAVE THIS IN*/
+    z-index: 1031;
+}
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error
+{
+    color: Red;
+    z-index: 25;
+    /*position:absolute;*/
+    display: block;
+    background-color: Silver;
+    /*font-weight:bold;*/
+    white-space: nowrap;
+    /*padding: 5px;*/
+    border: 1px solid red;
+    border-radius: 2px;
+    font-size: small;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors
+{
+    /*font-weight: bold;*/
+    color: #ff0000;
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+.validation-summary-errors
+{
+    font-size: xx-small;
+}
+
+.error
+{
+    color: Red;
+    max-height: 200px;
+    font-size: xx-small;
+    width: auto;
+}
+
+/* TABLE
+----------------------------------------------------------*/
+
+table
+{
+    border: solid 1px #e8eef4;
+    border-collapse: collapse;
+}
+
+    table td
+    {
+        padding: 5px;
+        border: solid 1px #e8eef4;
+    }
+
+
+    table.small td
+    {
+        font-size: smaller;
+        width: 100%;
+    }
+
+    table th
+    {
+        padding: 6px 5px;
+        text-align: left;
+        background-color: #e8eef4;
+        border: solid 1px #e8eef4;
+    }
+
+.hide
+{
+    display: none;
+}
+
+.show
+{
+    display: block;
+}
+
+.invisible
+{
+    visibility: hidden;
+}
+
+
+div#update-message1, div#update-message-spec
+{
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.t-grid-header .t-header .t-link
+{
+    padding: 0.3em 1.2em 0.3em 0.6em !important;
+    height: auto !important;
+}
+
+.t-grid-pager
+{
+    line-height: inherit !important;
+}
+
+
+
+a:focus
+{
+    outline: none !important;
+}
+
+.ui-button
+{
+    padding: 3px 2px !important;
+}
+
+input[type="file"]:focus,
+input[type="radio"]:focus,
+input[type="checkbox"]:focus
+{
+    outline: none !important;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus
+{
+    outline: none !important;
+    font-weight: bolder;
+}
+
+
+.container
+{
+    padding-right: 0; /*15px in bootstrap.css*/
+    padding-left: 0; /*idem*/
+    width: 95%;
+}
+
+.form-control
+{
+    height: 30px;
+    padding: 4px 6px !important;
+}
+
+
+legend
+{
+    font-weight: bold !important;
+    font-size: 18px !important;
+}
+
+.btn
+{
+    padding: 8px 12px !important;
+}
+
+.btn-xs
+{
+    padding: 2px 4px !important;
+    background: #25A6E1;
+	background: -moz-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
+	background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#25A6E1),color-stop(100%,#188BC0));
+	background: -webkit-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
+	background: -o-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
+	background: -ms-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
+	background: linear-gradient(top,#25A6E1 0%,#188BC0 100%);
+	filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#25A6E1',endColorstr='#188BC0',GradientType=0);
+	color:#fff;
+	font-family:'Helvetica Neue',sans-serif;
+	border-radius:4px;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+}
+
+body
+{
+    background-color: white !important;
+}
+
+.alert
+{
+    padding: 4px !important;
+}
+
+#result_credit, #result_debit
+{
+    color: lightgrey !important;
+}
+
+.form-control:focus
+{
+    background-color: #FDF5E6 !important;
+}
+
+
+#loading-indicator
+{
+    display: inline-block;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 50px;
+    height: 50px;
+    margin: auto;
+    background-color: #f3f3f3;
+    z-index: 1000;
+}
+
+.strong
+{
+    font-weight: bold;
+}
+
+.strongBlue
+{
+    font-weight: bold;
+    color: blue;
+}
+
+.mini
+{
+    color: darkgray;
+    font-size: smaller;
+    font-style: italic;
+}
+
+
+.clearable
+{
+    background: url("../Images/cross-icon.gif") no-repeat right -10px center;
+    border: 1px solid #999;
+    padding: 3px 18px 3px 4px; /* USE the same right padding in jQ! */
+    border-radius: 3px;
+    transition: background 0.4s; /*REMOVE THIS LINE IF YOU ENCOUNTER ISSUES IN Chrome (Bug 02.2014)*/
+}
+
+    .clearable.x
+    {
+        background-position: right 5px center;
+    }
+
+    .clearable.onX
+    {
+        cursor: pointer;
+    }
+
+table.smaller
+{
+    font-size: smaller;
+    /*text-align:center;*/
+    vertical-align: central !important;
+    padding: 2px !important;
+}
+
+.left
+{
+    text-align: left;
+}
+
+.right
+{
+    text-align: right;
+}
+
+.smaller
+{
+    font-size: smaller;
+}
+
+
+.bold
+{
+    font-weight: bold;
+    background-color: cornsilk;
+}
+
+.blueFont
+{
+    color: blue;
+}
+
+.ui-button:focus
+{
+    font-weight: bolder;
+    color: green;
+}
+
+.hover tr:hover td
+{
+    background-color: cornsilk !important;
+    color: #000 !important;
+    font-weight: bold;
+}
+
+.green
+{
+    color: green;
+}
+
+.red
+{
+    color: red;
+}
+
+.selectedRow
+{
+    font-weight: bolder;
+    color: blue;
+    background-color: pink !important;
+}
+
+
+.bigFont
+{
+    font-size: medium;
+}

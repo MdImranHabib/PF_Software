@@ -1,0 +1,26 @@
+﻿@model DLL.ViewModel.VM_Country
+
+           
+    @using (Ajax.BeginForm("CountryForm", "Country", new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccess1"
+	}, new { @id = "DialogForm1" }))
+    {
+    @Html.ValidationSummary(true)
+    <div id="update-message1" class="error"></div>
+        @Html.HiddenFor(model => model.CountryID)
+        
+    <table>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model, "Country Name: ")
+            </td>
+            <td>
+                @Html.TextBoxFor(model => model.Country, new { style="max-width: 200px; max-height: 70px; min-width: 199px; ", @class="form-control Next"})
+                @Html.ValidationMessageFor(model => model.Country)
+            </td>
+        </tr>
+    </table>
+}

@@ -1,0 +1,93 @@
+﻿
+
+
+@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @ViewBag.Total
+        <fieldset>
+    <legend>PF Monthly Status</legend>
+@(Html.Telerik().Grid<DLL.ViewModel.VM_PFMonthlyStatus>()
+    .Name("GridPFMonth")
+    .Columns(columns =>
+    {
+        columns.Bound(e => e.MonthYear).Width(140);
+        columns.Bound(e => e.Month).Visible(false).Width(140).Format("{0: MM, yyyy}");
+        //columns.Bound(e => e.SelfContribution).Width(200).Aggregate(aggreages => aggreages.Sum()).ClientFooterTemplate("Total : <#=  Sum  #> tk.");
+        //columns.Bound(e => e.EmpContribution).Width(200).Aggregate(aggreages => aggreages.Sum()).ClientFooterTemplate("Total : <#=  Sum  #> tk.");
+        //columns.Bound(e => e.Total).Width(200).Aggregate(aggreages => aggreages.Sum()).ClientFooterTemplate("Total : <#=  Sum  #> tk.");
+        columns.Bound(e => e.Self).Width(200);
+        columns.Bound(e => e.EMP).Width(200);
+        columns.Bound(e => e.SUM).Width(200);
+        columns.Bound(e => e.ProcessRunDate);
+        columns.Command(commands =>
+        {
+            commands.Custom("PFMonthlyDetailReport").Text("Detail Report").Ajax(true)
+           .ButtonType(GridButtonType.Text)
+           .ImageHtmlAttributes(new { @class = "t-edit" });
+        }
+                    ).Width(120).Title("");
+    })
+    .DataBinding(dataBinding => dataBinding.Ajax().Select("PFMonthHierarchyAjax", "PFMonthlyStatus"))
+     .ClientEvents(events =>
+                {
+                    events.OnCommand("GridPFMonthOnCommand");
+                })
+                .Selectable()
+    //.Pageable(paging => paging.PageSize(5))
+ 
+)
+            </fieldset>
+        <div>
+            @ViewBag.Total
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+    
+        function expandFirstRow(grid, row) {
+        if (grid.$rows().index(row) == 0) {
+            grid.expandRow(row);
+        }
+    }
+    
+        function employees_onRowDataBound(e) {
+        
+        var grid = $(this).data('tGrid');
+        expandFirstRow(grid, e.row);
+    }
+    
+        function orders_onRowDataBound(e) {
+        var grid = $(this).data('tGrid');
+        expandFirstRow(grid, e.row);
+        }
+
+
+
+        function GridPFMonthOnCommand(e) {
+            var row = e.row;
+            var grid = $(this).data("tGrid");
+            var dataItem = grid.dataItem(row);
+
+            if (e.name == "PFMonthlyDetailReport") {
+                
+                d = grid.dataItem(row);
+                month = d.MonthYear;
+                
+                var viewURL = rootPath + "/Report/ReportPF/Report?reportOptions=PFMonthlyDetail&fromDate=" + month+"&id=PDF";
+                
+                FancyBox(viewURL);
+                return false;
+            }
+        }
+    </script> 
+}

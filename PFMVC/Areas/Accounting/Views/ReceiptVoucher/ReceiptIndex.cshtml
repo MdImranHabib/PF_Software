@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            
+                var viewUrl = rootPath + "/Accounting/ReceiptVoucher/GetJQFile/";
+                $.get(viewUrl, function (data) {
+                    $("#JQ").html(data);
+                    var viewUrl = rootPath + "/Accounting/ReceiptVoucher/ReceiptVoucher/";
+                    $.get(viewUrl, function (data) {
+                        $("#mainDiv").html('');
+                        $("#mainDiv").html(data);
+                })
+            })
+
+            var viewUrl =rootPath + "/Accounting/ReceiptVoucher/AccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv").html('');
+                $("#optionDiv").html(data);
+            })
+
+            var viewUrl = rootPath + "/Accounting/ReceiptVoucher/AccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv3").html('');
+                $("#optionDiv3").addClass('hidden').html(data);
+            })
+
+            var viewUrl = rootPath + "/Accounting/ReceiptVoucher/GetVoucherNameList/?voucherType=" + 2; // here 2 for receipt voucher.
+            $.get(viewUrl, function (data) {
+                $("#optionDiv2").addClass("hidden").html(data);
+            })
+        })
+
+        function editVoucherEntry(id) {
+            var viewUrl = rootPath + "/Accounting/ReceiptVoucher/ReceiptVoucher/?voucherId=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").empty();
+                $("#mainDiv").html(data);
+                $("#switchOptionDiv").click();
+                $("#save_btn").focus();
+                $('.not-new').removeClass('hidden');
+            })
+        }
+
+    </script>
+    <script src="~/Scripts/custom/AccVoucherCommon.js"></script>
+}

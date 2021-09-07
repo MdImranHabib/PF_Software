@@ -1,0 +1,136 @@
+﻿@{  
+    Layout = null;
+}
+@model System.Collections.Generic.List<DLL.ViewModel.VM_Contribution>
+
+<br />
+<br />
+@if (Model.Count > 0)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="alert alert-success" id="dvMessageClass"><strong id="dvMessage">@ViewBag.Message</strong> </div>
+
+            <input type="hidden" value="@ViewBag.Month" name="_dtMonth" id="_dtMonth" />
+            <div id="dvInformation">
+                <table class="table table-striped smaller table-condensed" id="Processed">
+                    <tr style="font-weight: bold; text-align: center">
+                        <td>Employee ID</td>
+                        <td>Employee Name</td>
+                        @*<td>Salary In</td>*@
+                        <td>Self Contribution</td>
+                        <td>Org Contribution</td>
+                        <td>Total</td>
+
+
+                    </tr>
+                    @for (var i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(m => m[i].IdentificationNumber) @Html.HiddenFor(m => m[i].EmpID)</td>
+                            <td>@Html.DisplayFor(m => m[i].EmpName) @Html.HiddenFor(m => m[i].EmpName)</td>
+                            @*<td class="salary2-@i">@Html.DisplayFor(m => m[i].Salary) @Html.HiddenFor(m => m[i].Salary)</td>*@
+                            <td>
+                                <label style="font-weight: bold">@Html.DisplayFor(m => m[i].SelfContribution)</label></td>
+                            <td>
+                                <label style="font-weight: bold">@Html.DisplayFor(m => m[i].EmpContribution)</label></td>
+                            <td class="total2-@i">@Html.DisplayFor(m => m[i].Total)</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        @*<td id="res_salary2" class="green bold"></td>*@
+                        <td></td>
+                        <td></td>
+                        <td id="res_total2" class="green bold"></td>
+                    </tr>
+                </table>
+            </div>
+            @*@Html.ActionLink("Back", "Import", "Salary", new { @class="btn btn-info"})
+
+    <button type="button" class="btn btn-danger pull-right" onclick="DeleteContributionData()" >Delete and Re-Upload</button>
+    @Html.ActionLink("Delete and Re-Upload", "DeleteAndReupload", "Salary", new { date = ViewBag.Month }, new { @class=""})*@
+        </div>
+    </div>
+    <hr />
+    <label style="font-size: smaller; color: red">@ViewBag.CurrentInterestRate</label><br />
+    <label style="font-size: smaller; color: red">@ViewBag.AppliedInterestRate</label>
+}
+
+@section scripts{
+
+    <script type="text/javascript">
+
+        /*
+            function DeleteContributionData() {
+                //alert($('#_dtMonth').val());
+
+                var viewUrl = "/Salary/DeleteAndReupload/?date=" + $('#_dtMonth').val();
+                
+                $.post(viewUrl, function (data) {
+                    if (data.Success == true) {
+                        
+                        $("#dvMessage").text(data.Message);
+                        
+                        $("#dvMessageClass").removeClass("alert-success");
+                        $("#dvMessageClass").addClass("alert-danger");
+                        $('#dvInformation').empty();
+                        
+                    }
+                    else {
+                        $("#dvMessage").text(data.ErrorMessage);
+                    }
+            
+                })
+            }
+        */
+
+
+
+    </script>
+
+}
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+        FindTotal2();
+    })
+
+
+    function FindTotal2() {
+        var table = document.getElementById('Processed');
+
+        var rowLength = table.rows.length;
+        var temp = 0;
+        var _total = 0;
+        tempSalary = 0;
+        _totalSalary = 0;
+
+        for (var i = 0; i < rowLength; i += 1) {
+            if (parseFloat($('#Processed .total2-' + i).text())) {
+                temp = parseFloat($('#Processed .total2-' + i).text());
+                _total = _total + temp;
+            }
+            else {
+                temp = 0;
+            }
+            $("#res_total2").text(_total);
+
+
+            if (parseFloat($('#Processed .salary2-' + i).text())) {
+                tempSalary = parseFloat($('#Processed .salary2-' + i).text());
+                _totalSalary = _totalSalary + tempSalary;
+            }
+            else {
+                tempSalary = 0;
+            }
+            $("#res_salary2").text(_totalSalary);
+        }
+
+    }
+
+</script>

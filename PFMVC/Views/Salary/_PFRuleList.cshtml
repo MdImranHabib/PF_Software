@@ -1,0 +1,61 @@
+﻿@model List<DLL.LU_tbl_PFRules>
+
+<div id="tabs">
+            <ul>
+                <li><a href="#tabs-1">Active Rules</a></li>
+                <li><a href="#tabs-2">Inactive</a></li>
+            </ul>
+             <div id="tabs-1">
+                 <table class="table table-striped">
+        <tr><td>Working Duration</td><td>Self Contribution</td><td>Org. Contribution</td><td>Effective Date</td></tr>
+@foreach (var item in Model)
+{
+    
+    if (item.IsActive == 1)
+    {
+        <tr>
+            <td>@item.WorkingDurationInMonth</td>
+            <td>@item.EmployeeContribution</td>
+            <td>@item.EmployerContribution</td>
+            <td>@String.Format("{0:dd'-'MMM'-'yyyy}", item.EffectiveFrom.Value)</td>            
+        </tr>   
+    }
+
+    
+    
+}
+                     </table>   
+                 </div>
+                <div id="tabs-2">
+
+                  <table class="table table-striped">
+        <tr><td>Working Duration</td><td>Self Contribution</td><td>Org. Contribution</td><td>Effective Date</td></tr>
+@foreach (var item in Model)
+{
+    if (item.IsActive == 0)
+    {
+        <tr>
+            <td>@item.WorkingDurationInMonth</td>
+            <td>@item.EmployeeContribution</td>
+            <td>@item.EmployerContribution</td>
+            <td>@String.Format("{0:dd'-'MMM'-'yyyy}", item.EffectiveFrom.Value)</td>            
+        </tr>   
+    }
+
+    
+    
+}
+                      </table>   
+                 </div>
+    </div>
+
+
+<script type="text/javascript">
+
+    $(function () {
+        $("#tabs").tabs();
+    });
+
+</script>
+
+

@@ -1,0 +1,50 @@
+﻿@model List<PFMVC.Areas.Accounting.Controllers.ChartAccountTree>
+@{
+    ViewBag.Title = "MVC3 Tree with jsTree";
+}
+
+<div class="pull-left">
+    <div class="alert alert-info">
+        Click Group to see it's Ledger.
+    </div>
+<div id="divtree" class="alert alert-info">
+<ul id="tree"  >
+    @foreach(var item in Model)
+    {
+         <li>
+           <a href="#" onclick="getLedger(@item.GroupID)" class="usr1">@item.GroupName</a>
+            @Html.Partial("CATree2",item)
+         </li>
+    }
+</ul>
+</div>
+    </div>
+<div class="pull-right">
+     <div class="alert alert-warning">
+        Related Ledger List
+    </div>
+    <div id="dvLedgerList">
+        <ul></ul>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#divtree").jstree();
+    });
+
+    function getLedger(id) {
+        var viewUrl = rootPath + "/Accounting/Ledger/LedgerListByGroup/?groupID=" + id;
+        $.get(viewUrl, function (data) {
+            $("#dvLedgerList ul").empty();
+            if (data.Success == true) {
+                $.each(data.Data, function (i) {
+                    $("#dvLedgerList ul").append('<li>'+data.Data[i]+'</li>');
+                });
+            }
+            else {
+                $("#dvLedgerList").html("False");
+            }
+        })
+    }
+</script>

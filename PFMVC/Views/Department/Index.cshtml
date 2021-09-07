@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Department Information";
+}
+
+@section scripts{
+    <script src="~/Scripts/custom/Department.js"></script>
+}
+
+<div style="width:35%">
+    <fieldset>
+        <legend>@ViewBag.PageName</legend>
+@(Html.Telerik().Grid<DLL.ViewModel.VM_Department>()
+    .Name("DepartmentGrid").HtmlAttributes(new { @class="A"})
+        .DataKeys(keys => { keys.Add(s => s.DepartmentID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("New Department").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectDepartments", "Department");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(s => s.DepartmentID).Visible(false);
+                    columns.Bound(s => s.DepartmentName);
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                  columns.Command(commands =>
+                    {   
+                        commands.Custom("DeleteCommand").Text("DELETE").Ajax(true)
+                            .ButtonType(GridButtonType.Image)
+                            .ImageHtmlAttributes(new { @class = "t-delete" });
+                        
+                    }).Width(40).Title("");
+                }
+            )
+            .Sortable()
+            .Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                { 
+                    events.OnCommand("onCommand");
+                })
+)
+        </fieldset>
+    </div>

@@ -1,0 +1,17 @@
+﻿USE [PFTM]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_GetLedgerTransactionDetail]    Script Date: 08/11/2014 17:37:34 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+create proc [dbo].[sp_ChartOfAccount]
+
+AS
+Begin
+SET NOCOUNT ON;
+select A.GroupName as ParentGroup, B.GroupName, B.LedgerName from acc_Group A right join
+(select ParentGroupID, GroupName, LedgerName from acc_Group g, acc_Ledger l where l.GroupID = g.GroupID) B
+on A.GroupID = B.ParentGroupID
+End

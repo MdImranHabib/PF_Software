@@ -1,0 +1,111 @@
+﻿
+
+
+@{
+    ViewBag.Title = "NomineeInformation";
+}
+
+
+<div class="row">
+    <div class="col-md-9">
+        <fieldset>
+            <legend><strong>Employee ID  : <label id="CurEmpID">@ViewBag.EmpID</label></strong> <strong>Employee Name  : @ViewBag.EmpName</strong></legend>
+        
+@(Html.Telerik().Grid<DLL.tbl_NomineeInformation>()
+    .Name("NomineeGrid").HtmlAttributes(new { @class="A"})
+        .DataKeys(keys => { keys.Add(s => s.EmpID); })
+            .ToolBar(commands => commands.Custom().Name("InsertCommand").Text("Add Nominee").ButtonType(GridButtonType.ImageAndText).ImageHtmlAttributes(new { style = "margin-left:0", @class = "t-add" }).Ajax(true))
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectNominee", "Employee");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.EmpID).Visible(false);
+                    columns.Bound(c => c.NomineeID).Visible(false);
+                    columns.Bound(c => c.NomineeImageFileName).Visible(false);
+                    columns.Bound(c => c.NomineeSignFileName).Visible(false);
+                    columns.Bound(c => c.NomineeName);
+                    columns.Bound(c => c.NomineeNationalID);
+                    columns.Bound(c => c.NomineeAddress);
+                    columns.Bound(c => c.Relation);
+                    columns.Bound(c => c.Nomineepercentage).Title("Payable %");
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("EditCommand").Text("EDIT").Ajax(true)
+                           .ButtonType(GridButtonType.Image)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                    //columns.Command(commands =>
+                    //    {
+                    //commands.Custom("DeleteCommand").HtmlAttributes(new { }).Text("DELETE").Ajax(true)
+                    //       .ButtonType(GridButtonType.Image)
+                    //       .ImageHtmlAttributes(new { @class = "t-delete" });
+                    //                }
+                    //).Width(40).Title("");
+                }
+            )
+            .Sortable()
+            .Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                { 
+                    events.OnRowSelect("NomineeGridOnRowSelect");
+                    events.OnCommand("NomineeGridOnCommand");
+                    events.OnDataBinding("NomineeGridOnDataBinding");
+                })
+                .Selectable()
+)
+            </fieldset>
+        </div>
+    <div class="col-md-2">
+        <div class=" hidden pull-right" id="Attachments">
+        <fieldset>
+        <legend>Attachments</legend>
+            <div id="dvNomPhoto" align="center"></div>
+            <br />
+            <div id="dvUploadImage" align="center"><input type="button" class="btn btn-default btn-sm" value="Change photo" onclick="test()" /></div>
+            <div align="center" class="hidden">
+                   @(Html.Telerik().Upload().Multiple(false)
+            .Name("NomImgFile").Async(async => async.Save("SaveImageNom", "Employee"))
+            .ShowFileList(false)
+            .ClientEvents(events => events
+             .OnUpload("onUpload")
+            .OnSuccess("onSuccess")
+            .OnError("onError"))
+            )
+            </div>
+            </fieldset>
+        <br />
+            
+         <div id="dvNomSign" align="center"></div>
+            <br />
+            <div id="dvUploadSign" align="center"><input type="button" class="btn btn-default btn-sm" value="Change signature" onclick="signtest()" /></div>
+            <div align="center" class="hidden">
+                   @(Html.Telerik().Upload().Multiple(false)
+            .Name("NomSignFile").Async(async => async.Save("SaveSignatureNom", "Employee"))
+            .ShowFileList(false)
+            .ClientEvents(events => events
+             .OnUpload("onUpload")
+            .OnSuccess("onSuccessSign")
+            .OnError("onError"))
+            )
+            </div>
+    
+    </div>
+    </div>
+    </div>
+
+
+<div id="DialogSpace1" ></div>
+<div id="ModalSpace" title=""><p id="ModalMessage"></p></div>
+<div id="ModalInformation" title=""></div>
+
+@section scripts{
+    <script src="~/Scripts/custom/Nominee.js"></script>
+
+
+
+    }

@@ -1,0 +1,84 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_PFLoanPayment>
+@{
+    ViewBag.Title = "LoanPaymentErrorFound";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="row">
+    <div class="col-md-12">
+
+
+<div class="alert alert-warning"><strong>@ViewBag.Message</strong> </div>
+
+  @using (Ajax.BeginForm("", "", null, new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessSalaryProcess"
+	}, new { @id = "DialogForm1" }))
+    {
+    
+    <div id="update-message1" class="error"></div>
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" />
+    <table class="table table-striped table-condensed" style="text-align:center">
+           <tr style="font-weight:bold;" >
+            <td>Employee ID</td>
+            <td>Loan ID</td>
+            <td>Savings Amount</td>
+            <td>Installment Amount</td>
+            <td>Installment Number</td>
+            <td>Payment Date</td>
+            <td>Operation</td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].EmployeeID) @Html.HiddenFor(m => m[i].EmployeeID)</td>
+                <td>@Html.DisplayFor(m => m[i].LoanID) @Html.HiddenFor(m => m[i].LoanID)</td>
+                <td>@Html.DisplayFor(m => m[i].CurrentSavings.ToString("#,###,##0.000")) @Html.HiddenFor(m => m[i].CurrentSavings)</td>
+                <td>@Html.DisplayFor(m => m[i].InstallmentAmount.ToString("#,###,##0.000")) @Html.HiddenFor(m => m[i].InstallmentAmount)</td>
+                <td>@Html.DisplayFor(m => m[i].InstallmentNumber) @Html.HiddenFor(m => m[i].InstallmentNumber)</td>
+                <td>
+                    @if(Model[i].PaymentDate.Year != 0001)
+                    {
+                        @String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].PaymentDate.Date) @Html.HiddenFor(m => m[i].PaymentDate)
+                    }
+                </td>
+                <td>
+                    @if (Model[i].PaymentStatus)
+                    {
+                        <label style="color:green">Paid</label>
+                    }
+                    else
+                    {   
+                        if(!string.IsNullOrEmpty(Model[i].PreImportMessage))
+                        {
+                            <label style="color:red">@Html.DisplayFor(m => m[i].PreImportMessage)</label>
+                        }
+                        else
+                        {
+                            @Ajax.ActionLink("Pay Loan", "LoanPaymentFromSalaryConfirm", "Import", new { Area = "Loan", empID = @Model[i].EmployeeID, loanID = @Model[i].LoanID, paymentMonth = @ViewBag.Month }, new AjaxOptions {  HttpMethod = "GET", OnSuccess = "alertt"}, new { @class = "btn btn-warning btn-xs", @id="button"+@Model[i].LoanID })
+                            
+                        }
+                    }
+                </td>
+            </tr>
+        }
+    </table>
+<hr />
+        
+  @Html.ActionLink("Back", "Index", "Import", new { Area= "Loan" }, new { @class="btn btn-danger"})
+     
+  }
+    </div>
+</div>
+<div id="DialogSpace1" ></div>
+<div id="ModalSpace" title=""><p id="ModalMessage"></p></div>
+<div id="ModalInformation" title=""></div>
+
+@section scripts{
+    <script src="~/Scripts/custom/LoanPaymentFromSalary.js"></script>
+    }

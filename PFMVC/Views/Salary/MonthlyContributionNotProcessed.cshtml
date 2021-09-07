@@ -1,0 +1,49 @@
+﻿@model System.Collections.Generic.List<DLL.ViewModel.VM_Contribution>
+
+<div class="row"><div class="col-md-12">
+<div class="alert alert-warning"><strong>@ViewBag.Message</strong> </div>
+
+  @using (Ajax.BeginForm("MonthlyContributionSubmit", "Salary", null, new AjaxOptions
+	{
+		InsertionMode = InsertionMode.Replace,
+		HttpMethod = "POST",
+        OnSuccess = "updateSuccessSalaryProcess"
+	}, new { @id = "DialogForm1" }))
+    {
+    
+    <div id="update-message1" class="error"></div>
+
+<input type="hidden" value="@ViewBag.Month" name="_dtMonth" />
+    <table class="table table-striped">
+        <tr style="font-weight:bold; text-align:center">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+            <td>Joining Date</td>
+            <td>Working Duration</td>
+            <td>Salary</td>
+            <td>Self Contribution</td>
+            <td>Org Contribution</td>
+            <td>Total</td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].EmpID) @Html.HiddenFor(m => m[i].EmpID)</td>
+                <td>@Html.DisplayFor(m => m[i].EmpName) @Html.HiddenFor(m => m[i].EmpName)</td>
+                <td>@Html.DisplayFor(m => m[i].JoiningDate.Date) @Html.HiddenFor(m => m[i].JoiningDate)</td>
+                <td>@Html.DisplayFor(m => m[i].WorkingDuration) @Html.HiddenFor(m => m[i].WorkingDuration)</td>
+                <td>@Html.DisplayFor(m => m[i].Salary) @Html.HiddenFor(m => m[i].Salary)</td>
+                
+                <td><label style="font-weight:bold">@Html.DisplayFor(m => m[i].SelfContribution)</label> @Html.HiddenFor(m => m[i].SelfContribution) <label style="color:lightgrey">@Html.DisplayFor(m => m[i].SCInterest)% @Html.HiddenFor(m => m[i].SCInterest)</label></td>
+                <td><label style="font-weight:bold">@Html.DisplayFor(m => m[i].EmployerContribution)</label> @Html.HiddenFor(m => m[i].EmployerContribution) <label style="color:lightgrey">@Html.DisplayFor(m => m[i].ECInterest)% @Html.HiddenFor(m => m[i].ECInterest)</label></td>
+                
+                <td>@Html.DisplayFor(m => m[i].Total)</td>
+            </tr>
+        }
+    </table>
+<hr />
+        @*@Html.ActionLink("Process Data", "MonthlyContributionSubmit", "Salary", new{ _dtMonth = ViewBag.Month }, new { @class="btn btn-danger"})*@
+  
+     <button type="submit" class="btn btn-warning">Process Data</button>
+  }
+</div></div>

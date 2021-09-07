@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+        
+                var viewUrl = rootPath + "/Accounting/JournalVoucher/GetJQFile/";
+                $.get(viewUrl, function (data) {
+                    $("#JQ").html(data);
+                    var viewUrl = rootPath + "/Accounting/JournalVoucher/JournalVoucher/";
+                    $.get(viewUrl, function (data) {
+                        $("#mainDiv").html('');
+                        $("#mainDiv").html(data);
+                })
+            })
+
+            var viewUrl = rootPath + "/Accounting/JournalVoucher/AccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv").html('');
+                $("#optionDiv").html(data);
+            })
+
+            var viewUrl = rootPath + "/Accounting/JournalVoucher/CashAccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv3").html('');
+                $("#optionDiv3").addClass('hidden').html(data);
+            })
+
+            var viewUrl = rootPath + "/Accounting/JournalVoucher/GetVoucherNameList/?voucherType=" + 4; // here 4 for journal voucher.
+            $.get(viewUrl, function (data) {
+                $("#optionDiv2").addClass("hidden").html(data);
+            })
+        })
+
+        function editVoucherEntry(id) {
+            var viewUrl =rootPath + "/Accounting/JournalVoucher/JournalVoucher/?VoucherID=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").empty();
+                $("#mainDiv").html(data);
+                $("#switchOptionDiv").click();
+                $("#save_btn").focus();
+                $('.not-new').removeClass('hidden');
+            })
+        }
+
+    </script>
+    <script src="~/Scripts/custom/AccVoucherCommon.js"></script>
+}

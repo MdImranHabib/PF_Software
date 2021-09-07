@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.Partial("_AccountingMenu")
+<div id="JQ" class="hidden"></div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+         
+                var viewUrl = rootPath + "/Accounting/ContraVoucher/GetJQFile/";
+                $.get(viewUrl, function (data) {
+                    $("#JQ").html(data);
+                    var viewUrl = rootPath + "/Accounting/ContraVoucher/ContraVoucher/";
+                    $.get(viewUrl, function (data) {
+                        $("#mainDiv").html('');
+                        $("#mainDiv").html(data);
+                })
+            })
+
+            var viewUrl = rootPath + "/Accounting/ContraVoucher/AccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv").html('');
+                $("#optionDiv").html(data);
+            })
+
+            var viewUrl = rootPath + "/Accounting/ContraVoucher/CashAccountHeadList/";
+            $.get(viewUrl, function (data) {
+                $("#optionDiv3").html('');
+                $("#optionDiv3").addClass('hidden').html(data);
+            })
+
+            var viewUrl = rootPath + "/Accounting/ContraVoucher/GetVoucherNameList/?voucherType=" + 3; // here 3 for contra voucher.
+            $.get(viewUrl, function (data) {
+                $("#optionDiv2").addClass("hidden").html(data);
+            })
+        })
+
+        function editVoucherEntry(id) {
+            var viewUrl = rootPath + "/Accounting/ContraVoucher/ContraVoucher/?voucherId=" + id;
+
+            $.get(viewUrl, function (data) {
+                $("#mainDiv").empty();
+                $("#mainDiv").html(data);
+                $("#switchOptionDiv").click();
+                $("#save_btn").focus();
+                $('.not-new').removeClass('hidden');
+            })
+        }
+
+    </script>
+    <script src="~/Scripts/custom/AccVoucherCommon.js"></script>
+}

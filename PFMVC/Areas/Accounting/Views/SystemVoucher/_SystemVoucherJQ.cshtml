@@ -1,0 +1,130 @@
+﻿
+<script>
+
+    function updateSuccess(data) {
+
+        if (data.Success == true) {
+            ShowDropDownMessage(data.Message);
+            $("#update-message1").html("").removeClass("alert alert-danger alert-dismissable");
+            SuccessNotify(data.Message);
+            
+
+            $('#VoucherNo').val(data.VoucherNumber);
+            $('#voucherId').val(data.VoucherID);
+            $("#VoucherNo").notify("This is your voucher number!", "info");
+
+            $('.not-new').removeClass('hidden');
+
+            var viewUrl = rootPath + "/Accounting/SystemVoucher/GetVoucherNameList/?voucherType=" + 5; // here 5 for System Voucher.
+            $.get(viewUrl, function (data) {
+                $("#optionDiv2").addClass("hidden").html(data);
+                SwitchOptionDiv();
+            })
+        }
+        else {
+            ErrorNotify(data.ErrorMessage);
+            $("#update-message1").html(data.ErrorMessage).addClass("alert alert-danger");
+            $("#update-message1").show();
+        }
+    }
+
+
+
+
+    function deleteGroup(id) {
+        var viewUrl = rootPath + "/Accounting/SystemVoucher/DeleteVoucherPossible/?voucherID=" + id;
+        $.get(viewUrl, function (data) {
+            if (data.Success == true) {
+                $("#ModalSpace").html(data.Message),
+                $("#ModalSpace").dialog({
+                    width: 'auto',
+                    resizable: false,
+                    modal: true,
+                    show: "blind",
+                    hide: "blind",
+                    title: "Delete",
+                    buttons: [{
+                        text: "Yes", click: function () {
+                            viewUrl = rootPath + "/Accounting/SystemVoucher/DeleteVoucherConfirm/?voucherID=" + id;
+                            $.post(viewUrl, function (data) {
+                                if (data.Success == true) {
+                                    $("#ModalSpace").dialog('close');
+                                    $("#ModalSpace").html('');
+                                    //$("#mainDiv").html("");
+                                    //var viewUrl = rootPath + "/Accounting/JournalVoucher/GetVoucherNameList/?voucherType=" + 4; // here 4 for journal voucher.
+                                    //$.get(viewUrl, function (data) {
+                                    //    $("#optionDiv2").addClass("hidden").html(data);
+                                    //    SwitchOptionDiv();
+                                    //})
+
+                                    $("#mainDiv").html("<fieldset><legend>Confirmation</legend><div class=\"alert alert-warning\">Voucher successfully deleted!</div> <button class=\"btn btn-success\" onclick=\"NewVoucher()\">Add Journal Voucher</button></fieldset>");
+                                    $('#ve-' + id).remove();
+                                }
+                                else {
+                                    $("#ModalSpace").html("Something Problem while deleting!!!");
+                                }
+                            })
+                        }
+                    }, {
+                        text: "Cancel",
+                        click: function () {
+                            $(this).dialog("close");
+                        }
+                    }]
+                });
+            }
+            else {
+                ShowModalMessage(data.ErrorMessage);
+            }
+        });
+        return false;
+    }
+
+    function NewVoucher() {
+        var viewUrl = rootPath + "/Accounting/JournalVoucher/JournalVoucher/";
+        $.get(viewUrl, function (data) {
+            $("#mainDiv").html('');
+            $("#mainDiv").html(data);
+        })
+    }
+
+
+    function addRow(tableID) {
+
+
+    }
+
+
+
+    function ProcessGrid() {
+        var table = document.getElementById('VoucherTable');
+
+        var rowLength = table.rows.length;
+
+        for (var i = 0; i < rowLength; i += 1) {
+            if ($('#Debit' + i).val() > "") {
+                $('#inputType-' + i).addClass('btn-info').removeClass('btn-danger').val('Dr.');
+                $('#Credit' + i).val('');
+                $('#Credit' + i).attr('readonly', 'readonly');
+                $('#Credit' + i).addClass('hidden').removeClass('next lastcell');
+                $('#Debit' + i).addClass('lastcell');
+            }
+            else if ($('#Credit' + i).val() > "") {
+                //InfoNotify($('#Credit' + i).val() + "<< see");
+                $('#inputType-' + i).addClass('btn-danger').removeClass('btn-info').val('Cr.');
+                $('#Debit' + i).val('');
+                $('#Debit' + i).attr('readonly', 'readonly');
+                $('#Debit' + i).addClass('hidden').removeClass('next lastcell');
+                $('#Credit' + i).addClass('lastcell');
+            }
+            else {
+                $('#inputType-' + i).addClass('btn-info').removeClass('btn-danger').val('Dr.');
+                $('#Credit' + i).val('');
+                $('#Credit' + i).attr('readonly', 'readonly');
+                $('#Credit' + i).addClass('hidden').removeClass('next');
+                $('#Debit' + i).addClass('lastcell');
+            }
+        }
+    }
+
+    </script>

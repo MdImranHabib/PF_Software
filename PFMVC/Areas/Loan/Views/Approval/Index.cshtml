@@ -1,0 +1,170 @@
+﻿@using Telerik.Web.Mvc.UI;
+
+@{
+    ViewBag.Title = "Loan Approval";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12 ">
+
+
+<fieldset>
+    <legend>Unapproved Loan List</legend>
+
+    @(Html.Telerik().Grid<DLL.ViewModel.VM_PFLoan>()
+    .Name("UnapprovedLoanHistoryGrid").HtmlAttributes(new { @class="A"})
+        .DataKeys(keys => { keys.Add(s => s.EmpID); })
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectUnapprovedLoan", "Approval");
+            }
+        )
+        .Columns(columns =>
+                {
+                    columns.Bound(c => c.EmpID).Visible(false);
+                    columns.Bound(c => c.IdentificationNumber).Title("ID");
+                    columns.Bound(c => c.PFLoanID).Title("Loan ID");
+                    columns.Bound(c => c.LoanAmount);
+                    columns.Bound(c => c.PayableAmount);
+                    columns.Bound(c => c.TermMonth).Title("Tenor");
+                    columns.Bound(c => c.Interest).Title("Intrst (%)");
+                    columns.Bound(c => c.Installment).Title("Monthly Pay");
+                    columns.Bound(c => c.StartDate).HtmlAttributes(new { style = "text-align:center" }).Format("{0:dd/MMM/yyyy}"); ;
+                    
+                    columns.Command(commands =>
+                        {
+                            commands.Custom("ApproveCommand").Text("Approve").Ajax(true)
+                           .ButtonType(GridButtonType.Text)
+                           .ImageHtmlAttributes(new { @class = "t-edit" });
+                        }
+                    ).Width(40).Title("");
+                }
+            )
+            .Sortable()
+            .Pageable(s => s.PageSize(10))
+            .ClientEvents(events =>
+                { 
+                    events.OnRowSelect("ULHGOnRowSelect");
+                    events.OnCommand("ULHGOnRowCommand");
+                })
+                .Selectable()
+)
+
+</fieldset>
+    </div>
+    <div style="clear:both"></div>
+    </br>
+    <div class="col-md-12 pull-left hidden" id="Attachments" >
+        <table class="col-md-12">
+            <tr><td>
+                <div id="dvEmpDetail" style="font-size: smaller"></div>
+                </td>
+                <td style="vertical-align:top">
+                <div >
+                    <fieldset>
+                        <legend>Photo</legend>
+                        <div id="dvEmpPhoto"></div>
+                    </fieldset>
+                </div>
+                    </td>
+                </tr>
+            <tr>
+                <td colspan="2"><div id="dvLoanHistory"></div></td>
+            </tr>
+        </table>
+    </div>
+      
+
+</div>
+
+
+@section scripts{
+    
+    <script>
+
+
+
+        //ULHG = Unapproved Loan History Grid
+        function ULHGOnRowSelect(e) {
+            var row = e.row;
+            var grid = $(this).data("tGrid");
+            var dataItem = grid.dataItem(row);
+            _curEmpID = dataItem.EmpID;
+
+            if ( _curEmpID )
+            {
+
+               //Commentout by Avishek Date:May-11-2015 Reason that it's return month wise contribution but there there are no use of it's
+                //var URL = rootPath + "/Employee/GetEmployeeByID/?empId=" + _curEmpID;
+                //$.get(URL, function (data) {
+                //    $("#dvEmpDetail").html('');
+                //    $("#dvEmpDetail").html(data);
+                //});
+                //End
+
+                //load image     
+                var currentTime = new Date().getTime();
+                $("#dvEmpPhoto").html("");
+                loadImage("/Picture/Photos/" + _curEmpID + ".jpg?lastmod=" + currentTime, 100, 110, "#dvEmpPhoto");
+                $("#Attachments").removeClass("hidden");
+                //
+                //load  this employee loan history
+                var URL = rootPath + "/Loan/Loan/LoanHistory/?empId=" + _curEmpID;
+                $.get(URL, function (data) {
+                    $("#dvLoanHistory").html('');
+                    $("#dvLoanHistory").html(data);
+                    var gridHidCol = $("#LoanHistoryGrid").data("tGrid");
+                    gridHidCol.hideColumn("Installment");
+                    gridHidCol.hideColumn("ApprovedByName");
+                    $(".loanButton").hide();
+                });
+            }
+            else {
+                ShowModalMessage("Select employee to continue...");
+            }
+        }
+
+
+        function loadImage(path, width, height, target) {
+            $('<img src="' + path + '">').load(function () {
+                $(this).width(width).height(height).appendTo(target);
+            });
+        }
+
+        function ULHGOnRowCommand( e )
+        {
+            $(".ui-dialog-buttonpane").show();
+            var row = e.row;
+            var grid = $(this).data("tGrid");
+            var dataItem = grid.dataItem(row);
+
+            if (e.name == "ApproveCommand") {
+
+                $("#DialogSpace1").dialog("option", "title", "Select Cash Account");
+                var dialogDiv2 = $("#DialogSpace1");
+                var viewUrl = rootPath + "/Loan/Approval/ApproveLoan/?empId=" + dataItem.EmpID + "&loanID=" + dataItem.PFLoanID;
+
+                $.get(viewUrl, function (data) {
+                    dialogDiv2.html(data);
+                    $(".ui-dialog-buttonpane").show();
+                    var $form = $("#DialogForm1");
+
+                    $form.unbind();
+                    $form.data("validator", null);
+
+                    $.validator.unobtrusive.parse(document);
+
+                    $form.validate($form.data("unobtrusiveValidation").options);
+
+                    dialogDiv2.dialog('open');
+                });
+                return false;
+            }
+
+        }
+        
+    </script>
+    }

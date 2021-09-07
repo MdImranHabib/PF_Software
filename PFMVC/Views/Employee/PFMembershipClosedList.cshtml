@@ -1,0 +1,131 @@
+﻿@model List<DLL.ViewModel.VM_Employee>
+
+@{
+    ViewBag.Title = "PFMembers";
+}
+
+<div class="row"><div class="col-md-12">
+    @if (DLL.Utility.ApplicationSetting.Branch == true)
+{
+     <div class="col-md-3" style="margin-bottom : 10px;">
+
+                <select name="branch_name" class="form-control" id="branch_name">
+                    <option value="">All Branch</option>
+                    @foreach (var item in ViewBag.branchList)
+                    {
+                        if (item.BranchID != null)
+
+                        {
+                            <option value="@item.BranchID">@item.BranchName</option>
+                        }
+
+                    }
+                </select>
+
+            </div>
+}
+    <fieldset><legend>Closed PF Member List</legend></fieldset>
+    <div style="color:red" class="alert alert-warning middle">@Html.ActionLink((string)ViewBag.Message, "PFMembers" , "Employee") - @ViewBag.Deactivated 
+        <input type="text" style="font-size:smaller" placeholder="Search by Member Name/ID" class="search pull-right col-md-3" id="filterBox" onkeypress="FilterTable()"/>
+    </div>
+ 
+<table class="table table-striped table-condensed table-bordered" style="text-align:center; font-size:smaller" id="data">
+        <tr id="Header" style="font-weight:bold; text-align:center">
+            <td>Employee ID</td>
+            <td>Employee Name</td>
+             @if (DLL.Utility.ApplicationSetting.Branch == true)
+{
+            <td>Branch</td>
+             }
+            <td>Joining Date</td>
+            <td>PF Activate Date</td>
+            @*<td>Retirement Date</td>*@
+            <td>PF Closed Date</td>
+            <td>PF Duration</td>
+            <td></td>
+        </tr>
+        @for (var i = 0; i < Model.Count; i++ )
+        {
+            <tr>
+                <td>@Html.DisplayFor(m => m[i].IdentificationNumber)</td>
+                <td>@Html.DisplayFor(m => m[i].EmpName)</td>
+                 @if (DLL.Utility.ApplicationSetting.Branch == true)
+                {
+                <td>@Html.DisplayFor(m => m[i].BranchName)</td>
+                 }
+                <td>@String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].JoiningDate.Value)</td>
+                <td>@String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].PFActivationDate.Value)</td>
+                <td>@String.Format("{0:dd'-'MMM'-'yyyy}", Model[i].PFDeactivationDate.Value)</td>
+                <td>@Model[i].PFDuration</td>
+                @*<td>@Html.ActionLink("Close membership", "ClosePFMember", "Employee", new {empId = Model[i].EmpID, closingDate= System.DateTime.MinValue}, new {@class= "btn btn-warning btn-xs"})</td>*@
+                <td><input type="button" onclick="PFClosingReport(@Model[i].EmpID)" value="Voucher" class="btn btn-primary btn-xs" /></td>
+            </tr>
+        }
+    </table>
+    </div></div>
+<script src="~/Scripts/jquery-1.11.0.min.js"></script>
+<script>
+
+    function PFClosingReport(EmpID) {
+
+        if (EmpID) {
+            var viewURL = '../Employee/PFClosingReport/?EmpID='+EmpID;
+            
+            FancyBox(viewURL);
+        }
+        else
+        {
+            ShowModalMessage("Please employee to continue!");
+        }
+    }
+
+    function FilterTable() {
+        //InfoNotify("Key Press");
+        debugger;
+        index = -1;
+        inp = $('#filterBox').val();
+        
+        //InfoNotify(inp);
+        //This should ignore first row with th inside
+        $("#data:visible tr:not(:has(>th))").each(function () {
+            if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+                // Show the row (in case it was previously hidden)
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $("#Header").show();
+    };
+    $(document).ready(function () {
+        inp = $("#branch_name option:selected").text();
+        if (inp == "All Branch") {
+            $("#branch_name").attr('disabled', false);
+        }
+        else $("#branch_name").attr('disabled', true);
+
+        FilterTable2();
+        $("#branch_name").change(function () {
+            // var selectedBranch = $("#branch_name option:selected").text();
+            FilterTable2();
+
+        });
+    });
+
+    function FilterTable2() {
+        index = -1;
+        inp = $("#branch_name option:selected").text();
+        if (inp == "All Branch") {
+            inp = "";
+        }
+        $("#data:visible tr:not(:has(>th))").each(function () {
+            if (~$(this).text().toLowerCase().indexOf(inp.toLowerCase())) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+        $('#Header').show();
+    };
+
+</script>

@@ -1,0 +1,55 @@
+﻿@model List<DLL.tbl_Employees>
+
+@{
+    ViewBag.Title = "AccountTransaction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="alert alert-warning">@ViewBag.Message</div>
+
+
+<table class="table table-condensed table-striped smaller">
+    <tr style="font-weight:bold">
+        <td>Employee ID</td>
+        <td>Employee Name</td>
+        <td>Own Cont.</td>
+        <td>Emp Cont.</td>
+        <td>Profit</td>
+        <td>Loan</td>
+        <td>Accounting Entry</td>
+        <td>Operation Log</td>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.IdentificationNumber</td>
+            <td>@item.EmpName</td>
+            <td>@item.opOwnContribution</td>
+            <td>@item.opEmpContribution</td>
+            <td>@item.opProfit</td>
+            <td>@item.opLoan</td>
+            <td>
+                @if (item.PassVoucher == false)
+                { 
+                    <label style="color:red">Pending</label>
+                } 
+                else if(item.PassVoucher == true)
+                {
+                    <label style="color:green">Completed</label>
+                }   
+                else
+                {
+                    <label style="color:magenta">Undefined State</label> 
+                }
+
+            </td>
+            <td>@item.PassVoucherMessage</td>
+        </tr>
+    }
+</table>
+
+@using (Html.BeginForm("PassVoucherConfirm", "Employee",null, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <button type="submit" class="btn btn-primary pull-right btn-xs">Pass Voucher</button>
+}

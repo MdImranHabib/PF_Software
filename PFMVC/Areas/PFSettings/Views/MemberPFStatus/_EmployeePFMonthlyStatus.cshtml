@@ -1,0 +1,36 @@
+﻿@using Telerik.Web.Mvc.UI;
+@{
+    Layout = null;
+}
+<fieldset>
+    <legend>Monthly PF contribution detail</legend>
+    @(Html.Telerik().Grid<DLL.ViewModel.VM_PFMonthlyStatus>()
+    .Name("EmployeeGrid").HtmlAttributes(new { @class="A"})
+        .DataKeys(keys => { keys.Add(s => s.Month); })
+            
+        .DataBinding(databindings =>
+            {
+                databindings.Ajax()
+                    .Select("_SelectPFStatus", "MemberPFStatus");
+            }
+        )
+        .Columns(columns =>
+                {
+                        columns.Bound(c => c.Month).Visible(false).Format("{0: MM, yyyy}"); ;
+                        columns.Bound(c => c.MonthYear);
+                        columns.Bound(c => c.Self);
+                        columns.Bound(c => c.SelfProfit).Title("Self Profit");
+                        columns.Bound(c => c.EMP);
+                        columns.Bound(c => c.EmpProfit).Title("Emp. Profit");
+                        columns.Bound(c => c.CSC).Title("Cu.S.Con.");
+                        columns.Bound(c => c.CEC).Title("Cu.E.Con.");
+                       
+                       
+                        //columns.Bound(c => c.SUM).Title("Total Cont.");
+                    }
+            )
+            .Sortable()
+            .Pageable(s => s.PageSize(10))
+            .Selectable()
+)
+</fieldset>
